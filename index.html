@@ -1,9 +1,76 @@
 <!DOCTYPE html>
-<head>
-<title>Your Title</title>
-<meta charset="utf-8" />
-</head>
-<body>
-Your Body :)
-</body>
-</html>
+<meta charset = "utf-8">
+
+<h1>병행 프로세스</h1>
+<p>두 개 이상의 프로세스가 동시에 처리하는 것을 의미.
+배타 접근 보장X -&gt; 커다란 문제 야기</p>
+<h2>해결책</h2>
+<p><strong>임계영역</strong> | <strong>상호배제</strong> | <strong>세마포어</strong> | <strong>모니터</strong></p>
+<ul>
+<li>
+<p>임계영역(Critical Section)</p>
+<p>공유하는 자원에 대해 특정 시점에서는 한 프로세스만 사용하도록 허용된 영역</p>
+</li>
+<li>
+<p>상호배제(Mutual Exclusion)</p>
+<p>여러 개의 프로세스가 공유 자원에 접근할 때, 한 순간에 한 프로세스만 변경할 수 있도록 하는 기법</p>
+<p>(Dekker 알고리즘, Peterson 알고리즘, 인터럽트 비활성화 등의 방법으로 회피 가능)</p>
+</li>
+<li>
+<p>세마포어(Semaphore)</p>
+<p>Dijkstra에 의해 고안됨.</p>
+<p>보호 변수(Wait / Signal)의 두 가지 연산에 의해서만 Access되도록 통제함.</p>
+</li>
+<li>
+<p>모니터(Monitor)</p>
+<p>다중 프로그래밍에서 상호 배제를 구현하기 위한 특수한 프로그래밍 기법. <strong>병행성 구조</strong></p>
+</li>
+</ul>
+<hr />
+<hr />
+<hr />
+<h1>교착상태</h1>
+<p>둘 이상의 프로세스가 서로 다른 프로세스가 이미 차지하고있는 자원을 요구해서 영원히 프로세스가 기다리는 현상</p>
+<h2>교착상태 발생조건</h2>
+<p><strong>상호배제</strong> | <strong>점유 및 대기</strong> | <strong>비선점</strong> | <strong>환형대기</strong></p>
+<ul>
+<li>
+<p>상호배제</p>
+<p>한 번에 하나의 프로세스만 공유 자원을 사용할 수 있는 상태</p>
+</li>
+<li>
+<p>점유 및 대기</p>
+<p>프로세스들이 현재 자원을 점유하면서 다른 자원을 요구하는 상태</p>
+</li>
+<li>
+<p>비선점</p>
+<p>각 프로세스에 할당된 자원은 사용이 완료될 때까지 강제로 해제할 수 없는 상태</p>
+</li>
+<li>
+<p>환형대기</p>
+<p>서로 다른 프로세스 간 자원요구가 연속적으로 반복되는 상태</p>
+</li>
+</ul>
+<h2>교착상태 해결방안</h2>
+<p><strong>예방</strong> | <strong>회피</strong> | <strong>발견</strong> | <strong>회복</strong></p>
+<ul>
+<li>
+<p>예방</p>
+<p>발생조건을 미리 제거해서 사전에 미리 예방</p>
+</li>
+<li>
+<p>회피</p>
+<p>발생조건을 제거하지 않고 적절히 피함</p>
+</li>
+<li>
+<p>발견</p>
+<p>교착상태를 발견하고 발생 원인을 찾아 해결함</p>
+</li>
+<li>
+<p>회복</p>
+<p>교착상태에 빠진 프로세스를 재시작하거나 원래상태로 돌려서 해결</p>
+</li>
+</ul>
+<hr />
+<hr />
+<hr />
