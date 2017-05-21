@@ -3,7 +3,7 @@ layout: entry
 title: "Software System Architecture HW4"
 author: 이제언
 date: 2017-05-13 16:42 +0900
-tags: 
+tags: 소시설, 과제
 comments: true
 ---
 * table of contents
@@ -204,7 +204,7 @@ public class TaekwonV extends Robot {
 }
 ```
 
-## 잘 동작하는지 간단한 main함수를 작성해보았다.
+## main함수에서의 테스트
 
 ```
 public class testRobotMain {
@@ -260,3 +260,105 @@ Robot Context는 Robot Actions라는 Strategy를 이용하여 attack(), move() �
 힝...
 
 # 2. Observer Pattern 적용하기
+
+
+## 기존 코드
+### DataSheetView
+
+```
+import java.util.List;
+
+public class DataSheetView {
+	private ScoreRecord scoreRecord;
+	private int viewCount;
+
+	public DataSheetView(ScoreRecord scoreRecord, int viewCount) {
+		this.scoreRecord = scoreRecord;
+		this.viewCount = viewCount;
+	}
+
+	public void update() { // 점수의 변경을 통보 받음
+		List<Integer> record = scoreRecord.getScoreRecord(); // 점수를 조회함
+		displayScores(record, viewCount); // 조회된 점수를 viewCount만큼 출력함
+	}
+
+	private void displayScores(List<Integer> record, int viewCount) {
+		System.out.print("List of " + viewCount + " entries: ");
+		for (int i = 0; i < viewCount && i < record.size(); i++) {
+			System.out.print(record.get(i) + " ");
+		}
+		System.out.println();
+	}
+}
+
+```
+### MinMaxView
+
+```
+import java.util.Collections;
+import java.util.List;
+
+public class MinMaxView { // 전체 점수가 아니라 최소/최대값만을 출력하는 클래스
+	private ScoreRecord scoreRecord;
+
+	public MinMaxView(ScoreRecord scoreRecord) {
+		this.scoreRecord = scoreRecord;
+	}
+
+	public void update() {
+		List<Integer> record = scoreRecord.getScoreRecord();
+		displayMinMax(record); // 최소/최대값만을 출력
+	}
+
+	private void displayMinMax(List<Integer> record) {
+		int min = Collections.min(record, null);
+		int max = Collections.max(record, null);
+		System.out.println("Min: " + min + " Max: " + max);
+	}
+}
+```
+
+### ScoreRecord
+
+```
+import java.util.ArrayList;
+import java.util.List;
+
+public class ScoreRecord {
+	private List<Integer> scores = new ArrayList<Integer>(); // 점수를 저장함
+	private DataSheetView dataSheetView; // 목록 형태로 점수를 출력하는 클래스
+
+	public void setDataSheetView(DataSheetView dataSheetView) {
+		this.dataSheetView = dataSheetView;
+	}
+
+	public void addScore(int score) { // 새로운 점수를 축함
+		scores.add(score); // scores 목록에 주어진 점수를 추가함
+		dataSheetView.update(); // scores가 변경됨을 통보함
+	}
+
+	public List<Integer> getScoreRecord() {
+		return scores;
+	}
+}
+```
+
+## ~~해보자
+
+## ~~하도록 변경해보자.
+
+## main함수에서의 테스트
+
+## 정리(보고서 양식에 맞추어..)
+
+### 클래스 다이어그램 작성 및 설명
+
+*solution*
+
+(각 클래스를 Subject, Concrete Subject, Observer, Concrete Observer 관점에서 설명)
+
+### Observer Pattern을 적용함으로써 얻을 수 있는 이점
+
+*solution*
+
+잉...
