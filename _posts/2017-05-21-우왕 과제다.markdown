@@ -1,0 +1,36 @@
+---
+layout: entry
+title: "우왕 과제다"
+author: 이제언
+date: 2017-05-13 16:42 +0900
+tags: 
+comments: true
+---
+* table of contents
+{:toc}
+
+# 1. Introduce
+  Strategy Pattern을 적용해보려고 한다.
+
+  Robot 클래스를 기준으로 설명하고자 합니다. Robot은 정말 다양한 스킬을 갖고 있다. 하지만 모든 로봇이 모든 스킬을 잘 다루는 건 아니다. 각각 자신의 로봇 종류에 맞춰 특화된 스킬을 갖고 있다.
+
+  그래서 이번엔 이런 다양한 로봇들을 어떻게 유연하게 표현하는가에 대해 초점을 맞추고 이것을 위해 전략 패턴을 사용하고자 한다.
+
+# 2. Implement Strategy Pattern for Java 
+
+
+## 2.1. 기초 클래스를 작성해보자.
+* Robot Class : 로봇이라면 기본적으로 가져야 할 클래스
+* Move Interface : 움직임에 대한 스킬 인터페이스
+* Attack Interface : 공격에 대한 스킬 인터페이스
+
+
+# 2.1.1. Move Interface
+
+```
+// 움직이는 스킬을 표현하기 위한 인터페이스
+
+public interface Move {
+    public String getMove();
+}
+```
