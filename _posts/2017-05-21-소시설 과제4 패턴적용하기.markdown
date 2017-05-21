@@ -1,6 +1,6 @@
 ---
 layout: entry
-title: "우왕 과제다"
+title: "Software System Architecture HW4"
 author: 이제언
 date: 2017-05-13 16:42 +0900
 tags: 
@@ -246,7 +246,7 @@ Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적
 ---
 *Answer*
 
-힝....
+![ex_screenshot](../images/SW4_strategy.PNG)
 
 ### 얻을 수 있는 이점에 대해 설명
 
@@ -254,4 +254,4 @@ Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적
 
 힝...
 
-# Observer Pattern
+# 2. Observer Pattern 적용하기
