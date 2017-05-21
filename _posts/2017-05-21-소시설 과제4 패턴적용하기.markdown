@@ -19,6 +19,7 @@ comments: true
 ### Robot
 * 생성자로 이름 설정
 * attack(), move()는 하위클래스에서 적용하는 것으로 작성되었다.
+
 ```
 public abstract class Robot {
 	private String name;
@@ -40,6 +41,7 @@ public abstract class Robot {
 ### Atom
 * Robot class를 상속받아 작성된다.
 * attack(), move() 함수를 반드시(?) 작성한다.
+
 ```
 public class Atom extends Robot {
 	public Atom(String name) {
@@ -60,6 +62,7 @@ public class Atom extends Robot {
 
 * Robot class를 상속받아 작성된다.
 * attack(), move() 함수를 반드시(?) 작성한다.
+
 ```
 public class TaekwonV extends Robot {
 	public TaekwonV(String name) {
@@ -79,6 +82,7 @@ public class TaekwonV extends Robot {
 
 ### RobotActions Class
 * 기존에 주어진 attack(), move()를 interface화 한 모습이다.
+
 ```
 public interface RobotActions {
 	public void attack();
@@ -88,6 +92,7 @@ public interface RobotActions {
 
 ### AtomActions Class
 * RobotActions interface를 implements함
+
 ```
 public class AtomActions implements RobotActions {
 
@@ -105,6 +110,7 @@ public class AtomActions implements RobotActions {
 
 ### TaekwonVActions
 * RobotActions interface를 implements함
+
 ```
 public class TaekwonVActions implements RobotActions {
 
@@ -127,6 +133,7 @@ public class TaekwonVActions implements RobotActions {
 * RobotActions interface를 변수로 등록함.
 * RobotActions에 대한 setter, getter 등록
 * attack(), move()를 RobotActions의 interface를 호출하도록 변경.
+
 ```
 public abstract class Robot {
 	private String name;
@@ -156,6 +163,7 @@ public abstract class Robot {
 ### Atom Class
 * 생성자에서 RobotActions를 생성하여 setRobotActions를 호출하도록 변경.
 * attack(), move()를 RobotActions implement를 이용하도록 변경.
+
 ```
 public class Atom extends Robot {
 	public Atom(String name) {
@@ -177,6 +185,7 @@ public class Atom extends Robot {
 ### TaekwonV Class
 * 생성자에서 RobotActions를 생성하여 setRobotActions를 호출하도록 변경.
 * attack(), move()를 RobotActions implement를 이용하도록 변경.
+
 ```
 public class TaekwonV extends Robot {
 	public TaekwonV(String name) {
@@ -196,6 +205,7 @@ public class TaekwonV extends Robot {
 ```
 
 ## 잘 동작하는지 간단한 main함수를 작성해보았다.
+
 ```
 public class testRobotMain {
 
@@ -217,9 +227,8 @@ public class testRobotMain {
 예상대로(?) 각각에 대해 에러 없이 잘 동작하였다.
 
 아래는 출력된 결과이다.
-```
-I have strong punch and can attack with it.
-I can fly.
-I have Missile and can attack with it.
-I can only walk.
-```
+
+>I have strong punch and can attack with it.
+>I can fly.
+>I have Missile and can attack with it.
+>I can only walk.
