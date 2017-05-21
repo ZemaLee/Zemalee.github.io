@@ -1,0 +1,93 @@
+---
+layout: default
+---
+
+{% assign base_path = '../../..' %}
+
+{% if page.author %}
+<div class="post-author-info">
+  {% if page.author-email %}
+    <img class="portrait" src="{{base_path}}/images/profile/{{page.author-email}}.png" />
+    <h1 class="post-title">{{page.title}}</h1>
+    <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
+    <span class="sep">|</span>
+    <span class="author-name"><a href="mailto:{{page.author-email}}">{{page.author}}</a></span>
+  {% else %}
+    <h1 class="post-title">{{page.title}}</h1>
+    <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
+    <span class="sep">|</span>
+    <span class="author-name">{{page.author}}</span>
+
+  {% endif %}
+</div>
+{% endif %}
+
+{% if page.publish == false %}
+  <div class="post">Coming soon</div>
+{% else %}
+  <div class="post">{{ content }}</div>
+{% endif %}
+
+<div class="post-footer">
+  <div class="back-btn"><a href="/">목록으로 돌아가기</a></div>
+</div>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.9&appId=1562362760731488";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-numposts="5"></div>
+
+
+<aside id="comments" class="disqus">
+
+  <div class="container">
+    <h3><i class="icon icon-comments-o"></i> Comments</h3>
+    <div id="disqus_thread"></div>
+
+    <script type="text/javascript">
+var disqus_shortname = '{{ site.disqus_shortname }}';
+var disqus_identifier = '{{ page.id }}';
+var disqus_title = '{{ page.title }}';
+var disqus_url = '{{ site.url }}{{ page.url }}';
+/*var disqus_developer = 1;*/
+
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+    </script>
+
+    <noscript>
+      Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+    </noscript>
+  </div>
+
+</aside>
+
+<style>
+.hiring-banner {
+  height: 320px;
+  background-position-y: 80%;
+}
+.hiring-subtitle
+{
+  display: none;
+}
+.btn-job{
+  margin-top: 4px;
+}
+@media only screen and (max-width: 360px) {
+  .hiring-banner {
+    height: 220px;
+  }
+}
+}
+</style>
