@@ -246,7 +246,7 @@ Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적
 ---
 *Answer*
 
-![ex_screenshot](../images/SW4_strategy.PNG)
+![스샷파일](/images/SW4_strategy.PNG)
 
 ### 얻을 수 있는 이점에 대해 설명
 
