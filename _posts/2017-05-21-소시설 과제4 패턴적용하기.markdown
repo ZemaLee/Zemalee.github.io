@@ -194,3 +194,32 @@ public class TaekwonV extends Robot {
 	}
 }
 ```
+
+## 잘 동작하는지 간단한 main함수를 작성해보았다.
+```
+public class testRobotMain {
+
+	public static void main(String[] args) {
+		Robot atom = new Atom("atom-1");
+
+		atom.attack();
+		atom.move();
+		
+		Robot taekwonV = new TaekwonV("taekwonV-1");
+		
+		taekwonV.attack();
+		taekwonV.move();
+	}
+
+}
+```
+
+예상대로(?) 각각에 대해 에러 없이 잘 동작하였다.
+
+아래는 출력된 결과이다.
+```
+I have strong punch and can attack with it.
+I can fly.
+I have Missile and can attack with it.
+I can only walk.
+```
