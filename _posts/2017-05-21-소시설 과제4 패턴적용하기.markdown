@@ -16,9 +16,7 @@ comments: true
 
 
 ## 기존 코드
-### Robot
-* 생성자로 이름 설정
-* attack(), move()는 하위클래스에서 적용하는 것으로 작성되었다.
+* Robot
 
 ```
 public abstract class Robot {
@@ -38,9 +36,7 @@ public abstract class Robot {
 }
 ```
 
-### Atom
-* Robot class를 상속받아 작성된다.
-* attack(), move() 함수를 반드시(?) 작성한다.
+* Atom
 
 ```
 public class Atom extends Robot {
@@ -58,10 +54,7 @@ public class Atom extends Robot {
 }
 ```
 
-### TaekwonV
-
-* Robot class를 상속받아 작성된다.
-* attack(), move() 함수를 반드시(?) 작성한다.
+* TaekwonV
 
 ```
 public class TaekwonV extends Robot {
@@ -78,10 +71,12 @@ public class TaekwonV extends Robot {
 	}
 }
 ```
-## 로봇의 움직임을 클래스로 상속받도록 해보자
 
-### RobotActions Class
-* 기존에 주어진 attack(), move()를 interface화 한 모습이다.
+## Interface로 구현
+
+attack, move 함수를 interface로 생성하고, implements로 받은 클래스에 세부 구현내용이 있도록 클래스 생성. 
+
+* RobotActions Class
 
 ```
 public interface RobotActions {
@@ -90,8 +85,7 @@ public interface RobotActions {
 }
 ```
 
-### AtomActions Class
-* RobotActions interface를 implements함
+* AtomActions Class
 
 ```
 public class AtomActions implements RobotActions {
@@ -108,8 +102,7 @@ public class AtomActions implements RobotActions {
 }
 ```
 
-### TaekwonVActions
-* RobotActions interface를 implements함
+* TaekwonVActions
 
 ```
 public class TaekwonVActions implements RobotActions {
@@ -127,12 +120,13 @@ public class TaekwonVActions implements RobotActions {
 }
 ```
 
-## 각 로봇 클래스를 위에 만든 Action을 이용하도록 변경하자
+## Robot, Atom, TaekwonV 클래스에 적용
 
-### Robot Class
-* RobotActions interface를 변수로 등록함.
-* RobotActions에 대한 setter, getter 등록
-* attack(), move()를 RobotActions의 interface를 호출하도록 변경.
+Robot class에 RobotActions interface를 private으로 지정.
+
+각 개체에서 생성자 내부에서 RobotActions를 생성하여 attack, move 함수를 사용하도록 지정.
+
+* Robot Class
 
 ```
 public abstract class Robot {
@@ -160,9 +154,7 @@ public abstract class Robot {
 }
 ```
 
-### Atom Class
-* 생성자에서 RobotActions를 생성하여 setRobotActions를 호출하도록 변경.
-* attack(), move()를 RobotActions implement를 이용하도록 변경.
+* Atom Class
 
 ```
 public class Atom extends Robot {
@@ -182,9 +174,7 @@ public class Atom extends Robot {
 }
 ```
 
-### TaekwonV Class
-* 생성자에서 RobotActions를 생성하여 setRobotActions를 호출하도록 변경.
-* attack(), move()를 RobotActions implement를 이용하도록 변경.
+* TaekwonV Class
 
 ```
 public class TaekwonV extends Robot {
@@ -222,6 +212,7 @@ public class testRobotMain {
 	}
 
 }
+
 ```
 
 예상대로(?) 각각에 대해 에러 없이 잘 동작하였다.
@@ -238,7 +229,7 @@ public class testRobotMain {
 
 ## 정리(보고서 양식에 맞추어...)
 
-### 클래스다이어그램 작성
+* 클래스다이어그램 작성
 Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적용한 결과를 클래스 다이어그램으로 작성하고, 각 클래스를 설명하라
 
 (각 클래스를 Context, Strategy, Concrete Strategy 관점에서 설명.)
@@ -248,12 +239,14 @@ Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적
 
 ![Class-diagram Picture](/images/SW4_strategy.PNG)
 
-Robot Context는 Robot Actions라는 Strategy를 이용하여 attack(), move() 함수를 동작시킨다.
+Robot(Context)는 RobotActions(Strategy)을 변수로 내부 변수로 가진다
 
-각 Concrete Strategy는 Interface를 이용하여 각 attack(), move()함수에 대한 자세한 함수가 구현된다.
+attack(), move() 함수는 Context 내부의 Strategy inteface를 호출하여 동작한다.
+
+각 Concrete Strategy는 Interface로 제공되는 attack, move함수에 대해 세부 구현내용을 기술한다.
 
 
-### 얻을 수 있는 이점에 대해 설명
+* 얻을 수 있는 이점에 대해 설명
 
 *Answer*
 
@@ -263,7 +256,8 @@ Robot Context는 Robot Actions라는 Strategy를 이용하여 attack(), move() �
 
 
 ## 기존 코드
-### DataSheetView
+
+* DataSheetView
 
 ```
 import java.util.List;
@@ -292,7 +286,8 @@ public class DataSheetView {
 }
 
 ```
-### MinMaxView
+
+* MinMaxView
 
 ```
 import java.util.Collections;
@@ -318,7 +313,7 @@ public class MinMaxView { // 전체 점수가 아니라 최소/최대값만을 �
 }
 ```
 
-### ScoreRecord
+* ScoreRecord
 
 ```
 import java.util.ArrayList;
@@ -351,13 +346,13 @@ public class ScoreRecord {
 
 ## 정리(보고서 양식에 맞추어..)
 
-### 클래스 다이어그램 작성 및 설명
+* 클래스 다이어그램 작성 및 설명
 
 *solution*
 
 (각 클래스를 Subject, Concrete Subject, Observer, Concrete Observer 관점에서 설명)
 
-### Observer Pattern을 적용함으로써 얻을 수 있는 이점
+* Observer Pattern을 적용함으로써 얻을 수 있는 이점
 
 *solution*
 
