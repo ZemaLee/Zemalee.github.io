@@ -15,7 +15,7 @@ comments: true
 # 1. Strategy Pattern 적용하기
 
 
-## 1.1. 기존 코드
+## 기존 코드
 ### Robot
 * 생성자로 이름 설정
 * attack(), move()는 하위클래스에서 적용하는 것으로 작성되었다.
@@ -72,6 +72,125 @@ public class TaekwonV extends Robot {
 
 	public void move() {
 		System.out.println("I can only walk.");
+	}
+}
+```
+## 로봇의 움직임을 클래스로 상속받도록 해보자
+
+### RobotActions Class
+* 기존에 주어진 attack(), move()를 interface화 한 모습이다.
+```
+public interface RobotActions {
+	public void attack();
+	public void move();
+}
+```
+
+### AtomActions Class
+* RobotActions interface를 implements함
+```
+public class AtomActions implements RobotActions {
+
+	@Override
+	public void attack() {
+		System.out.println("I have strong punch and can attack with it.");
+	}
+
+	@Override
+	public void move() {
+		System.out.println("I can fly.");
+	}
+}
+```
+
+### TaekwonVActions
+* RobotActions interface를 implements함
+```
+public class TaekwonVActions implements RobotActions {
+
+	@Override
+	public void attack() {
+		System.out.println("I have Missile and can attack with it.");
+	}
+
+	@Override
+	public void move() {
+		System.out.println("I can only walk.");
+	}
+
+}
+```
+
+## 각 로봇 클래스를 위에 만든 Action을 이용하도록 변경하자
+
+### Robot Class
+* RobotActions interface를 변수로 등록함.
+* RobotActions에 대한 setter, getter 등록
+* attack(), move()를 RobotActions의 interface를 호출하도록 변경.
+```
+public abstract class Robot {
+	private String name;
+	private RobotActions robotActions;
+	public Robot(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setRobotActions(RobotActions robotActions) {
+		this.robotActions = robotActions;
+	}
+	
+	public void attack() {
+		robotActions.attack();
+	};
+
+	public void move() {
+		robotActions.move();
+	}
+}
+```
+
+### Atom Class
+* 생성자에서 RobotActions를 생성하여 setRobotActions를 호출하도록 변경.
+* attack(), move()를 RobotActions implement를 이용하도록 변경.
+```
+public class Atom extends Robot {
+	public Atom(String name) {
+		super(name);
+		RobotActions atomActions = new AtomActions();
+		setRobotActions(atomActions);
+	}
+
+	public void attack() {
+		super.attack();
+	}
+
+	public void move() {
+		super.move();
+	}
+}
+```
+
+### TaekwonV Class
+* 생성자에서 RobotActions를 생성하여 setRobotActions를 호출하도록 변경.
+* attack(), move()를 RobotActions implement를 이용하도록 변경.
+```
+public class TaekwonV extends Robot {
+	public TaekwonV(String name) {
+		super(name);
+		RobotActions taekwonVActions = new TaekwonVActions();
+		setRobotActions(taekwonVActions);
+	}
+
+	public void attack() {
+		super.attack();
+	}
+
+	public void move() {
+		super.move();
 	}
 }
 ```
