@@ -236,3 +236,22 @@ public class testRobotMain {
 >
 >I can only walk.
 
+## 정리(보고서 양식에 맞추어...)
+
+### 클래스다이어그램 작성
+Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적용한 결과를 클래스 다이어그램으로 작성하고, 각 클래스를 설명하라
+
+(각 클래스를 Context, Strategy, Concrete Strategy 관점에서 설명.)
+
+---
+*Answer*
+
+힝....
+
+### 얻을 수 있는 이점에 대해 설명
+
+*Answer*
+
+힝...
+
+# Observer Pattern
