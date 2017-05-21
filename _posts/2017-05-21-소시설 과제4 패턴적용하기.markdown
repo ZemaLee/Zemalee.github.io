@@ -1,0 +1,77 @@
+---
+layout: entry
+title: "우왕 과제다"
+author: 이제언
+date: 2017-05-13 16:42 +0900
+tags: 
+comments: true
+---
+* table of contents
+{:toc}
+
+# 과제 개요
+  주어진 프로그램 코드에 대해 각각 Strategy Pattern, Observer Pattern을 적용한다.
+
+# 1. Strategy Pattern 적용하기
+
+
+## 1.1. 기존 코드
+### Robot
+* 생성자로 이름 설정
+* attack(), move()는 하위클래스에서 적용하는 것으로 작성되었다.
+```
+public abstract class Robot {
+	private String name;
+
+	public Robot(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	abstract public void attack();
+
+	abstract public void move();
+}
+```
+
+### Atom
+* Robot class를 상속받아 작성된다.
+* attack(), move() 함수를 반드시(?) 작성한다.
+```
+public class Atom extends Robot {
+	public Atom(String name) {
+		super(name);
+	}
+
+	public void attack() {
+		System.out.println("I have strong punch and can attack with it.");
+	}
+
+	public void move() {
+		System.out.println("I can fly.");
+	}
+}
+```
+
+### TaekwonV
+
+* Robot class를 상속받아 작성된다.
+* attack(), move() 함수를 반드시(?) 작성한다.
+```
+public class TaekwonV extends Robot {
+	public TaekwonV(String name) {
+		super(name);
+	}
+
+	public void attack() {
+		System.out.println("I have Missile and can attack with it.");
+	}
+
+	public void move() {
+		System.out.println("I can only walk.");
+	}
+}
+```
