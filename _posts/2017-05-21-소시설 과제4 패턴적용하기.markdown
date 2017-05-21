@@ -246,7 +246,12 @@ Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적
 ---
 *Answer*
 
-![스샷파일](/images/SW4_strategy.PNG)
+![Class-diagram Picture](/images/SW4_strategy.PNG)
+
+Robot Context는 Robot Actions라는 Strategy를 이용하여 attack(), move() 함수를 동작시킨다.
+
+각 Concrete Strategy는 Interface를 이용하여 각 attack(), move()함수에 대한 자세한 함수가 구현된다.
+
 
 ### 얻을 수 있는 이점에 대해 설명
 
