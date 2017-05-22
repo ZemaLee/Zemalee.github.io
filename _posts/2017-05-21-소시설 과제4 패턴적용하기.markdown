@@ -410,7 +410,64 @@ public interface Observer {
 
 	```
 
-## ~~하도록 변경해보자.
+## ScoreRecord의 SuperClass가 Observer를 다루도록 구현
+
+* Subject (abstract class)
+
+```
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Subject {
+	private List<Observer> observers = new ArrayList<Observer>();
+	
+	public void attachObserver(Observer observer) {
+		observers.add(observer);
+	}
+	
+	public void detachObserver(Observer observer) {
+		observers.remove(observer);
+	}
+	
+	public void notifyObservers() {
+		for( Observer observer : observers ) {
+			observer.update();
+		}
+	}
+}
+
+```
+
+* Subject를 extends하는 ScoreRecord 변화
+
+기존에 DataSheetView 또는 MinMaxView를 직접 private 변수로 가져야 했던 불편함을, List<Observer>로 갖게 되어 각 View에 대한 update()를 일일히 본인이 실행할 필요가 없도록 구성하였다.
+
+addScore 함수 내부에서 기존에는 dataSheetView.update(), minmaxView.update() 와 같이 각 View에 대해 직접 update 함수를 실행해야 했던 불편함이 있지만, observer의 notify()함수를 통해 모든 View를 자동으로 update하도록 수정하였다. 
+
+
+```
+import java.util.ArrayList;
+import java.util.List;
+
+public class ScoreRecord extends Subject {
+	private List<Observer> observers = new ArrayList<Observer>();
+	private List<Integer> scores = new ArrayList<Integer>(); // 점수를 저장함
+
+	public void setDataSheetView(DataSheetView dataSheetView) {
+		attachObserver(dataSheetView);
+	}
+
+	public void addScore(int score) { // 새로운 점수를 축함
+		scores.add(score); // scores 목록에 주어진 점수를 추가함
+		notifyObservers();
+	}
+
+	public List<Integer> getScoreRecord() {
+		return scores;
+	}
+}
+
+```
 
 ## main함수에서의 테스트
 
