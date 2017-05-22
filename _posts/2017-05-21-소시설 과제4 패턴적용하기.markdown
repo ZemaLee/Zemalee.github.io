@@ -338,7 +338,77 @@ public class ScoreRecord {
 }
 ```
 
-## ~~해보자
+## 각 View에 적용할 Observer를 생성해보자.
+
+* Observer (interface)
+
+```
+public interface Observer {
+	public abstract void update();
+}
+```
+
+* Observer interface를 implements로 갖는 클래스 정의	
+	
+	두 클래스 모두 실제로 내부에 변경된 내용은 없고, implements Observer를 추가했다.
+	
+	* DataSheetView
+
+	```
+
+	import java.util.List;
+
+	public class DataSheetView implements Observer {
+		private ScoreRecord scoreRecord;
+		private int viewCount;
+	
+		public DataSheetView(ScoreRecord scoreRecord, int viewCount) {
+			this.scoreRecord = scoreRecord;
+			this.viewCount = viewCount;
+		}
+
+		public void update() { // 점수의 변경을 통보 받음
+			List<Integer> record = scoreRecord.getScoreRecord(); // 점수를 조회함
+			displayScores(record, viewCount); // 조회된 점수를 viewCount만큼 출력함
+		}
+
+		private void displayScores(List<Integer> record, int viewCount) {
+			System.out.print("List of " + viewCount + " entries: ");
+			for (int i = 0; i < viewCount && i < record.size(); i++) {
+				System.out.print(record.get(i) + " ");
+			}
+			System.out.println();
+		}
+	}
+
+	```
+
+	* MinMaxView
+
+	```
+	import java.util.Collections;
+	import java.util.List;
+	
+	public class MinMaxView implements Observer { // 전체 점수가 아니라 최소/최대값만을 출력하는 클래스
+		private ScoreRecord scoreRecord;
+	
+		public MinMaxView(ScoreRecord scoreRecord) {
+			this.scoreRecord = scoreRecord;
+		}
+	
+		public void update() {
+			List<Integer> record = scoreRecord.getScoreRecord();
+			displayMinMax(record); // 최소/최대값만을 출력
+		}
+	
+		private void displayMinMax(List<Integer> record) {
+			int min = Collections.min(record, null);
+			int max = Collections.max(record, null);
+			System.out.println("Min: " + min + " Max: " + max);
+		}
+	}
+
+	```
 
 ## ~~하도록 변경해보자.
 
