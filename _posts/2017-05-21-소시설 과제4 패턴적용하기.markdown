@@ -515,6 +515,10 @@ public class testScoreRecordMain {
 
 *solution*
 
+![Class-diagram Picture(obs)](/images/SW4_observer.PNG)
+
+짜잔
+
 (각 클래스를 Subject, Concrete Subject, Observer, Concrete Observer 관점에서 설명)
 
 * Observer Pattern을 적용함으로써 얻을 수 있는 이점
