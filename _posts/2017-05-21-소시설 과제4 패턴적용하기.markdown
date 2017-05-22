@@ -471,6 +471,44 @@ public class ScoreRecord extends Subject {
 
 ## main함수에서의 테스트
 
+ScoreRecord를 만들고, DataSheetView, MinMaxView를 Observer로 추가한 후, 여러 값을 넣으며 출력값을 확인했다.
+
+```
+public class testScoreRecordMain {
+	public static void main( String[] args ) {
+		ScoreRecord scoreRecord = new ScoreRecord();
+		
+		scoreRecord.attachObserver(new DataSheetView(scoreRecord, 10));
+		scoreRecord.attachObserver(new MinMaxView(scoreRecord));
+		
+		scoreRecord.addScore(10);
+		scoreRecord.addScore(20);
+		scoreRecord.addScore(30);
+		scoreRecord.addScore(40);
+	}
+}
+
+```
+
+출력 결과는 아래와 같다.
+
+> List of 10 entries: 10
+>  
+> Min: 10 Max: 10
+> 
+> List of 10 entries: 10 20
+>  
+> Min: 10 Max: 20
+> 
+> List of 10 entries: 10 20 30
+>  
+> Min: 10 Max: 30
+> 
+> List of 10 entries: 10 20 30 40
+>  
+> Min: 10 Max: 40
+
+
 ## 정리(보고서 양식에 맞추어..)
 
 * 클래스 다이어그램 작성 및 설명
