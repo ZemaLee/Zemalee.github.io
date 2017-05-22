@@ -450,7 +450,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScoreRecord extends Subject {
-	private List<Observer> observers = new ArrayList<Observer>();
 	private List<Integer> scores = new ArrayList<Integer>(); // 점수를 저장함
 
 	public void setDataSheetView(DataSheetView dataSheetView) {
