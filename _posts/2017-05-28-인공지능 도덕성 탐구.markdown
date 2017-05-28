@@ -7,7 +7,9 @@ tags: 공학윤리, 논문
 comments: true
 ---
 
-sub title : 동물되기, 기계되기를 통한 사이보그 도덕성  
+동물되기, 기계되기를 통한 사이보그 도덕성  
+
+(**마지막 수정 : '17. 5.28.(일)**)
 
 * table of contents
 {:toc}
