@@ -21,5 +21,3 @@ html header: <script type="text/javascript"  src="http://cdn.mathjax.org/mathjax
 * 문단 안에 바로 수식 삽입하기:
 \\({e}^{i\pi}+1=0\\)
 
-
-출처: http://dataleaf.tistory.com/entry/Markdown에서-수식-입력하기 [정보의 잎사귀]
