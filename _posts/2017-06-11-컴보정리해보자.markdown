@@ -13,6 +13,6 @@ comments: true
 
 $$
 
-a ^ { phi (n)+1}
+a ^ { phi (n)+1} \\  
 
 $$
