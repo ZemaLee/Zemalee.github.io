@@ -142,9 +142,14 @@ Discrete Logarithm Problem 기반 프로토콜.
 
 5. A와 B는 각각 Secret Key **S**를 공유하게 되었다.
 
-단, 디피헬만 키분배는 **인증 과정이 없기 때문에** Man-in-the-Middle-Attack에 취약하다.
+단, 디피헬만 키분배는 **인증 과정이 없기 때문에** Man-in-the-Middle-Attack에 취약하다.  
+(교환 알고리즘 자체는 암호학적으로 안정적임)
 
 이 중간자 공격을 막기 위해 디피헬만 알고리즘 위에 다른 알고리즘을 섞어 사용한다.
 
 ## ElGamal Cryptography
+
+Discrete Logarithm Problem 기반.  
+
+엘가말 기반이라 엘가말 키 교환이랑 비슷함!!  
 
