@@ -6,7 +6,6 @@ date: 2017-06-11 17:05 +0900
 tags: 컴퓨터보안, 보안, 기말고사
 comments: true
 --- 
-{% include mathjax_helper.html %}
 
 * table of contents
 {:toc}
