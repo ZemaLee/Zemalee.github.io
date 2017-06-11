@@ -116,5 +116,7 @@ Merkle에 의해 고안된 방식이다.
 
 ## Diffie-Hellman Key Exchange
 
-**아~~주** 중요한 내용이라고 합니다.
+**아~~주** 중요한 내용이라고 합니다
+
+디피헤르만 키분배도 Discrete Logarithm Problem 기반이다.
 
