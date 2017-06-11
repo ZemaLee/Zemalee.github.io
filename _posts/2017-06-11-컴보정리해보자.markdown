@@ -13,6 +13,7 @@ comments: true
 
 $$
 
-a ^ { phi (n)+1} \\  
+그렇다. \\  
+a ^ { phi (n) + 1} \\  
 
 $$
