@@ -12,21 +12,14 @@ comments: true
 
 # RSA
 
-$$  
+html header: <script type="text/javascript"  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> 
 
-그렇다. \\  
-a ^ { phi (n) + 1} \\  
+* 수식으로 삽입하기:
 
-$$  
+\\( x(t)=\frac{-b\pm \sqrt{{b}^{2}-4ac}}{2a} \\)
 
-$$  
+* 문단 안에 바로 수식 삽입하기:
+\\({e}^{i\pi}+1=0\\)
 
-수식이 안나온다
-g(x)라던지  
-f(x)라던지  
 
-$$  
-
-$ g(x)  \\  
-
-왜 안될까
+출처: http://dataleaf.tistory.com/entry/Markdown에서-수식-입력하기 [정보의 잎사귀]
