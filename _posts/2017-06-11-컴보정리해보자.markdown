@@ -195,3 +195,20 @@ M = C2 * K^{-1} mod q
 * 단점  
 > Message M을 암호화 할 때, 길이가 두 배로 늘어난다....(흑흑)
 
+---
+
+# CH10_2_ECC (Elliptic Curve Cryptography)
+
+딴거 먼저 하고 이거 공부할 예정 ㅠㅠ
+
+# CH11_MAC_Hash
+
+# CH12_MIC_SHA
+
+# CH13_Digital_Signature
+
+# CH14_Authentication_X509_Certificate
+
+# CH15_User_Authentication
+
+# CH19_ComputerSecurity_MaliciousSW
