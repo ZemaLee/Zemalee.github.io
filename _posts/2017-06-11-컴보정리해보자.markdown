@@ -11,4 +11,4 @@ comments: true
 
 # RSA
 
-\\( a^{\phi(n)+1} \\)
+$$ a^{ phi (n)+1} $$
