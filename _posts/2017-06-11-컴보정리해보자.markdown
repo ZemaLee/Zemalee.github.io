@@ -1,0 +1,14 @@
+---
+layout: entry
+title: "컴퓨터보안 시험용 정리"
+author: 이제언
+date: 2017-06-11 17:05 +0900
+tags: 컴퓨터보안, 보안, 기말고사
+comments: true
+--- 
+* table of contents
+{:toc}
+
+# RSA
+
+\\( a^{\phi(n)+1} \\)
