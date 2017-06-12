@@ -337,16 +337,16 @@ SHA-512만 간단하게 요약해보겠다.
 
 어려우니 그림으로 보자
 
-![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_1.png)  
+![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_01.png)  
 
 우선, 메세지 길이를 1024비트에 맞게 Pending.  
 Initial Vector로 F함수를 처리할거다.  
 
-![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_2.png)  
+![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_02.png)  
 
 512비트 80개로 쪼개서 각 라운드를 진행한다.  
 
-![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_3.png)  
+![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_03.png)  
 
 각 라운드는 덧셈연산과 Major연산으로 빠르게 처리한다.  
 
@@ -368,7 +368,7 @@ Keyed Hash = Hash( Key | Message ).
 
 간단하게 말하면, 계속 Key값을 넣어서 바꿔서 찾아내기 힘들게 하는 방법이다.  
 
-![Message Pending](https://zemalee.github.io/images/Computer_Security/05_HMAC.png)  
+![Message Pending](https://zemalee.github.io/images/Computer_Security/05_HMAC_overview.png)  
 
 Key를 input-padding한 값(초기값)을 넣고 돌린다.  
 그 후, output을 또 Pending해서 넣는다.  
@@ -380,7 +380,7 @@ Key를 input-padding한 값(초기값)을 넣고 돌린다.
 
 # CH13 Digital Signature
 
-
+ㅇ
 
 ---  
 
