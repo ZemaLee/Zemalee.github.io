@@ -283,19 +283,57 @@ Collision이 일어날 확률이 매우 적다.
 
 **Birthday Paradox**  
 Hash 충돌과 관련된 내용.  
-365일 중, 같은 생일을 가진사람을 뽑을 확률이 23명이면 50%, 140명이면 거의 100% 뽑는다는 내용.  
+365일 중, 같은 생일을 가진사람을 뽑을 확률이 23명이면 50%, 80명이면 거의 100% 뽑는다는 내용.  
 
 결론만 적도록 하겠다.
 Hash가 n bit라고 할 때, 1.17 * 루트 n을 취한만큼만 시도하면 충돌이 일어날 확률이 50%더라...  
 
 ---  
 
-# CH12 MIC SHA
+# CH12 MIC & SHA
+
+## Classification of Hash Functions
+
+MAC이라는 단어를 네트워크에서 하도 많이써서;;; 용어를 정리하도록 한다.  
+
+Hash 함수를 목적에 따라 나누면  
+
+**MDC** = **MIC** : 수정여부를 검사하는 Code.  
+(MDC : Modification Detection Codes)  
+(MIC : Message Integrity Codes)  
+Key가 필요없다. **Unkeyed**  
+
+```  
+(농담)  
+M : 모디파이 됐는지~  
+D : 디텍션하는  
+C : 코드  
+```  
+
+**MAC** : 인증을 위한 Codes.
+(MAC : Message Authentication Codes)  
+Key가 항상 있어야 한다. **Keyed**  
+
+
+
+---  
 
 # CH13 Digital Signature
 
+
+
+---  
+
 # CH14 Authentication X509 Certificate
 
+
+
+---  
+
 # CH15 User Authentication
+
+
+
+---  
 
 # CH19 ComputerSecurity MaliciousSW
