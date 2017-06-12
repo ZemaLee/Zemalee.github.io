@@ -229,8 +229,26 @@ public-key encryption을 사용하게 되면 **발신자에 대한 신원확인*
 
 ## Message Authentication Code(MAC)
 
-그림을 먼저 보고 시작하도록 하자.  
+MAC은 메세지의 무결성 확인 및 인증을 위한 Code를 달아주는 방식이다.
+
+**Sender**
+
+*input*  
+Message, K(공유하는 key)  
+
+*전송하는 정보*  
+Message와 MAC Code  
+
+**Receiver**  
+
+1. 메세지를 일단 받는다.  
+2. 메세지를 같은 K값으로 MAC Algorithm을 거쳐 MAC Code를 얻는다.  
+3. 받은 MAC과 일치하는지 확인한다.  
+
+그림으로 이해하면 아래와 같다.  
 ![Message_Authentication_Code](https://zemalee.github.io/images/Computer_Security/01_Message_Athentication_Code.png)  
+
+
 
 # CH12 MIC SHA
 
