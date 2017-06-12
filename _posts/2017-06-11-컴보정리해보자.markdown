@@ -466,7 +466,57 @@ V1 == V2 ? 제대로왔군 : 변조됐군.
 
 # CH14 Authentication X509 Certificate
 
+CA : 인증기관.. 이라고 알고 아래를 이해하자.  
 
+어떤 사람의 공개키 및 아이디를 CA가 확인해주는 방법.  
+
+CA가 서명해서 공개키로 확인할 수 있게 토큰을 줌.  
+
+★★★ **표기법**  
+CA << A >> 는 CA가 A의 공개키를 서명해줬다는 의미.  
+
+![인증 체인](https://zemalee.github.io/images/Computer_Security/07_CA_Hierarchy.png)  
+
+내가 어떻게 외국에 있는 이름 모를 회사의 공개키를 믿고 메세지를 보낼수 있는가~? 에 대한 Tree.  
+
+```  
+(안읽어도됨)  
+나 : A, 확인하고자 하는 기관 : B  
+X는 날 인증해준 착한 기관이다.  
+X를 인정해준 W는 착한 기관이다.  
+W를 인정해준 V는 착한 기관이다.  
+
+V는 착한놈인데, Y를 인정하네? Y도 착하다.  
+Y는 착한놈인데, Z를 인정하네? Z도 착하다.  
+Z는 착한놈인데, B를 인정하네?  
+
+오호! B는 믿을만한 놈인가보다.  
+```
+
+**Nonce** : 랜덤한 값으로, Replay 공격을 방지함.  
+
+## ★★★ 1,2,3-Way Authentication
+
+### One-Way Authentication
+
+![One-way Authentication](https://zemalee.github.io/images/Computer_Security/08_One_way.png)  
+
+A가 B를 timestamp, nonce와 함께 서명해주는 방식  
+
+### Two-way Authentication
+
+![Two-way Authentication](https://zemalee.github.io/images/Computer_Security/09_Two_way.png)  
+
+A가 B를, B도 A를 인증하는 방식으로,  
+rA(nonce)를 B가 되돌려줌으로 인해  
+"방금 내가 보낸거에 대한 인증값이구나"를 확인할 수 있음.
+
+### Three-way Authentication
+
+![Three-way Authentication](https://zemalee.github.io/images/Computer_Security/10_Three_way.png)  
+
+A가 B에게 준걸 B가 확인하고, 자기도 넌스를 하나 더 실어서 줌.  
+A는 B가 만든 Nonce를 잘받았다고 알려주는 방식.
 
 ---  
 
