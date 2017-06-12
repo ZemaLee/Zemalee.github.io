@@ -522,7 +522,85 @@ A는 B가 만든 Nonce를 잘받았다고 알려주는 방식.
 
 # CH15 User Authentication
 
+## Authentication Protocol
 
+User Authentication은 여러개가 있다.  
+* knows : 지식 기반  
+	ex) 비밀번호, PIN번호 입력 등  
+
+* Possesses : 소유 기반  
+	ex) 열쇠, 토큰, 스마트카드 등  
+
+* is(static biometrics) : 바이오 기반  
+	ex) 지문, 홍채인식 등  
+
+* does(dynamic biometrics) : 행위 기반  
+	ex) 음성, 서명 등
+
+**Replay attacks**
+
+* Simple Replay  
+	그냥 다시 한번 시도해보기.  
+* Repetition that can be logged  
+	허용시간 범위 내에서 재전송해보기.  
+* Repetition that cannot be detected  
+	원본은 정지된 상태고, 재전송용 메세지만 도착하는 경우  
+* Backward Replay without modification  
+	수정 없이 역방향 재전송.(그냥 온걸 다시 보내는거래요)  
+
+**방어방법들...**
+
+* Sequence Number  
+	생각보다 취약하기 때문에 잘 안쓴다.
+
+* TimeStamp  
+	전송 시점이 잘못된 걸로 눈치챌 수 있음.!!
+
+* Challenge / Response  
+	(확실X) Nonce로 그때그때 업데이트 하면서 메시지 주고받는 방법  
+
+## ★★★ Needham-Schroeder Protocol
+
+**KDC : Key Distribute Center**를 알고 아래를 이해하자!!  
+
+![Needham-Schroeder Protocol](https://zemalee.github.io/images/Computer_Security/11_Needham.png)  
+
+1) A->KDC  
+	나는 A야. B랑 통신하고싶어.  
+2) KDC->A  
+	비밀키, B아이디, 니가보낸 넌스 여기있어.  
+	B만 열어볼 수 있게 토큰도 같이 달아줄께  
+	(Token : E_{kb}[Ks || AID]  
+3) A->B  
+	안녕 B야, 이거 KDC가 너 주래.  
+4) B->A  
+	(비밀키로) 내꺼 받으면 연락줘~  
+5) A->B  
+	(비밀키로) 니가 보낸거 좀 수정했어~  
+
+참고) 과정 5에서 함수화하는 이유는 Replay attack 방지를 위함!!  
+
+## ★ Kerberos
+
+간단하게 보면 이렇다.  
+
+![Kerberos](https://zemalee.github.io/images/Computer_Security/12_Kerberos.png)  
+
+한 단계씩 보자.
+
+![Kerberos_1,2](https://zemalee.github.io/images/Computer_Security/13_Kerberos_12.png)  
+
+
+![Kerberos_3,4](https://zemalee.github.io/images/Computer_Security/13_Kerberos_34.png)  
+
+
+![Kerberos_5,6](https://zemalee.github.io/images/Computer_Security/13_Kerberos_56.png)  
+
+에라이... 큰거 한 번 더 보면서 생각해봐요
+
+![Kerberos_OverView](https://zemalee.github.io/images/Computer_Security/14_Kerberos_OV.png)  
+
+그냥 순서만 잘 생각하면 안어려움...
 
 ---  
 
