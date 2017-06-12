@@ -1,0 +1,11 @@
+---
+layout: entry
+title: "공윤 시험대비 빠샤"
+author: 이제언
+date: 2017-06-11 17:05 +0900
+tags: 공학윤리, 공윤, 기말고사
+comments: true
+--- 
+* table of contents
+{:toc}
+

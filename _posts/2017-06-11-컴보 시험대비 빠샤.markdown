@@ -1,6 +1,6 @@
 ---
 layout: entry
-title: "컴퓨터보안 시험용 정리"
+title: "컴보 시험대비 빠샤"
 author: 이제언
 date: 2017-06-11 17:05 +0900
 tags: 컴퓨터보안, 보안, 기말고사
@@ -605,3 +605,5 @@ User Authentication은 여러개가 있다.
 ---  
 
 # CH19 ComputerSecurity MaliciousSW
+
+잉... 뭐하는지 모르겠다 이건
