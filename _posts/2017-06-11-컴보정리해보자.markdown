@@ -9,7 +9,7 @@ comments: true
 * table of contents
 {:toc}
 
-# CH10_1_Key Management other PKC
+# CH10.1 Key Management other PKC
 
 ## RSA
 
@@ -197,18 +197,46 @@ M = C2 * K^{-1} mod q
 
 ---
 
-# CH10_2_ECC (Elliptic Curve Cryptography)
+# CH10.2 ECC (Elliptic Curve Cryptography)
 
 딴거 먼저 하고 이거 공부할 예정 ㅠㅠ
 
-# CH11_MAC_Hash
+# CH11 MAC & Hash
 
-# CH12_MIC_SHA
+## 개요
 
-# CH13_Digital_Signature
+메세지에 대한 인증(Message Athentication)은 크게 두 가지로 나뉜다.  
+1) 보낸 메세지가 위조/변조되지 않았는가? 
+2) 발신자에 대한 신원 확인(A가 맞는가?)  
+3) 부정 방지(해 놓고 안했다 하기 없기)  
 
-# CH14_Authentication_X509_Certificate
+위 내용을 방지하기 위해 세 가지 function을 사용할 것이다.  
+1. Message Encryption  
+2. Message Authentication Code(MAC)  
+3. hash function  
 
-# CH15_User_Authentication
+## Message Encryption
 
-# CH19_ComputerSecurity_MaliciousSW
+*Problem of public-key*  
+public-key encryption을 사용하게 되면 **발신자에 대한 신원확인**이 어렵게 된다.(모두가 공개키를 알 수 있기 때문)  
+
+*Solution*  
+> 발신자는 메시지에 자신의 Private-key로 서명하여 **비밀**보장 및 **인증**과정이 동시에 수행될 수 있게 한다.  
+
+*But*  
+암호화 하는데 비용이 들더라..  
+
+## Message Authentication Code(MAC)
+
+그림을 먼저 보고 시작하도록 하자.  
+![Message Authentication Code](/images/Computer_Security/01_Message_Athentication_Code.PNG)  
+
+# CH12 MIC SHA
+
+# CH13 Digital Signature
+
+# CH14 Authentication X509 Certificate
+
+# CH15 User Authentication
+
+# CH19 ComputerSecurity MaliciousSW
