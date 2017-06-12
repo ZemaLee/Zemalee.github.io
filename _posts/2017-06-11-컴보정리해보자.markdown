@@ -249,7 +249,12 @@ Message와 MAC Code
 ![Message_Authentication_Code](https://zemalee.github.io/images/Computer_Security/01_Message_Athentication_Code.png)  
 
 ....*참고*  
-MAC은 기본적으로 Many-to-One 함수이기 때문에, 같은 결과를 내는 입력이 여러개일 수 있다.
+MAC은 기본적으로 Many-to-One 함수이기 때문에, 같은 결과를 내는 입력이 여러개일 수 있다.  
+따라서, MAC 알고리즘은 동일한 MAC값을 가진 Message를 찾는 것이 infeasible 해야 한다.   
+
+MAC기반 DES-CBC 대표적인 알고리즘  
+(DAA: Data Authentication Algorithm) 그림  
+![Data Authentication Algorithm](https://zemalee.github.io/images/Computer_Security/02_Data_Authentication_Algorithm.png)  
 
 ## Hash Function
 
