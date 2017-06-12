@@ -230,7 +230,7 @@ public-key encryption을 사용하게 되면 **발신자에 대한 신원확인*
 ## Message Authentication Code(MAC)
 
 그림을 먼저 보고 시작하도록 하자.  
-![Message_Authentication_Code](imagesComputer_Security01_Message_Athentication_Code.png)  
+![Message_Authentication_Code](images/Computer_Security/01_Message_Athentication_Code.png)  
 
 # CH12 MIC SHA
 
