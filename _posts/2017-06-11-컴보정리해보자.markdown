@@ -253,10 +253,18 @@ MAC은 기본적으로 Many-to-One 함수이기 때문에, 같은 결과를 내�
 따라서, MAC 알고리즘은 동일한 MAC값을 가진 Message를 찾는 것이 infeasible 해야 한다.   
 
 MAC기반 DES-CBC 대표적인 알고리즘  
-(DAA: Data Authentication Algorithm) 그림  
+(**DAA**: Data Authentication Algorithm)  
+Block-Chaining 방식 예제라네요..  
+MAC이랑 연관됐는진 모르겠지만 눈에 익히기 위해...   
 ![Data Authentication Algorithm](https://zemalee.github.io/images/Computer_Security/02_Data_Authentication_Algorithm.png)  
 
+
 ## Hash Function
+
+h = Hash( M )이라고 가정하고, MAC과 비슷한 동작을 함.  
+
+![Hashing](https://zemalee.github.io/images/Computer_Security/03_Hashing.png)  
+
 
 
 
