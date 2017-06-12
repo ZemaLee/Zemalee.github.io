@@ -296,12 +296,15 @@ Hash가 n bit라고 할 때, 1.17 * 루트 n을 취한만큼만 시도하면 충
 
 MAC이라는 단어를 네트워크에서 하도 많이써서;;; 용어를 정리하도록 한다.  
 
-Hash 함수를 목적에 따라 나누면  
+Hash 함수를 목적에 따라 나눌 수 있다.  
 
-**MDC** = **MIC** : 수정여부를 검사하는 Code.  
+* **MDC** = **MIC**  
+수정여부를 검사하는 Code를 갖는 Hash.  
 (MDC : Modification Detection Codes)  
 (MIC : Message Integrity Codes)  
 Key가 필요없다. **Unkeyed**  
+같은 알고리즘을 사용하면 **같은 입력에 대해 항상 같은 출력을 갖는다.**  
+
 
 ```  
 (농담)  
@@ -310,11 +313,68 @@ D : 디텍션하는
 C : 코드  
 ```  
 
-**MAC** : 인증을 위한 Codes.
+* **MAC**  
+인증을 위한 Code를 갖는 Hash.
 (MAC : Message Authentication Codes)  
 Key가 항상 있어야 한다. **Keyed**  
+같은 알고리즘을 사용해도 **Key에 따라 출력이 달라진다.**  
 
+## UnKeyed Hash Functions - SHA
 
+SHA : Secure Hash Algorithm  
+160비트짜리를 SHA-1이라고 부른다.  
+중국인 여자 교수 WANG이 치명적 단점을 밝힌 그 알고리즘..  
+
+이후, SHA-256, 384, 512를 개발함.  
+
+SHA-512만 간단하게 요약해보겠다.  
+1. 메세지 Panding  
+	메세지 길이를 1024의 배수로 맞추기 위해 Pending한다.  
+2. 길이 정보 추가  
+3. 해쉬 버퍼 초기화  
+4. 1024 비트 처리  
+5. 출력  
+
+어려우니 그림으로 보자
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/03_SHA1024_1.png)  
+
+우선, 메세지 길이를 1024비트에 맞게 Pending.  
+Initial Vector로 F함수를 처리할거다.  
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/03_SHA1024_2.png)  
+
+512비트 80개로 쪼개서 각 라운드를 진행한다.  
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/03_SHA1024_3.png)  
+
+각 라운드는 덧셈연산과 Major연산으로 빠르게 처리한다.  
+
+다 외우거나 할 필요는 없어보인다. 넘어간다.  
+
+## Keyed Hash Function - HMAC
+
+### 간단한 Keyed-Hash 정보들  
+
+왜 Keyed가 필요한가? = 인증에 이용하기 위함.  
+
+간단하게 생각해보면  
+Keyed Hash = Hash( Key | Message ).  
+
+이런식으로 concat하면 공격자는 Message를 바꿔가면서 hash가 어떻게 출력되는지 Model이 깔끔하게 나와버린다.  
+즉, Hash의 안전도만 남고 Keyed가 의미가 없어질 우려가 있다.
+
+### HMAC
+
+간단하게 말하면, 계속 Key값을 넣어서 바꿔서 찾아내기 힘들게 하는 방법이다.  
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/04_HMAC.png)  
+
+Key를 input-padding한 값(초기값)을 넣고 돌린다.  
+그 후, output을 또 Pending해서 넣는다.  
+그 결과, **Key값과 출력이 직접적으로 연관이 없게 된다**  
+
+이 또한 **외울 필요가 없다고 한다**.  
 
 ---  
 
