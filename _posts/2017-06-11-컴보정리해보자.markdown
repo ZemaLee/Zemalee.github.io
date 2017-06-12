@@ -233,10 +233,10 @@ MAC은 메세지의 무결성 확인 및 인증을 위한 Code를 달아주는 �
 
 **Sender**
 
-*input*  
+....*input*  
 Message, K(공유하는 key)  
 
-*전송하는 정보*  
+....*전송하는 정보*  
 Message와 MAC Code  
 
 **Receiver**  
@@ -247,6 +247,11 @@ Message와 MAC Code
 
 그림으로 이해하면 아래와 같다.  
 ![Message_Authentication_Code](https://zemalee.github.io/images/Computer_Security/01_Message_Athentication_Code.png)  
+
+....*참고*  
+MAC은 기본적으로 Many-to-One 함수이기 때문에, 같은 결과를 내는 입력이 여러개일 수 있다.
+
+## Hash Function
 
 
 
