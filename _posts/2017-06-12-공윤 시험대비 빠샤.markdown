@@ -9,22 +9,7 @@ comments: true
 * table of contents
 {:toc}
 
-```  
-정리 안된 내용 막 적음..  
-
-★★ 에일리언 내용이나, 영화 줄거리 좀 알고 있는게 좋을거라고 하심  
-
-공학윤리문제 해결책(단순한 윤리문제에 대한 해결책)  
-선긋기 기법  
-창조적 중도 해결법  
-순서도 기법  
-7단계 문제해결법  
-복잡한 윤리문제: 공리주의, 인간존중 원리, 동기주의  
-```  
-
-http://ynucc.yeungnam.ac.kr/~kimsoo/0011/Lecture/chapter4/chapter4.html  
-
-나름 잘 정리한 사이트임.
+[공학윤리문제 해결과정 정리 잘된 사이트](http://ynucc.yeungnam.ac.kr/~kimsoo/0011/Lecture/chapter4/chapter4.html "공학윤리문제의 해결과정 정리된 사이트")를 보는 것도 추천한다. 여긴 내가 똥을 싸지를 뿐..
 
 **공학윤리문제의 해결과정**  
 ![공학윤리문제의 해결과정 도표](https://zemalee.github.io/images/GY/01_GY_Solution.png)  
