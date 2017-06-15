@@ -1,0 +1,10 @@
+---
+layout: entry
+title: "공학윤리 시험 ㅋㅋ"
+author: 이제언
+date: 2017-06-15 13:39 +0900
+tags: 공학윤리, 시험
+comments: true
+--- 
+
+시간남으면 여기도 적어야징
