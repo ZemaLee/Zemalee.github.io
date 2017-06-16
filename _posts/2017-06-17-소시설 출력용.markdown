@@ -7,9 +7,8 @@ tags: 소시설, 기말고사
 comments: true
 ---
 
-## 단위테스트
-
-### JUnit 이용 Test  
+## 단위테스트  
+### JUnit 이용 Test    
 
 **Assertion 유형**  
 assertEquals(a, b);  
@@ -25,18 +24,16 @@ assertTrue(condition);
 
 public class MathTest {
     private Mymath testMath;
-	
+
 	@Test
 	public void testConstructor() {
 		testMath = new Mymath();
 		assertTrue(testMath.getUseCount() == 0);
 	}
-
 	@Test
 	public void testAddition() {
 		assertEquals(5, testMath.addition(2, 3));
 	}
-
 	@Test
 	public void testMultiply() {
 		assertEquals(6, testMath.multiply(2, 3));
