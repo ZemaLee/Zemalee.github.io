@@ -5,8 +5,9 @@ date: 2017-06-17 06:19 +0900
 comments: true
 ---
 
-## 단위테스트 (경계값 꼭 생각!)
-### JUnit 이용 Test    
+**단위테스트 (경계값 꼭 생각!)**
+
+**JUnit 이용 Test**(널리 사용됨)  
 
 **Assertion 유형**  
 assertEquals(a, b);  
@@ -17,7 +18,6 @@ assertNotSame(a, b);
 assertTrue(condition);  
 
 **JUnit test 예시**  
-
 ```java  
 public class MathTest {
     private Mymath testMath;
@@ -39,10 +39,7 @@ public class MathTest {
 
 ```   
 
-### Mock Test  
-
-**유용성**  
-아직 완전히 만들어지지 않은 개체에 대한 테스트가 가능하다.
+**Mock Test**의 장점 : 아직 완전히 만들어지지 않은 개체에 대한 테스트가 가능하다.
 
 ---  
 ---  
