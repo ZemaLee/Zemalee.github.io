@@ -69,3 +69,43 @@ public class MathTest {
 
 ![Transition Coverage Example](https://zemalee.github.io/images/Software_Engineering/02_Transition_Coverage.png)
 
+---  
+---  
+
+# Refactoring  
+
+## Overview
+
+Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, 프로그램 내부의 구조를 개선하는 것이다.  
+**"외부에서 본 동작은 변하지 않고** -> 최소한의 단위테스트는 필요.  
+
+**Bad Smell 측정**  
+* CC  
+	Number of decisions + 1
+	if, else, for loop가 많을 때 증가  
+* Nesting Depth  
+	Number of Structuring levels  
+	중첩된 if의 깊이  
+* NPath  
+	Number of (static) Execution Paths  
+	갈 수 있는 경로의 갯수  
+* Coupling  
+	Degree of interdependence beteween two modules  
+* Cohesion  
+	strength of functional relatedness of elements within a module  
+* LOC  
+	Lines of Code  
+
+**SOLID 원칙**  
+|  S  | Single Responsibility Principle |
+|:---:|:-------------------------------:|
+|  O  |      Open Closed Principle      |
+|  L  |  Liskov Substitution Principle  |
+|  I  | Interface Segregation Principle |
+|  D  |  Dependency Inversion Principle |
+
+응집도 : S  
+규모 : S  
+복잡도 : D  
+결합도 : L, I, D  
+
