@@ -44,24 +44,24 @@ public class MathTest {
 ---  
 ---  
 
-## Testing
+**Testing**
 
-### BlackBox Testing
+* BlackBox Testing
 
-#### State Coverage  
+State Coverage  
 
 ![State Coverage Example](https://zemalee.github.io/images/Software_Engineering/01_State_Coverage.png)
 
-#### Transition Coverage
+Transition Coverage
 
 ![Transition Coverage Example](https://zemalee.github.io/images/Software_Engineering/02_Transition_Coverage.png)
 
 ---  
 ---  
 
-## Refactoring  
+**Refactoring**  
 
-### Overview
+...Overview
 
 Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, 프로그램 내부의 구조를 개선하는 것이다.  
 **"외부에서 본 동작은 변하지 않고** -> 최소한의 단위테스트는 필요.  
