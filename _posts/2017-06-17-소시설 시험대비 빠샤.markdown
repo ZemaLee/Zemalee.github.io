@@ -127,6 +127,16 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 알고리즘 변경에 용이하다.
 
 **예시코드**  
+
+*Strategy*  
+```java  
+public interface Statistics {  
+	public int getMax(int[] data) ;  
+	public int getMin(int[] data) ;  
+	public float getAverage(int[] data) ;  
+}  
+```
+
 *Context*  
 ```java  
 public class ScoreProcessing { 
@@ -147,6 +157,15 @@ public class ScoreProcessing {
 }  
 ```
 
+*Concrete Strategies*  
+```java  
+public class GeneralStatistics implements Statistics {  
+	public int getMax(int[] data) { /* 실제 내부 구현 */ }  
+	public int getMin(int[] data) { /* 실제 내부 구현 */ }  
+	public float getAverage(int[] data) { /* 실제 내부 구현 */ }  
+}  
+```  
+ 
 ## Observer Pattern
 
 ## Template Method Pattern
