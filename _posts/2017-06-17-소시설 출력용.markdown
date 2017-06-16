@@ -1,6 +1,6 @@
 ---
 layout: entry
-title: "소시설 시험대비 빠샤"
+title: "소시설 오픈북 자료"
 author: 이제언
 date: 2017-06-17 06:19 +0900
 tags: 소시설, 기말고사
