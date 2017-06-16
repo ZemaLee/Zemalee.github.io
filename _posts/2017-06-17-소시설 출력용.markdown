@@ -72,23 +72,32 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 
 ---  
 ---  
+---  
 
 **Bad Smell 측정**  
 * CC  
 	Number of decisions + 1
 	if, else, for loop가 많을 때 증가  
+
 * Nesting Depth  
 	Number of Structuring levels  
 	중첩된 if의 깊이  
+
 * NPath  
 	Number of (static) Execution Paths  
 	갈 수 있는 경로의 갯수  
+
 * Coupling  
 	Degree of interdependence beteween two modules  
+
 * Cohesion  
 	strength of functional relatedness of elements within a module  
+
 * LOC  
 	Lines of Code  
+
+---  
+---  
 
 ---  
 ---  
