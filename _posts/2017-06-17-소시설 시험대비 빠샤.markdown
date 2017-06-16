@@ -1,0 +1,12 @@
+---
+layout: entry
+title: "소시설 시험대비 빠샤"
+author: 이제언
+date: 2017-06-17 00:19 +0900
+tags: 소시설, 기말고사
+comments: true
+---
+* table of contents
+{:toc}
+
+작성예정..
