@@ -106,6 +106,14 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 |   I   | **I**nterface **S**egregation **P**rinciple |
 |   D   |  **D**ependency **I**nversion **P**rinciple |
 
+* **SRP** : 모든 객체는 하나의 책임을 갖는다.  
+(한 가지가 바뀔 때, 1가지 이상의 클래스가 변경되면 안된다)  
+* **OCP** : 모듈은 확장에 열려있고, 변경에는 닫혀 있어야 한다.  
+* **LSP** : 상속관계에서 is-a 관계가 성립해야 한다.  
+(sub class가 Super class 멤버 중 일부를 거부하면 안된다)  
+* **ISP** : 여러개의 인터페이스가 하나의 범용 인터페이스보다 좋다.  
+* **DIP** : 구현 클래스들은 인터페이스에 의존해야한다.(구현클래스가 아님!)  
+(원칙적으로 모든 구현클래스 당 하나의 인터페이스 ㄷㄷ)
 
 응집도 : S  
 규모 : S  
@@ -332,7 +340,99 @@ public class ProductFactory {
 }
 
 /* 메인에서의 사용 */  
-Product pc = ProductFactory.getProduct(
-	new ComputerFactory(파라미터) );
+Product pc = ProductFactory.getProduct(new ComputerFactory(파라미터));
 ```
+
+# Singleton Pattern
+
+if( obj == null ) obj = new Obj(); 가 끝.
+
+# Composite Pattern
+
+객체들의 관계를 트리 구조로 구성하여 부분-전체 계층을 표현하는 패턴.  
+사용자가 단일 객체 및 복합 객체 모두 동일하게 다루도록 한다.
+
+```java  
+import java.util.List;  
+import java.util.ArrayList;  
+
+/** "Component" */  
+interface Graphic {  
+	public void print();  
+}  
+
+/** "Composite" */
+class CompositeGraphic implements Graphic {  
+    private List<Graphic> mChildGraphics = new ArrayList<Graphic>();  
+
+    public void print() {  
+        for (Graphic graphic : mChildGraphics) {  
+            graphic.print();  
+        }  
+    }  
+
+    public void add(Graphic graphic) {  
+        mChildGraphics.add(graphic);  
+    }  
+	
+	public void remove(Graphic graphic) {  
+        mChildGraphics.remove(graphic);  
+    }  
+}  
+
+/** "Leaf" */  
+class Ellipse implements Graphic {  
+    public void print() {  
+        System.out.println("Ellipse");  
+    }  
+}  
+
+/** Client */
+public class Program {  
+    public static void main(String[] args) {  
+        Ellipse ellipse1 = new Ellipse();  
+        Ellipse ellipse2 = new Ellipse();  
+
+        CompositeGraphic graphic1 = new CompositeGraphic();  
+        CompositeGraphic graphic2 = new CompositeGraphic();  
+
+        graphic1.add(ellipse1);  
+        graphic1.add(ellipse2);  
+
+        graphic2.add(graphic1);  
+        graphic2.add(graphic2);  
+        graphic.print();  
+    }  
+}  
+```
+
+*PPT예제 : 폴더와 파일 다루기*
+
+totalSize를 구하는 과정에서
+```java    
+if( obj == Dir )  
+	(Directory) obj.getSize();  
+else  
+	(File) obj.getSize();  
+```
+이런 식으로 하다보니, DIP, LSP위반이었다.  
+(특정 타입에 의존하고있고, 자식새끼를 챙겨야했따)  
+
+하지만, DirectoryElement라는 새로운 걸 만들어서
+
+totalSize += elements.get(i).getSize(); 라는 깔끔한 한줄로 완성!  
+DIP, LSP가 해결되는 마법!
+
+![Composite Pattern EX](https://zemalee.github.io/images/Software_Engineering/09_Composite_Pattern_Example.png)
+
+# Facade Pattern
+
+모든 일이 순차적으로 쭈르륵! 진행되면 끝인데 그걸 메인코드에 다때려박은걸 수정할 때 쓰인다.
+
+예) 컴퓨터 버튼 누르면 자동으로 켜지는 코드를 CPU.on(); Register.getMemory()... 이런걸 다 짜두면 꼴보기싫다.  
+그냥 Computer.on(); 하나만 남기고 다 숨기자! 라는게 Facade 패턴
+
+![Facade Pattern EX](https://zemalee.github.io/images/Software_Engineering/10_Facade_Pattern.png)
+
+그림이 정확하게 나타나있어서 추가설명은 생략한다.
 
