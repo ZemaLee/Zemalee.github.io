@@ -119,10 +119,33 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 알고리즘군을 정의하고 각각을 캡슐화하여 교환할 수 있도록 만든다.  
 전략패턴을 사용함으로써 클라이언트와 독립적으로 알고리즘을 변경할 수 있다.
 
+![전략 패턴 예시](https://zemalee.github.io/images/Software_Engineering/03_Strategy_Pattern.png)
+
+
 **이점**  
 코드 중복을 줄일 수 있다.  
 신규 알고리즘 추가가 용이하다(확장성이 높다)  
 알고리즘 변경에 용이하다.
+
+**예시코드**  
+```java  
+public class ScoreProcessing { 
+	private Statistics statistics ;  
+	private int min, max ;  
+	private float average ;  
+	public ScoreProcessing(Statistics statistics) {  
+		this.statistics = statistics;  
+	}  
+	public void analyze(int[] data) {  
+		min = statistics.getMin(data);  
+		max = statistics.getMax(data);  
+		average = statistics.getAverage(data);  
+	}  
+	public int getMin() { return min; }  
+	public int getMax() { return max; }  
+	public float getAverage() { return average; }  
+}  
+```
 
 ## Observer Pattern
 
