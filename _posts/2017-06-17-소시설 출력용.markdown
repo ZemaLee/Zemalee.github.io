@@ -1,0 +1,436 @@
+---
+layout: entry
+title: "소시설 시험대비 빠샤"
+author: 이제언
+date: 2017-06-17 06:19 +0900
+tags: 소시설, 기말고사
+comments: true
+---
+
+# 단위테스트
+
+## JUnit 이용 Test  
+
+**Assertion 유형**  
+assertEquals(a, b);  
+assertNull(object);  
+assertNotNull(object);  
+assertSame(a, b); // 같은 객체 참조여부  
+assertNotSame(a, b);  
+assertTrue(condition);  
+
+**JUnit test 예시**  
+
+```java  
+
+public class MathTest {
+    private Mymath testMath;
+	
+	@Test
+	public void testConstructor() {
+		testMath = new Mymath();
+		assertTrue(testMath.getUseCount() == 0);
+	}
+
+	@Test
+	public void testAddition() {
+		assertEquals(5, testMath.addition(2, 3));
+	}
+
+	@Test
+	public void testMultiply() {
+		assertEquals(6, testMath.multiply(2, 3));
+	}
+}
+
+```  
+
+**경계값**을 고려하면서 test하자!  
+
+## Mock Test  
+
+**유용성**  
+아직 완전히 만들어지지 않은 개체에 대한 테스트가 가능하다.
+
+---  
+---  
+
+# Testing
+
+## BlackBox Testing
+
+### State Coverage  
+
+![State Coverage Example](https://zemalee.github.io/images/Software_Engineering/01_State_Coverage.png)
+
+### Transition Coverage
+
+![Transition Coverage Example](https://zemalee.github.io/images/Software_Engineering/02_Transition_Coverage.png)
+
+---  
+---  
+
+# Refactoring  
+
+## Overview
+
+Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, 프로그램 내부의 구조를 개선하는 것이다.  
+**"외부에서 본 동작은 변하지 않고** -> 최소한의 단위테스트는 필요.  
+
+**Bad Smell 측정**  
+* CC  
+	Number of decisions + 1
+	if, else, for loop가 많을 때 증가  
+* Nesting Depth  
+	Number of Structuring levels  
+	중첩된 if의 깊이  
+* NPath  
+	Number of (static) Execution Paths  
+	갈 수 있는 경로의 갯수  
+* Coupling  
+	Degree of interdependence beteween two modules  
+* Cohesion  
+	strength of functional relatedness of elements within a module  
+* LOC  
+	Lines of Code  
+
+**SOLID 원칙**  
+
+| SOLID |              해 설              |
+|:-----:|:-------------------------------:|
+|   S   | **S**ingle **R**esponsibility **P**rinciple |
+|   O   |      **O**pen **C**losed **P**rinciple      |
+|   L   |  **L**iskov **S**ubstitution **P**rinciple  |
+|   I   | **I**nterface **S**egregation **P**rinciple |
+|   D   |  **D**ependency **I**nversion **P**rinciple |
+
+* **SRP** : 모든 객체는 하나의 책임을 갖는다.  
+(한 가지가 바뀔 때, 1가지 이상의 클래스가 변경되면 안된다)  
+* **OCP** : 모듈은 확장에 열려있고, 변경에는 닫혀 있어야 한다.  
+* **LSP** : 상속관계에서 is-a 관계가 성립해야 한다.  
+(sub class가 Super class 멤버 중 일부를 거부하면 안된다)  
+* **ISP** : 여러개의 인터페이스가 하나의 범용 인터페이스보다 좋다.  
+* **DIP** : 구현 클래스들은 인터페이스에 의존해야한다.(구현클래스가 아님!)  
+(원칙적으로 모든 구현클래스 당 하나의 인터페이스 ㄷㄷ)
+
+응집도 : S  
+규모 : S  
+복잡도 : D  
+결합도 : L, I, D  
+
+# Design Pattern
+
+## Strategy Pattern
+
+알고리즘군을 정의하고 각각을 캡슐화하여 교환할 수 있도록 만든다.  
+전략패턴을 사용함으로써 클라이언트와 독립적으로 알고리즘을 변경할 수 있다.
+
+**중복된 코드가 보이면 적용하자!**  
+
+![Strategy 구조](https://zemalee.github.io/images/Software_Engineering/03_Strategy_Structure.png)
+
+**이점**  
+코드 중복을 줄일 수 있다.  
+신규 알고리즘 추가가 용이하다(확장성이 높다)  
+알고리즘 변경에 용이하다.
+
+**예시**  
+
+![Strategy 예제](https://zemalee.github.io/images/Software_Engineering/03_Strategy_Pattern.png)
+
+*Strategy*  
+```java  
+public interface Statistics {  
+	public int getMax(int[] data) ;  
+	public int getMin(int[] data) ;  
+	public float getAverage(int[] data) ;  
+}  
+```
+
+*Context*  
+```java  
+public class ScoreProcessing { 
+	private Statistics statistics ;  
+	private int min, max ;  
+	private float average ;  
+	public ScoreProcessing(Statistics statistics) {  
+		this.statistics = statistics;  
+	}  
+	public void analyze(int[] data) {  
+		min = statistics.getMin(data);  
+		max = statistics.getMax(data);  
+		average = statistics.getAverage(data);  
+	}  
+	public int getMin() { return min; }  
+	public int getMax() { return max; }  
+	public float getAverage() { return average; }  
+}  
+```
+
+*Concrete Strategies*  
+```java  
+public class GeneralStatistics implements Statistics {  
+	public int getMax(int[] data) { /* 실제 내부 구현 */ }  
+	public int getMin(int[] data) { /* 실제 내부 구현 */ }  
+	public float getAverage(int[] data) { /* 실제 내부 구현 */ }  
+}  
+```  
+ 
+## Observer Pattern
+
+한 객체의 상태가 바뀌면 그 객체에 의존하는 다른 객체들한테 연락이 가고 자동으로 내용이 갱신되는 방식  
+One-to-Many 의존성을 정의하는 방식. 
+
+![Observer 구조](https://zemalee.github.io/images/Software_Engineering/04_Observer_Structure.png)
+
+**이점**  
+객체의 상태가 변경될 때 참조하는 대상이 자동으로 업데이트 되어 일관성을 보장한다  
+Subject와 Observer가 느슨하게 결합하여 언제든 새로운 옵저버를 독립적으로 생성할 수 있다.
+
+**예시**  
+![Observer 예시](https://zemalee.github.io/images/Software_Engineering/05_Observer_Pattern.png)
+
+*Observer*  
+```java  
+public interface Observer {  
+	public abstract void update() ;  
+}  
+```  
+
+*Concrete Observer*  
+```java  
+public class DataSheet implements Observer {  
+	private SaleRecord saleRecord ;  
+	public DataSheet(SaleRecord saleRecord) {  
+		this.saleRecord = saleRecord ;  
+	}  
+	public void update() {  
+		Map<String, Integer> records = saleRecord.getRecords() ;   
+		displayDataSheet(records);  
+	}
+	private void displayDataSheet(Map<String, Integer> records) {  
+		System.out.println("DataSheet") ;  
+		Set<String> companies = records.keySet() ;  
+		for ( String company : companies ) {  
+			System.out.println(company + "\t" + records.get(company)) ;  
+		}  
+	}  
+}    
+```
+
+*Subject*  
+```java  
+public abstract class Subject {  
+	private List<Observer> observers = new ArrayList<Observer>() ;  
+	public void attach(Observer observer) {  
+		observers.add(observer) ;  
+	}  
+
+	public void detach(Observer observer) {  
+		observers.remove(observer) ;  
+	}  
+
+	public void notify_() {  
+		for ( Observer observer : observers ) observer.update() ;  
+	}  
+}  
+```  
+
+*Concrete Subject*  
+```java  
+public class SaleRecord extends Subject {  
+	private Map<String, Integer> records = new HashMap<String, Integer>() ;  
+	public void changeRecord(String company, int sale) {  
+		getRecords().put(company, sale) ;   
+		notify_() ;  
+	}  
+	public Map<String, Integer> getRecords() { return records; }  
+}    
+```  
+
+## Template Method Pattern
+
+상위 클래스에서 처리의 흐름을 제어하고, 하위클래스에서 내용을 구체화한다.  
+공통되는 사항을 상위 추상 클래스에서 구현, 각 상세부분은 하위 클래스에서 구현  
+
+**아주 간단한 예시**  
+![Template 예시-Before](https://zemalee.github.io/images/Software_Engineering/06_1_Template_Before.png)
+
+![Template 예시-After](https://zemalee.github.io/images/Software_Engineering/06_2_Template_After.png)
+
+**예시 ...**
+
+![Template Pattern EX](https://zemalee.github.io/images/Software_Engineering/07_Template_Method_Pattern.png)
+
+## Factory Method Pattern
+
+팩토리 메소드 패턴에서는 객체를 생성하기 위한 인터페이스를 정의하는데, 어떤 클래스의 인스턴스를 만들지는 서브클래스에서 결정하게 만듭니다. 팩토리 메소드패턴을 이용하면 클래스의 인스턴스를 만드는 일을 서브클래스에게 맡기는 것이다.
+
+쉽게 표현하면 Template Method 패턴의 생성 패턴 버전!
+
+![Factory Method Structure](https://zemalee.github.io/images/Software_Engineering/08_Factory_Method_Pattern_Structure.png)
+
+*Creator*  
+```java  
+public abstract class Pizza {  
+	public abstract int getPrice();  
+	public enum PizzaType { Cheese, Seafood, Ham }  
+	public static Pizza PizzaFactory(PizzaType pizzaType) {  
+		switch(pizzaType) {  
+			case PizzaType.Cheese :  
+				return new CheesePizza();  
+			case PizzaType.Seafood :  
+				return new SeafoodPizza();  
+			case PizzaType.Ham :  
+				return new HamPizza();  
+		}  
+	}  
+}  
+```  
+
+*ConcreteCreator*  
+```java  
+public class CheesePizza extends Pizza {  
+	private int price = 10;  
+	public int getPrice() { return price; }  
+}  
+```
+
+## Abstract Factory Pattern
+
+많은 연관된 서브 클래스를 특정 그룹으로 묶어, 한번에 교체할 수 있도록 만드는 패턴.
+
+if-else 구문을 없애고, parameter로 생성자를 구분하게 된다.
+
+```java  
+public abstract class Product {  
+	public abstract String getName();  
+	public String toString() { return ~~; }  
+}  
+public class PC extends Product {  
+	생성자 및 getName, toString();  
+}  
+public class Phone extends Product {  
+	생성자, getName, toString();  
+}  
+
+public interface ProductAbstractFactory {  
+	public Product createProduct();  
+}  
+public class PCFactory implements PAF {  
+	생성자();  
+	public Product createProduct() {  
+		return new 생성자();  
+	}  
+}  
+public class PhoneFactory implements PAF {  
+	생성자();  
+	public Product createProduct() {  
+		return new 생성자();  
+	}  
+}
+
+/* 사용할 클래스 */  
+public class ProductFactory {  
+	public static Product getProduct(PAF product) {  
+		return product.createProduct();  
+	}  
+}
+
+/* 메인에서의 사용 */  
+Product pc = ProductFactory.getProduct(new ComputerFactory(파라미터));
+```
+
+# Singleton Pattern
+
+if( obj == null ) obj = new Obj(); 가 끝.
+
+# Composite Pattern
+
+객체들의 관계를 트리 구조로 구성하여 부분-전체 계층을 표현하는 패턴.  
+사용자가 단일 객체 및 복합 객체 모두 동일하게 다루도록 한다.
+
+```java  
+import java.util.List;  
+import java.util.ArrayList;  
+
+/** "Component" */  
+interface Graphic {  
+	public void print();  
+}  
+
+/** "Composite" */
+class CompositeGraphic implements Graphic {  
+    private List<Graphic> mChildGraphics = new ArrayList<Graphic>();  
+
+    public void print() {  
+        for (Graphic graphic : mChildGraphics) {  
+            graphic.print();  
+        }  
+    }  
+
+    public void add(Graphic graphic) {  
+        mChildGraphics.add(graphic);  
+    }  
+	
+	public void remove(Graphic graphic) {  
+        mChildGraphics.remove(graphic);  
+    }  
+}  
+
+/** "Leaf" */  
+class Ellipse implements Graphic {  
+    public void print() {  
+        System.out.println("Ellipse");  
+    }  
+}  
+
+/** Client */
+public class Program {  
+    public static void main(String[] args) {  
+        Ellipse ellipse1 = new Ellipse();  
+        Ellipse ellipse2 = new Ellipse();  
+
+        CompositeGraphic graphic1 = new CompositeGraphic();  
+        CompositeGraphic graphic2 = new CompositeGraphic();  
+
+        graphic1.add(ellipse1);  
+        graphic1.add(ellipse2);  
+
+        graphic2.add(graphic1);  
+        graphic2.add(graphic2);  
+        graphic.print();  
+    }  
+}  
+```
+
+*PPT예제 : 폴더와 파일 다루기*
+
+totalSize를 구하는 과정에서
+```java    
+if( obj == Dir )  
+	(Directory) obj.getSize();  
+else  
+	(File) obj.getSize();  
+```
+이런 식으로 하다보니, DIP, LSP위반이었다.  
+(특정 타입에 의존하고있고, 자식새끼를 챙겨야했따)  
+
+하지만, DirectoryElement라는 새로운 걸 만들어서
+
+totalSize += elements.get(i).getSize(); 라는 깔끔한 한줄로 완성!  
+DIP, LSP가 해결되는 마법!
+
+![Composite Pattern EX](https://zemalee.github.io/images/Software_Engineering/09_Composite_Pattern_Example.png)
+
+# Facade Pattern
+
+모든 일이 순차적으로 쭈르륵! 진행되면 끝인데 그걸 메인코드에 다때려박은걸 수정할 때 쓰인다.
+
+예) 컴퓨터 버튼 누르면 자동으로 켜지는 코드를 CPU.on(); Register.getMemory()... 이런걸 다 짜두면 꼴보기싫다.  
+그냥 Computer.on(); 하나만 남기고 다 숨기자! 라는게 Facade 패턴
+
+![Facade Pattern EX](https://zemalee.github.io/images/Software_Engineering/10_Facade_Pattern.png)
+
+그림이 정확하게 나타나있어서 추가설명은 생략한다.
+
