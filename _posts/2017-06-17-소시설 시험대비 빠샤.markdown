@@ -254,6 +254,7 @@ public class SaleRecord extends Subject {
 
 **예시 ...**
 
+![Template Pattern EX](https://zemalee.github.io/images/Software_Engineering/07_Template_Method_Pattern.png)
 
 ## Factory Method Pattern
 
