@@ -100,14 +100,31 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 
 | SOLID |              해 설              |
 |:-----:|:-------------------------------:|
-|   S   | Single Responsibility Principle |
-|   O   |      Open Closed Principle      |
-|   L   |  Liskov Substitution Principle  |
-|   I   | Interface Segregation Principle |
-|   D   |  Dependency Inversion Principle |
+|   S   | **S**ingle **R**esponsibility **P**rinciple |
+|   O   |      **O**pen **C**losed **P**rinciple      |
+|   L   |  **L**iskov **S**ubstitution **P**rinciple  |
+|   I   | **I**nterface **S**egregation **P**rinciple |
+|   D   |  **D**ependency **I**nversion **P**rinciple |
+
 
 응집도 : S  
 규모 : S  
 복잡도 : D  
 결합도 : L, I, D  
+
+# Design Pattern
+
+## Strategy Pattern
+
+알고리즘군을 정의하고 각각을 캡슐화하여 교환할 수 있도록 만든다.  
+전략패턴을 사용함으로써 클라이언트와 독립적으로 알고리즘을 변경할 수 있다.
+
+**이점**  
+코드 중복을 줄일 수 있다.  
+신규 알고리즘 추가가 용이하다(확장성이 높다)  
+알고리즘 변경에 용이하다.
+
+## Observer Pattern
+
+## Template Method Pattern
 
