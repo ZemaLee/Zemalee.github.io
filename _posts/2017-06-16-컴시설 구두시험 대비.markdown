@@ -155,3 +155,26 @@ comments: true
 * Artifact ---> ExecutionEnv로의 연결  
 	"배치한다" 배포한다" "서버에 올린다"
 
+# 상세 설계  
+
+쉽게 생각하면 코드수준으로 표현하는 것.
+
+boundary(UI) : <<page, ui>> 등 
+control = control  
+entity = DAO + VO  
+boundary(system) : <<subsystem\>>
+
+*Subsystem의 목적*  
+낮은 결합도  
+높은 이식성  
+변화에 영향을 적게 받음
+
+*Subsystem 표현법*  
+![Subsystem 표현 예시](https://zemalee.github.io/images/SH/04_subsystem.png)  
+
+interface로 use를 사용한 후, subsystem에서 general?로 연결.
+
+*DAO와 VO의 차이*  
+DAO는 데이터에 접근하기 위한 인터페이스 제공 component  
+VO는 DB Record라고 생각하면 됨.(메소드는 겟/셋만 허용)  
+
