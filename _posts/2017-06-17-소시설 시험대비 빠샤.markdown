@@ -98,12 +98,13 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 
 **SOLID 원칙**  
 
-|  S  | Single Responsibility Principle |
-|:---:|:-------------------------------:|
-|  O  |      Open Closed Principle      |
-|  L  |  Liskov Substitution Principle  |
-|  I  | Interface Segregation Principle |
-|  D  |  Dependency Inversion Principle |
+| SOLID |              해 설              |
+|:-----:|:-------------------------------:|
+|   S   | Single Responsibility Principle |
+|   O   |      Open Closed Principle      |
+|   L   |  Liskov Substitution Principle  |
+|   I   | Interface Segregation Principle |
+|   D   |  Dependency Inversion Principle |
 
 응집도 : S  
 규모 : S  
