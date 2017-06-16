@@ -7,9 +7,9 @@ tags: 소시설, 기말고사
 comments: true
 ---
 
-# 단위테스트
+## 단위테스트
 
-## JUnit 이용 Test  
+### JUnit 이용 Test  
 
 **Assertion 유형**  
 assertEquals(a, b);  
@@ -47,7 +47,7 @@ public class MathTest {
 
 **경계값**을 고려하면서 test하자!  
 
-## Mock Test  
+### Mock Test  
 
 **유용성**  
 아직 완전히 만들어지지 않은 개체에 대한 테스트가 가능하다.
@@ -55,24 +55,24 @@ public class MathTest {
 ---  
 ---  
 
-# Testing
+## Testing
 
-## BlackBox Testing
+### BlackBox Testing
 
-### State Coverage  
+#### State Coverage  
 
 ![State Coverage Example](https://zemalee.github.io/images/Software_Engineering/01_State_Coverage.png)
 
-### Transition Coverage
+#### Transition Coverage
 
 ![Transition Coverage Example](https://zemalee.github.io/images/Software_Engineering/02_Transition_Coverage.png)
 
 ---  
 ---  
 
-# Refactoring  
+## Refactoring  
 
-## Overview
+### Overview
 
 Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, 프로그램 내부의 구조를 개선하는 것이다.  
 **"외부에서 본 동작은 변하지 않고** -> 최소한의 단위테스트는 필요.  
@@ -118,9 +118,9 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 복잡도 : D  
 결합도 : L, I, D  
 
-# Design Pattern
+## Design Pattern
 
-## Strategy Pattern
+### Strategy Pattern
 
 알고리즘군을 정의하고 각각을 캡슐화하여 교환할 수 있도록 만든다.  
 전략패턴을 사용함으로써 클라이언트와 독립적으로 알고리즘을 변경할 수 있다.
@@ -176,7 +176,7 @@ public class GeneralStatistics implements Statistics {
 }  
 ```  
  
-## Observer Pattern
+### Observer Pattern
 
 한 객체의 상태가 바뀌면 그 객체에 의존하는 다른 객체들한테 연락이 가고 자동으로 내용이 갱신되는 방식  
 One-to-Many 의존성을 정의하는 방식. 
@@ -248,7 +248,7 @@ public class SaleRecord extends Subject {
 }    
 ```  
 
-## Template Method Pattern
+### Template Method Pattern
 
 상위 클래스에서 처리의 흐름을 제어하고, 하위클래스에서 내용을 구체화한다.  
 공통되는 사항을 상위 추상 클래스에서 구현, 각 상세부분은 하위 클래스에서 구현  
@@ -262,7 +262,7 @@ public class SaleRecord extends Subject {
 
 ![Template Pattern EX](https://zemalee.github.io/images/Software_Engineering/07_Template_Method_Pattern.png)
 
-## Factory Method Pattern
+### Factory Method Pattern
 
 팩토리 메소드 패턴에서는 객체를 생성하기 위한 인터페이스를 정의하는데, 어떤 클래스의 인스턴스를 만들지는 서브클래스에서 결정하게 만듭니다. 팩토리 메소드패턴을 이용하면 클래스의 인스턴스를 만드는 일을 서브클래스에게 맡기는 것이다.
 
@@ -296,7 +296,7 @@ public class CheesePizza extends Pizza {
 }  
 ```
 
-## Abstract Factory Pattern
+### Abstract Factory Pattern
 
 많은 연관된 서브 클래스를 특정 그룹으로 묶어, 한번에 교체할 수 있도록 만드는 패턴.
 
@@ -341,11 +341,11 @@ public class ProductFactory {
 Product pc = ProductFactory.getProduct(new ComputerFactory(파라미터));
 ```
 
-# Singleton Pattern
+## Singleton Pattern
 
 if( obj == null ) obj = new Obj(); 가 끝.
 
-# Composite Pattern
+## Composite Pattern
 
 객체들의 관계를 트리 구조로 구성하여 부분-전체 계층을 표현하는 패턴.  
 사용자가 단일 객체 및 복합 객체 모두 동일하게 다루도록 한다.
@@ -423,7 +423,7 @@ DIP, LSP가 해결되는 마법!
 
 ![Composite Pattern EX](https://zemalee.github.io/images/Software_Engineering/09_Composite_Pattern_Example.png)
 
-# Facade Pattern
+## Facade Pattern
 
 모든 일이 순차적으로 쭈르륵! 진행되면 끝인데 그걸 메인코드에 다때려박은걸 수정할 때 쓰인다.
 
