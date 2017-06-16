@@ -60,12 +60,16 @@ Transition Coverage
 ---  
 ---  
 
+
+
 **Refactoring**  
 
 ...Overview
 
 Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, 프로그램 내부의 구조를 개선하는 것이다.  
 **"외부에서 본 동작은 변하지 않고** -> 최소한의 단위테스트는 필요.  
+
+
 
 **Bad Smell 측정**  
 * CC  
@@ -83,6 +87,8 @@ Refactoring이란 외부에서 본 프로그램의 동작은 변하지 않고, �
 	strength of functional relatedness of elements within a module  
 * LOC  
 	Lines of Code  
+
+
 
 **SOLID 원칙**  
 
