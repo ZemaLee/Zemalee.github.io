@@ -9,13 +9,31 @@ comments: true
 * table of contents
 {:toc}
 
-# JUnit 이용 단위테스트
+# 단위테스트
+
+## JUnit 이용 Test  
+
+**Assertion 유형**  
+assertEquals(a, b);  
+assertNull(object);  
+assertNotNull(object);  
+assertSame(a, b); // 같은 객체 참조여부  
+assertNotSame(a, b);  
+assertTrue(condition);  
+
+**JUnit test 예시**  
 
 ```java  
 
 public class MathTest {
     private Mymath testMath;
 	
+	@Test
+	public void testConstructor() {
+		testMath = new Mymath();
+		assertTrue(testMath.getUseCount() == 0);
+	}
+
 	@Test
 	public void testAddition() {
 		assertEquals(5, testMath.addition(2, 3));
@@ -27,6 +45,27 @@ public class MathTest {
 	}
 }
 
-```
+```  
 
-# Mock Test
+**경계값**을 고려하면서 test하자!  
+
+## Mock Test  
+
+**유용성**  
+아직 완전히 만들어지지 않은 개체에 대한 테스트가 가능하다.
+
+---  
+---  
+
+# Testing
+
+## BlackBox Testing
+
+### State Coverage  
+
+![State Coverage Example](https://zemalee.github.io/images/Software_Engineering/01_State_Coverage.png)
+
+### Transition Coverage
+
+![Transition Coverage Example](https://zemalee.github.io/images/Software_Engineering/02_Transition_Coverage.png)
+
