@@ -30,7 +30,8 @@ comments: true
 해쉬! One-way ness? 특성이 어디서 나오는지?  
 
 해쉬 이용해서 고결성만 제공됐는데, 키 값이 들어가면 <인증>을 할 수 있더라!  
-..>> 메세지에 대한 무결성 + source에 대한 Originality까지 보장하는 뭔가가 있었다? 이게 뭐지
+..>> 메세지에 대한 무결성 + source에 대한 Originality까지 보장하는 뭔가가 있었다?  
+-->> 이게 뭐지?;;
 
 엘가말 증명 및 과정 기술  
 ```
@@ -131,7 +132,7 @@ Private : {x}
 M 암호화 시 길이가 두 배로 늘어난다.  
 (이걸 보완하려고 나중에 Hash처리를 한다)  
 
----
+---  
 
 # CH10.2 ECC (Elliptic Curve Cryptography)
 
@@ -141,26 +142,26 @@ M 암호화 시 길이가 두 배로 늘어난다.
 
 # CH11 MAC & Hash
 
-## 개요
-
-메세지에 대한 인증(Message Athentication)은 크게 두 가지로 나뉜다.  
-1) 보낸 메세지가 위조/변조되지 않았는가? 
+**개요**  
+메세지에 대한 인증(Message Athentication)은 크게 세 가지로 나뉜다.  
+1) 보낸 메세지가 위조/변조되지 않았는가?   
 2) 발신자에 대한 신원 확인(A가 맞는가?)  
 3) 부정 방지(해 놓고 안했다 하기 없기)  
 
 위 내용을 방지하기 위해 세 가지 function을 사용할 것이다.  
-1. Message Encryption  
-2. Message Authentication Code(MAC)  
-3. hash function  
+1) Message Encryption  
+2) Message Authentication Code(MAC)  
+3) hash function  
 
 ## Message Encryption
 
 *Problem of public-key*  
-public-key encryption을 사용하게 되면 **발신자에 대한 신원확인**이 어렵게 된다.(모두가 공개키를 알 수 있기 때문)  
+public-key encryption을 사용하게 되면 발신자에 대한 **신원확인**이 어렵게 된다.  
+(모두가 공개키를 알 수 있기 때문)  
 
 *Solution*  
-> 발신자가 메시지를 자신의 Private-key로 서명.  
-> **비밀보장** 및 **인증**이 동시에 해결!!  
+발신자가 메시지를 자신의 Private-key로 서명.  
+**비밀보장** 및 **인증**이 동시에 해결!!  
 
 *But*  
 암호화 하는데 비용이 들더라..  
@@ -169,26 +170,22 @@ public-key encryption을 사용하게 되면 **발신자에 대한 신원확인*
 
 MAC은 메세지의 무결성 확인 및 인증을 위한 Code를 달아주는 방식이다.
 
-**Sender**
-
-....*input*  
-Message, K(공유하는 key)  
-
-....*전송하는 정보*  
-Message와 MAC Code  
+**Sender**  
+*전송시 필요한 정보*  
+M(Message), K(공유하는 Secret key)  
+Message와, K값으로 Cipher한 MAC값을 붙여서 보낸다.  
 
 **Receiver**  
-
-1. 메세지를 일단 받는다.  
-2. 메세지를 같은 K값으로 MAC Algorithm을 거쳐 MAC Code를 얻는다.  
+1. 메세지를 일단 받는다.(M + Ck(M))  
+2. 미리 공유한 K값으로 받은 M을 Cipher해서 MAC Code를 얻는다.  
 3. 받은 MAC과 일치하는지 확인한다.  
 
 그림으로 이해하면 아래와 같다.  
 ![Message_Authentication_Code](https://zemalee.github.io/images/Computer_Security/01_Message_Athentication_Code.png)  
 
-....*참고*  
-MAC은 기본적으로 Many-to-One 함수이기 때문에, 같은 결과를 내는 입력이 여러개일 수 있다.  
-따라서, MAC 알고리즘은 동일한 MAC값을 가진 Message를 찾는 것이 infeasible 해야 한다.   
+*MAC의 조건*  
+같은 MAC값을 갖는 다른 입력이 있을 수 있다(Many-to-One 함수)  
+따라서, **동일한 MAC값을 가진 M**을 찾는 것이 **infeasible** 해야 한다.   
 
 MAC기반 DES-CBC 대표적인 알고리즘  
 (**DAA**: Data Authentication Algorithm)  
@@ -196,6 +193,7 @@ Block-Chaining 방식 예제라네요..
 MAC이랑 연관됐는진 모르겠지만 눈에 익히기 위해...   
 ![Data Authentication Algorithm](https://zemalee.github.io/images/Computer_Security/02_Data_Authentication_Algorithm.png)  
 
+---  
 
 ## Hash Function
 
