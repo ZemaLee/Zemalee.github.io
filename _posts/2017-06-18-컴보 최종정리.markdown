@@ -176,22 +176,16 @@ M(Message), K(공유하는 Secret key)
 Message와, K값으로 Cipher한 MAC값을 붙여서 보낸다.  
 
 **Receiver**  
-1. 메세지를 일단 받는다.(M + Ck(M))  
-2. 미리 공유한 K값으로 받은 M을 Cipher해서 MAC Code를 얻는다.  
-3. 받은 MAC과 일치하는지 확인한다.  
+1) 메세지를 일단 받는다.(M + Ck(M))  
+2) 미리 공유한 K값으로 받은 M을 Cipher해서 MAC Code를 얻는다.  
+3) 받은 MAC과 일치하는지 확인한다.  
 
 그림으로 이해하면 아래와 같다.  
 ![Message_Authentication_Code](https://zemalee.github.io/images/Computer_Security/01_Message_Athentication_Code.png)  
 
-*MAC의 조건*  
+**MAC의 조건**  
 같은 MAC값을 갖는 다른 입력이 있을 수 있다(Many-to-One 함수)  
 따라서, **동일한 MAC값을 가진 M**을 찾는 것이 **infeasible** 해야 한다.   
-
-MAC기반 DES-CBC 대표적인 알고리즘  
-(**DAA**: Data Authentication Algorithm)  
-Block-Chaining 방식 예제라네요..  
-MAC이랑 연관됐는진 모르겠지만 눈에 익히기 위해...   
-![Data Authentication Algorithm](https://zemalee.github.io/images/Computer_Security/02_Data_Authentication_Algorithm.png)  
 
 ---  
 
