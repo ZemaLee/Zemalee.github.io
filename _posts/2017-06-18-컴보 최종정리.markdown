@@ -116,10 +116,10 @@ Public : {Ya, a(생성자), q}
 Private : {x}  
 
 **메세지 암호화**  
-![ElGamal Key 생성](https://zemalee.github.io/images/Computer_Security/20_ElGamal_Encrypt_Message.png)  
+![ElGamal M Encrpt](https://zemalee.github.io/images/Computer_Security/20_ElGamal_Encrypt_Message.png)  
 
 **C1, C2 복호화**  
-![ElGamal Key 생성](https://zemalee.github.io/images/Computer_Security/21_ElGamal_Decrypt_Message.png)  
+![ElGamal M Decrypt](https://zemalee.github.io/images/Computer_Security/21_ElGamal_Decrypt_Message.png)  
 
 **k**값은 반드시 매번 달라야 한다.  
 
