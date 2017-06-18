@@ -40,65 +40,34 @@ comments: true
 ## RSA
 
 **RSA private/public key 생성**  
+```  
 1. 소수 p, q 선정 \>> n = pq \>> phi(n) = (p-1)*(q-1)    
 2. gcd( e, phi(n) ) = 1 인 e 값을 선정.  
-3. d x e = 1 (mod phi(n))인 d를 구한다.
-
+3. d x e = 1 (mod phi(n))인 d를 구한다.  
+```
 Public = {e, n}, Private = {p, q, d}
 
 **RSA로 Message 보내는 법**  
 ![RSA 메세지 교환](https://zemalee.github.io/images/Computer_Security/15_RSA_Message_Cipher.png)  
 
-### 메세지 암호화, 복호화  
-CipherText = Message^{e} mod n.  
-공개키 e, n을 통해 아무 메시지나 암호화해서 보낼 수 있다.  
-
-Message = CiperText^{d} mod n.  
-비밀키 d를 통해 비밀 메시지를 풀 수 있다.
-
-
-
 ## 키 분배(관리)
 
-키 분배(관리)에는 4가지 방법이 있다.
+키 분배(관리)에는 4가지 방법이 있다.  
+1) Public Announcement - 말 해주기  
+2) Public Available Directory - 게시판에 올리기  
+3) Public-key-Authority - 기관이 관리해줌  
+**4)** Public-Key Certificates - 기관의 인증서
 
-### Public Announcement  
-그냥 다른 사람들에게 자신의 key를 알리는 방법이다.  
-위조에 취약함.(ex. 저 제언인데요, 100만원만 빌려주세요^^)
+**Public-key Authority**  
+ : 기관이 필요시마다 인증해주는 방식  
+![PA](https://zemalee.github.io/images/Computer_Security/16_PA.png)  
 
-### Public Available Directory  
-게시판 같은 열린 공간에 자신의 공개키를 올리는 방법이다.  
-이 방법은 홈페이지가 공격당하면 GG...
+*계속해서 요청*하는 방식 ▶ **병목현상**!!
 
-### Public-key Authority  
-Public-key Authority(기관)이 공개키를 관리해주는 방식이다.  
-A와 B가 통신하기 위해 아래의 과정을 거쳐야한다.
+**Public-Key Certificates**
+ : 기관에서 인증서 자체를 줘 버리는 방식.
 
-1. A가 기관에게 B의 공개키를 요구한다.  
-(A->PA) Request || TimeStamp1  
-2. 기관이 A에게 공개키를 서명해서 준다.  
-(PA->A) E(PR_{auth} [ PU_{b} || Request || TimeStamp1 ])
-
-3. A가 B의 공개키로 자신의 아이디와 Nonce를 실어 보낸다.  
-(A->B) E(PU_{b}, [ID_{A} || Nonce1])
-
-4. B도 기관에게 1, 2의 과정을 거쳐 A의 공개키를 얻는다.(식 생략)
-
-5. B가 A의 공개키로 받은 Nonce와 새로운 Nonce를 생성하여 보낸다.
-(B->A) E(PU_{a}, [N1 || N2])  
-이 과정에서 B의 공개키로 암호화 된 N1을 해독하고 다시 보내주는 과정을 통해 **상호 인증**이 된다.
-
-6. A가 B에게 잘 받았다고 B가 생성한 N2를 재 전송한다.(**상호인증**)  
-(A->B) E(PU_{b}, N2)  
-
-이 프로토콜은 확인할 때 마다 TimeStamp를 변경하면서 계속해서 요청하는 방식이기 때문에 **병목현상**을 일으킬 수 있다.
-
-### Public-Key Certificates
-
-확인하는 기관에서 인증서 자체를 줘 버리는 방식.  
-인증서 = {신원, 공개키}를 기관이 서명해 주는 방식.  
-자세한 내용은 아래에서 다루겠다.
-
+![PAC](https://zemalee.github.io/images/Computer_Security/17_PAC.png)  
 
 ### Simple Secret Key Distribution(Ks분배)
 
