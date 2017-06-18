@@ -30,7 +30,7 @@ comments: true
 해쉬! One-way ness? 특성이 어디서 나오는지?  
 
 해쉬 이용해서 고결성만 제공됐는데, 키 값이 들어가면 <인증>을 할 수 있더라!  
->> 메세지에 대한 무결성을... + source에 대한 Originality..!까지 보장하는 뭔가가 있었죠? 그쵸? ㅅㅂ  
+..>> 메세지에 대한 무결성을... + source에 대한 Originality..!까지 보장하는 뭔가가 있었죠? 그쵸? ㅅㅂ  
 
 엘가말 증명해봐라  
 ```
@@ -106,49 +106,30 @@ DH는 **인증 과정이 없기 때문에** Man-in-the-Middle-Attack에 취약.
 
 ## ElGamal Cryptography
 
-Discrete Logarithm Problem 기반.  
+Discrete Logarithm Problem 기반. 엘가말 기반.  
 
-엘가말 기반이라 엘가말 키 교환이랑 비슷함!!  
+수신, 송신자는 사전에 private x와 public 소수 q를 사용하기로 한다.
 
-### 키 생성
+**키 생성**  
+![ElGamal Key 생성](https://zemalee.github.io/images/Computer_Security/19_ElGamal_Key_Create.png)  
+Public : {Ya, a(생성자), q}  
+Private : {x}  
 
-1. 큰 소수 q를 선택하고, 생성자 g를 선택한다.  
-2. 비밀키 x를 선택하고, 공개키 y를 계산한다.  
-   (y = g^{x} mod q)  
-3. {y, g, q}는 공개키, {x}는 비밀키가 된다.
+**메세지 암호화**  
+![ElGamal Key 생성](https://zemalee.github.io/images/Computer_Security/20_ElGamal_Encrypt_Message.png)  
 
-### 메세지 암호화
+**C1, C2 복호화**  
+![ElGamal Key 생성](https://zemalee.github.io/images/Computer_Security/21_ElGamal_Decrypt_Message.png)  
 
-1. 메세지 M을 암호화하기 위해 난수 k를 선택한다. (**일회성**)  
-2. 난수 k로 One-Time Key인 K를 계산한다.  
-   (K = y^{k} mod q)  
-   (K는 풀어보면 g^{x * k} mod q가 된다)  
-3. 암호문을 계산한다.  
-   C1 = g^{k} mod q  
-   C2 = K * M mod q  
-4. (C1, C2)를 수신자에게 전달한다.
+**k**값은 반드시 매번 달라야 한다.  
 
-### 메세지 복호화
+**ElGamal 장점**  
+매 교환마다 난수 k를 이용하므로 안전하다.  
+(같은 Message, 같은 Key를 이용해도 매번 C1, C2값이 다르다)  
 
-서로 미리 교환한 x값과 전달받은 C1, C2 값으로 받은 메세지를 복호화 해보자.  
-
-1. One-Time-Key K를 C1을 통해 복호화한다.  
-K = y^{k} mod q  
-  = a^{k*x} mod q  
-  = **C1^{x} mod q**
-
-2. Message M을 C2와 계산한 K를 통해 복호화한다.  
-M = C2 * K^{-1} mod q  
-(K의 inverse 계산)
-
-### 엘가말의 뽀인뜨
-
-* 장점  
-> 매 교환시 난수 k를 이용하므로 안전하다.  
-> (같은 M, 같은 키를 사용해도 암호화 할때마다 변하기 때문)
-
-* 단점  
-> Message M을 암호화 할 때, 길이가 두 배로 늘어난다....(흑흑)
+**ElGamal 단점**  
+M 암호화 시 길이가 두 배로 늘어난다.  
+(이걸 보완하려고 나중에 Hash처리를 한다)  
 
 ---
 
