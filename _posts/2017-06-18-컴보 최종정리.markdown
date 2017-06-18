@@ -50,9 +50,8 @@ Public = {e, n}, Private = {p, q, d}
 **RSA로 Message 보내는 법**  
 ![RSA 메세지 교환](https://zemalee.github.io/images/Computer_Security/15_RSA_Message_Cipher.png)  
 
-## 키 분배(관리)
+## 공개키(PUa) 분배  
 
-키 분배(관리)에는 4가지 방법이 있다.  
 1) Public Announcement - 말 해주기  
 2) Public Available Directory - 게시판에 올리기  
 3) Public-key-Authority - 기관이 관리해줌  
@@ -69,39 +68,16 @@ Public = {e, n}, Private = {p, q, d}
 
 ![PAC](https://zemalee.github.io/images/Computer_Security/17_PAC.png)  
 
-### Simple Secret Key Distribution(Ks분배)
+## 비밀키(Ks) 분배  
 
-Merkle에 의해 고안된 방식이다.  
-암호화 없이 공개키와 신원을 보내면, 그 공개키를 받은 사람이 Ks를 주는 방식.
-   
-(A->B) [ PU_{a} || ID_{A} ]  
-(B->A) E(PU_{a}, Ks)
+1) Simple Secret Key Distribution - 그냥 줌  
+**2)** Confidentiality & Authentication - Nonce + 암호화  
 
-딱! 봐도 알겠지만, A->B 보내는 도중에 다른 사람이 낚아채는 위험이 있다.  
-**Man-in-the-Middle-Attack**
-
-(A->Z) [ PU_{a} || ID_{A} ]  
-(Z->B) [ PU_{z] || IA_{A} ] // 이 과정에서 A인척 자신의 공개키를 준다.  
-(B->Z) E(PU_{z}, Ks)  
-(Z->A) E(PU_{a}, Ks)  
-
-이렇게 되면 A, B는 각각 메시지를 정상적으로 받지만 3명이 Ks를 분배하는 결과를 낳게 된다.
-
-### Secret-Key Distribution with Confidentiality & Authentication
-
-각각 상대의 공개키로 암호화한 메시지를 보내고, 메시지에는 Nonce가 포함된다!!
-
-(A->B) E(PU_{b}, [N1 || ID_{A}])  
-(B->A) E(PU_{a}, [N1 || N2])  
-(A->B) E(PU_{b}, N2)  
-(A->B) E(PU_{b}, E(PR_{a}, Ks))
-
-마지막 과정에서 Ks를 A가 자신의 비밀키로 서명하여, Man-in-the-Middle-Attack을 방지한다.  
-마지막 과정에서 PU_{b}로 암호화 하는 것은 **기밀성**방지, PR_{a}로 암호화 하는 것은 **서명(인증)**을 위함!! 
-
-### Hybrid Key Distribution
-
-자세히 안다룬내용.
+**Ks Distribution**  
+![Ks Distribution](https://zemalee.github.io/images/Computer_Security/18_Ks_Distribution.png)  
+Nonce : 상호인증  
+Public-key로 암호화 : 기밀성  
+Private-key로 암호화 : 서명(인증)  
 
 ## ★ Diffie-Hellman Key Exchange
 
@@ -118,18 +94,11 @@ Discrete Logarithm Problem 기반 프로토콜.
 **교환하는 과정**
 
 1. A와 B는 소수 **p**, 임의의 generalization **g**를 사용하기로 한다.  
-	이해를 돕기 위해, p = 23, g = 5로 가정한다.
-
-2. A가 임의의 수 a = 6을 선택한 후, YA를 B에게 전송한다. (YA = g^{a} mod p)  
-	(A->B) YA.
-
-3. B는 임의의 수 b = 15를 선택한 후, YB를 A에게 전송한다. (YB = g^{b} mod p)  
-	(B->A) YB.
-
-4. A, B는 각각 받은 수 YA, YB를 통해 Secret Key를 계산한다.  
-	(**S** = **YA^{b} mod p** = **YB^{a} mod p**)
-
-5. A와 B는 각각 Secret Key **S**를 공유하게 되었다.
+2. A, B는 각자 임의의 수를 선택(a, b), 각자 랜덤키 생성 후 전송  
+	(YA = g^{a} mod p) (YB = g^{b} mod p)  
+3. A, B는 각각 받은 수 YA, YB를 통해 Secret Key를 계산한다.  
+	(**Ks** = **YA^{b} mod p** = **YB^{a} mod p**)  
+4. A와 B는 각각 Secret Key **Ks**를 공유하게 되었다.
 
 단, 디피헬만 키분배는 **인증 과정이 없기 때문에** Man-in-the-Middle-Attack에 취약하다.  
 (교환 알고리즘 자체는 암호학적으로 안정적임)
