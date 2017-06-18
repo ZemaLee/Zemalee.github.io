@@ -191,21 +191,26 @@ Message와, K값으로 Cipher한 MAC값을 붙여서 보낸다.
 
 ## Hash Function
 
-h = Hash( M )이라고 가정하고, MAC과 비슷한 동작을 함.  
+h = Hash( M )라는 **고정된** bit로 짧게 뽑아내는 것.  
 
 A가 자기 private-key로 서명한 Hash 내용을 메세지에 붙여 전송하는 그림.  
 ![Hashing](https://zemalee.github.io/images/Computer_Security/03_Hashing.png)  
 
-MAC과 비슷하게, 수신자도 Hash(M)을 한 번 수행하면 된다. 
+**위 그림의 장점**  
+Hash처리를 통해 MAC 길이가 짧아진다.  
+Private Key로 서명하여 인증이 가능하다.  
 
-*참고사항*  
-h = H(x)라고 할 때,  
-같은 h값을 갖는 x값이 여러개일 수 있기 때문에 보낸 진짜 내용을 찾기가 어렵다. 이를 One-way-function이라고 부른다.  
+**Hash 참고사항**  
+h = H(x)라고 할 때,   
+같은 h값을 갖는 x값이 여러개일 수 있기 때문에 보낸 진짜 내용을 찾기가 어렵다.  
+이를 One-way-function이라고 부른다.
+  
 Collision이 일어날 확률이 매우 적다.  
 (H(x)=H(y)가 될 확률이 적다)  
 반대로 생각하면, 같은 해쉬값을 갖는 M을 찾기 힘들다.  
 
-**요약**) M으로 h를 만들기는 쉽지만 h로 M을 찾기 어렵게 하는, 짧게 만들어 주는 해쉬함수!  
+**요약**) 동일한 M값을 갖는 진짜 h 값을 찾기 어렵게 하는 함수.  
+
 
 ## Security of Hash Functions & MACs
 
