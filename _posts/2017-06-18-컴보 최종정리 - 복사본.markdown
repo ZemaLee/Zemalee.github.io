@@ -1,8 +1,8 @@
-﻿---
+---
 layout: entry
-title: "컴보 시험대비 빠샤22"
+title: "컴보 시험대비 빠샤"
 author: 이제언
-date: 2017-07-24 14:41 +0900
+date: 2017-06-18 14:41 +0900
 tags: 컴퓨터보안, 보안, 기말고사
 comments: true
 --- 
