@@ -1,0 +1,544 @@
+﻿---
+layout: entry
+title: "중간 보고서야"
+author: 이제언
+date: 2017-06-19 14:41 +0900
+tags: 컴퓨터보안, 보안, 기말고사
+comments: true
+--- 
+* table of contents
+{:toc}
+
+
+시발
+
+```  
+(참고) 마지막 수업 때, 시험 언급내용...  
+
+만약 마지막 수업에서 낸다면..?  
+-> 폴리몰틱 인크립티드 바이러스 메타월픽
+
+제일 중요한건 프로토콜이다
+
+커버러스.. 토큰으로 어떻게 인증되고 어떻게 정보가 안전하게 상호인증이 되면서 .....  
+이런 프로토콜을 하나하나 해설을 할 수 있어야 하고, 조그마한걸 만들 수 있을 정도로 알아야 한다.  
+
+타임스탬프, 넌스가 어떤뜻인지... 인증서 기반 도대체 저게 뭐하는건지?..  
+
+서명..검증.. 저게 도대체 뭔지?!  
+
+공개키 기반으로 했을 때, private / public 특성이 있더라.(각각이 뭘 하는지?)  
+
+해쉬! One-way ness? 특성이 어디서 나오는지?  
+
+해쉬 이용해서 고결성만 제공됐는데, 키 값이 들어가면 <인증>을 할 수 있더라!  
+..>> 메세지에 대한 무결성 + source에 대한 Originality까지 보장하는 뭔가가 있었다?  
+-->> 이게 뭐지?;;
+
+엘가말 증명 및 과정 기술  
+```
+
+# CH10.1 Key Management other PKC
+
+## RSA
+
+**RSA private/public key 생성**  
+```  
+1. 소수 p, q 선정 \>> n = pq \>> phi(n) = (p-1)*(q-1)    
+2. gcd( e, phi(n) ) = 1 인 e 값을 선정.  
+3. d x e = 1 (mod phi(n))인 d를 구한다.  
+```
+Public = {e, n}, Private = {p, q, d}
+
+**RSA로 Message 보내는 법**  
+![RSA 메세지 교환](https://zemalee.github.io/images/Computer_Security/15_RSA_Message_Cipher.png)  
+
+## 공개키(PUa) 분배  
+
+1) Public Announcement - 말 해주기  
+2) Public Available Directory - 게시판에 올리기  
+3) Public-key-Authority - 기관이 관리해줌  
+**4)** Public-Key Certificates - 기관의 인증서
+
+**Public-key Authority**  
+ : 기관이 필요시마다 인증해주는 방식  
+![PA](https://zemalee.github.io/images/Computer_Security/16_PA.png)  
+
+*계속해서 요청*하는 방식 ▶ **병목현상**!!
+
+**Public-Key Certificates**
+ : 기관에서 인증서 자체를 줘 버리는 방식.
+
+![PAC](https://zemalee.github.io/images/Computer_Security/17_PAC.png)  
+
+## 비밀키(Ks) 분배  
+
+1) Simple Secret Key Distribution - 그냥 줌  
+**2)** Confidentiality & Authentication - Nonce + 암호화  
+
+**Ks Distribution**  
+![Ks Distribution](https://zemalee.github.io/images/Computer_Security/18_Ks_Distribution.png)  
+Nonce : 상호인증  
+Public-key로 암호화 : 기밀성  
+Private-key로 암호화 : 서명(인증)  
+
+## ★ Diffie-Hellman Key Exchange
+
+암호 Key(Session key)를 교환하는 하나의 방법.  
+Discrete Logarithm Problem 기반 프로토콜.  
+
+**사용 변수**  
+	(공개) 큰 소수 *p*  
+	(공개) 임의의 수 *g* (Generalization)  
+	(비밀) A가 만드는 임의의 수 *a(YA)*  
+	(비밀) B가 만드는 임의의 수 *b(YB)*  
+	(비밀) a, b(YA, YB)로 계산할 수 있는 Secret key *S*
+
+**교환하는 과정**  
+1. A와 B는 소수 **p**, 임의의 generalization **g**를 사용하기로 한다.  
+2. A, B는 각자 임의의 수를 선택(a, b), 각자 랜덤키 생성 후 전송  
+	(YA = g^{a} mod p) (YB = g^{b} mod p)  
+3. A, B는 각각 받은 수 YA, YB를 통해 Secret Key를 계산한다.  
+	(**Ks** = **YA^{b} mod p** = **YB^{a} mod p**)  
+4. A와 B는 각각 Secret Key **Ks**를 공유하게 되었다.
+
+DH는 **인증 과정이 없기 때문에** Man-in-the-Middle-Attack에 취약.  
+(교환 알고리즘 자체는 암호학적으로 안정적임)
+
+중간자 공격을 막기 위해 디피헬만 알고리즘 위에 다른 알고리즘을 섞어서 사용
+
+## ElGamal Cryptography
+
+Discrete Logarithm Problem 기반. 엘가말 기반.  
+
+수신, 송신자는 사전에 private x와 public 소수 q를 사용하기로 한다.
+
+**키 생성**  
+![ElGamal Key 생성](https://zemalee.github.io/images/Computer_Security/19_ElGamal_Key_Create.png)  
+Public : {Ya, a(생성자), q}  
+Private : {x}  
+
+**메세지 암호화**  
+![ElGamal M Encrpt](https://zemalee.github.io/images/Computer_Security/20_ElGamal_Encrypt_Message.png)  
+
+**C1, C2 복호화**  
+![ElGamal M Decrypt](https://zemalee.github.io/images/Computer_Security/21_ElGamal_Decrypt_Message.png)  
+
+**k**값은 반드시 매번 달라야 한다.  
+
+**ElGamal 장점**  
+매 교환마다 난수 k를 이용하므로 안전하다.  
+(같은 Message, 같은 Key를 이용해도 매번 C1, C2값이 다르다)  
+
+**ElGamal 단점**  
+M 암호화 시 길이가 두 배로 늘어난다.  
+(이걸 보완하려고 나중에 Hash처리를 한다)  
+
+---  
+
+# CH10.2 ECC (Elliptic Curve Cryptography)
+
+딴거 먼저 하고 이거 공부할 예정 ㅠㅠ
+
+---  
+
+# CH11 MAC & Hash
+
+**개요**  
+메세지에 대한 인증(Message Athentication)은 크게 세 가지로 나뉜다.  
+1) 보낸 메세지가 위조/변조되지 않았는가?   
+2) 발신자에 대한 신원 확인(A가 맞는가?)  
+3) 부정 방지(해 놓고 안했다 하기 없기)  
+
+위 내용을 방지하기 위해 세 가지 function을 사용할 것이다.  
+1) Message Encryption  
+2) Message Authentication Code(MAC)  
+3) hash function  
+
+## Message Encryption
+
+*Problem of public-key*  
+public-key encryption을 사용하게 되면 발신자에 대한 **신원확인**이 어렵게 된다.  
+(모두가 공개키를 알 수 있기 때문)  
+
+*Solution*  
+발신자가 메시지를 자신의 Private-key로 서명.  
+**비밀보장** 및 **인증**이 동시에 해결!!  
+
+*But*  
+암호화 하는데 비용이 들더라..  
+
+## Message Authentication Code(MAC)
+
+MAC은 메세지의 무결성 확인 및 인증을 위한 Code를 달아주는 방식이다.
+
+**Sender**  
+*전송시 필요한 정보*  
+M(Message), K(공유하는 Secret key)  
+Message와, K값으로 Cipher한 MAC값을 붙여서 보낸다.  
+
+**Receiver**  
+1) 메세지를 일단 받는다.(M + Ck(M))  
+2) 미리 공유한 K값으로 받은 M을 Cipher해서 MAC Code를 얻는다.  
+3) 받은 MAC과 일치하는지 확인한다.  
+
+그림으로 이해하면 아래와 같다.  
+![Message_Authentication_Code](https://zemalee.github.io/images/Computer_Security/01_Message_Athentication_Code.png)  
+
+**MAC의 조건**  
+같은 MAC값을 갖는 다른 입력이 있을 수 있다(Many-to-One 함수)  
+따라서, **동일한 MAC값을 가진 M**을 찾는 것이 **infeasible** 해야 한다.   
+
+---  
+
+## Hash Function
+
+h = Hash( M )라는 **고정된** bit로 짧게 뽑아내는 것.  
+
+A가 자기 private-key로 서명한 Hash 내용을 메세지에 붙여 전송하는 그림.  
+![Hashing](https://zemalee.github.io/images/Computer_Security/03_Hashing.png)  
+
+**위 그림의 장점**  
+Hash처리를 통해 MAC 길이가 짧아진다.  
+Private Key로 서명하여 인증이 가능하다.  
+
+**Hash 참고사항**  
+h = H(x)라고 할 때,   
+같은 h값을 갖는 x값이 여러개일 수 있기 때문에 보낸 진짜 내용을 찾기가 어렵다.  
+이를 One-way-function이라고 부른다.
+  
+Collision이 일어날 확률이 매우 적다.  
+(H(x)=H(y)가 될 확률이 적다)  
+반대로 생각하면, 같은 해쉬값을 갖는 M을 찾기 힘들다.  
+
+**요약**) 동일한 M값을 갖는 진짜 h 값을 찾기 어렵게 하는 함수.  
+
+
+## Security of Hash Functions & MACs
+
+**Birthday Paradox**  
+Hash 충돌과 관련된 내용.  
+365일 중, 같은 생일을 가진사람을 뽑을 확률이 23명이면 50%, 80명이면 거의 100% 뽑는다는 내용.  
+
+결론만 적도록 하겠다.
+Hash가 n bit라고 할 때, 1.17 * 루트 n을 취한만큼만 시도하면 충돌이 일어날 확률이 50%더라...  
+
+---  
+
+# CH12 MIC & SHA
+
+## Classification of Hash Functions
+
+MAC이라는 단어를 네트워크에서 하도 많이써서;;; 용어를 정리하도록 한다.  
+
+Hash 함수를 목적에 따라 나눌 수 있다.  
+
+* **MDC** = **MIC**  
+수정여부를 검사하는 Code를 갖는 Hash.  
+(MDC : Modification Detection Codes)  
+(MIC : Message Integrity Codes)  
+Key가 필요없다. **Unkeyed**  
+같은 알고리즘을 사용하면 **같은 입력에 대해 항상 같은 출력을 갖는다.**  
+
+
+```  
+(농담)  
+M : 모디파이 됐는지~  
+D : 디텍션하는  
+C : 코드  
+```  
+
+* **MAC**  
+인증을 위한 Code를 갖는 Hash.
+(MAC : Message Authentication Codes)  
+Key가 항상 있어야 한다. **Keyed**  
+같은 알고리즘을 사용해도 **Key에 따라 출력이 달라진다.**  
+
+## UnKeyed Hash Functions - SHA
+
+SHA : Secure Hash Algorithm  
+160비트짜리를 SHA-1이라고 부른다.  
+중국인 여자 교수 WANG이 치명적 단점을 밝힌 그 알고리즘..  
+
+이후, SHA-256, 384, 512를 개발함.  
+
+SHA-512만 간단하게 요약해보겠다.  
+1. 메세지 Panding  
+	메세지 길이를 1024의 배수로 맞추기 위해 Pending한다.  
+2. 길이 정보 추가  
+3. 해쉬 버퍼 초기화  
+4. 1024 비트 처리  
+5. 출력  
+
+어려우니 그림으로 보자
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_01.png)  
+
+우선, 메세지 길이를 1024비트에 맞게 Pending.  
+Initial Vector로 F함수를 처리할거다.  
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_02.png)  
+
+512비트 80개로 쪼개서 각 라운드를 진행한다.  
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/04_SHA1024_03.png)  
+
+각 라운드는 덧셈연산과 Major연산으로 빠르게 처리한다.  
+
+다 외우거나 할 필요는 없어보인다. 넘어간다.  
+
+## Keyed Hash Function - HMAC
+
+### 간단한 Keyed-Hash 정보들  
+
+왜 Keyed가 필요한가? = 인증에 이용하기 위함.  
+
+간단하게 생각해보면  
+Keyed Hash = Hash( Key | Message ).  
+
+이런식으로 concat하면 공격자는 Message를 바꿔가면서 hash가 어떻게 출력되는지 Model이 깔끔하게 나와버린다.  
+즉, Hash의 안전도만 남고 Keyed가 의미가 없어질 우려가 있다.
+
+### HMAC
+
+간단하게 말하면, 계속 Key값을 넣어서 바꿔서 찾아내기 힘들게 하는 방법이다.  
+
+![Message Pending](https://zemalee.github.io/images/Computer_Security/05_HMAC_overview.png)  
+
+Key를 input-padding한 값(초기값)을 넣고 돌린다.  
+그 후, output을 또 Pending해서 넣는다.  
+그 결과, **Key값과 출력이 직접적으로 연관이 없게 된다**  
+
+이 또한 **외울 필요가 없다고 한다**.  
+
+---  
+
+# CH13 Digital Signature
+
+## OverView
+
+메세지 인증은 양자 사이에서 제 3자의 공격을 안전하게 하는 데 한계가 있다. 보내는 사람이 바뀌어버리면?? 대책이 없더라!!  
+
+따라서, 전자서명은 보내는사람, 서명한 날짜/시간을 가지고 있어야 한다.  
+
+디지털 서명을 아주 간단하게 보면 아래와 같다.  
+
+![일반적인 디지털 서명 과정](https://zemalee.github.io/images/Computer_Security/06_General_Digital_Signature.png)  
+
+하지만 Message를 통째로 넣기 귀찮고 시간도 많이 걸리니까 Message를 Hash화 한 후 서명하는 방법으로 사용하는 편이다.  
+
+## 공격 기법
+
+* Key-only Attack  
+	공개키만 알고 있는... 존나어려운 공격
+
+* Known Message Attack  
+	어떤내용의 메세지를 암호화한건지 아는 경우.(안녕?을 서명했다.라던지..)
+
+* Generic chosen message attack  
+	공격자가 **임의**의 메세지에 대한 서명을 만들어 낼 수 있는 경우의 공격.
+
+* Directed Chosen Message Attack  
+	Message를 공격자 의도대로 바꾼 서명값을 알아낼 수 있는 공격.
+
+* Adaptive Chosen Message Attack  
+	메시지와 서명 쌍을 선택할 수 있게 된다.  
+	Adaptive한 것을 만들어 주는 것을 Oracle이라 한다.  
+	**공격자 입장에서 가장 쉬운 공격기법**
+
+## 디지털 서명이 가져야 하는 패턴  
+
+bit pattern으로 나와야 한다.  
+서명 및 검증은 쉬워야 한다.  
+공격하기는 어려워야 한다.  
+
+## Arbitrated Digital Signatures
+
+Sender & Receiver가 직접 소통하는건 위험하다. 제 3자가 나서야 한다.  
+
+### ElGamal Digital Signature
+
+디피헬만 알고리즘으로 M, S1, S2를 보내는 방법.  
+
+** 송신 **  
+
+```  
+
+1. 비밀키 x를 하나 선택한다(1~q-1)  
+
+2. x를 기반으로 공개키 Ya = a^{x} mod q 를 생성한다.  
+
+3. 메시지 M을 해싱한다. (m = H(M))  
+
+4. Generator g를 선택한다. (PPT에는 K로 표기)  
+
+5. S1 = a^{k} mod q  
+
+6. K의 inverse(q-1공간)를 구한다. (K^{-1}  
+
+7. S2 = K^{-1} * (m - (x*S1)) mod (q-1)  
+
+```
+** 수신 **  
+
+받은 값 S1, S2를 통해 계산한 값과, 공개키와 해쉬값으로 계산하는 값을 비교하여 **인증**, **서명**이 확인된다.
+
+```  
+
+V1 = a^{m} mod q  :: 공개키와 메세지해쉬값으로 계산  
+
+V2 = Ya^{S1} * S1^{S2} mod q :: 받은 값으로 계산  
+
+V1 == V2 ? 제대로왔군 : 변조됐군.  
+
+```  
+
+### Schnorr Digital Signature
+
+서명이 짧다.. 정도만 알면 된답니다.  
+
+---  
+
+# CH14 Authentication X509 Certificate
+
+CA : 인증기관.. 이라고 알고 아래를 이해하자.  
+
+어떤 사람의 공개키 및 아이디를 CA가 확인해주는 방법.  
+
+CA가 서명해서 공개키로 확인할 수 있게 토큰을 줌.  
+
+★★★ **표기법**  
+CA << A >> 는 CA가 A의 공개키를 서명해줬다는 의미.  
+
+![인증 체인](https://zemalee.github.io/images/Computer_Security/07_CA_Hierarchy.png)  
+
+내가 어떻게 외국에 있는 이름 모를 회사의 공개키를 믿고 메세지를 보낼수 있는가~? 에 대한 Tree.  
+
+```  
+(안읽어도됨)  
+나 : A, 확인하고자 하는 기관 : B  
+X는 날 인증해준 착한 기관이다.  
+X를 인정해준 W는 착한 기관이다.  
+W를 인정해준 V는 착한 기관이다.  
+
+V는 착한놈인데, Y를 인정하네? Y도 착하다.  
+Y는 착한놈인데, Z를 인정하네? Z도 착하다.  
+Z는 착한놈인데, B를 인정하네?  
+
+오호! B는 믿을만한 놈인가보다.  
+```
+
+**Nonce** : 랜덤한 값으로, Replay 공격을 방지함.  
+
+## ★★★ 1,2,3-Way Authentication
+
+### One-Way Authentication
+
+![One-way Authentication](https://zemalee.github.io/images/Computer_Security/08_One_way.png)  
+
+A가 B를 timestamp, nonce와 함께 서명해주는 방식  
+
+### Two-way Authentication
+
+![Two-way Authentication](https://zemalee.github.io/images/Computer_Security/09_Two_way.png)  
+
+A가 B를, B도 A를 인증하는 방식으로,  
+rA(nonce)를 B가 되돌려줌으로 인해  
+"방금 내가 보낸거에 대한 인증값이구나"를 확인할 수 있음.
+
+### Three-way Authentication
+
+![Three-way Authentication](https://zemalee.github.io/images/Computer_Security/10_Three_way.png)  
+
+A가 B에게 준걸 B가 확인하고, 자기도 넌스를 하나 더 실어서 줌.  
+A는 B가 만든 Nonce를 잘받았다고 알려주는 방식.
+
+---  
+
+# CH15 User Authentication
+
+## Authentication Protocol
+
+User Authentication은 여러개가 있다.  
+* knows : 지식 기반  
+	ex) 비밀번호, PIN번호 입력 등  
+
+* Possesses : 소유 기반  
+	ex) 열쇠, 토큰, 스마트카드 등  
+
+* is(static biometrics) : 바이오 기반  
+	ex) 지문, 홍채인식 등  
+
+* does(dynamic biometrics) : 행위 기반  
+	ex) 음성, 서명 등
+
+**Replay attacks**
+
+* Simple Replay  
+	그냥 다시 한번 시도해보기.  
+* Repetition that can be logged  
+	허용시간 범위 내에서 재전송해보기.  
+* Repetition that cannot be detected  
+	원본은 정지된 상태고, 재전송용 메세지만 도착하는 경우  
+* Backward Replay without modification  
+	수정 없이 역방향 재전송.(그냥 온걸 다시 보내는거래요)  
+
+**방어방법들...**
+
+* Sequence Number  
+	생각보다 취약하기 때문에 잘 안쓴다.
+
+* TimeStamp  
+	전송 시점이 잘못된 걸로 눈치챌 수 있음.!!
+
+* Challenge / Response  
+	(확실X) Nonce로 그때그때 업데이트 하면서 메시지 주고받는 방법  
+
+## ★★★ Needham-Schroeder Protocol
+
+**KDC : Key Distribute Center**를 알고 아래를 이해하자!!  
+
+![Needham-Schroeder Protocol](https://zemalee.github.io/images/Computer_Security/11_Needham.png)  
+
+1) A->KDC  
+	나는 A야. B랑 통신하고싶어.  
+2) KDC->A  
+	비밀키, B아이디, 니가보낸 넌스 여기있어.  
+	B만 열어볼 수 있게 토큰도 같이 달아줄께  
+	(Token : E_{kb}[Ks || AID]  
+3) A->B  
+	안녕 B야, 이거 KDC가 너 주래.  
+4) B->A  
+	(비밀키로) 내꺼 받으면 연락줘~  
+5) A->B  
+	(비밀키로) 니가 보낸거 좀 수정했어~  
+
+참고) 과정 5에서 함수화하는 이유는 Replay attack 방지를 위함!!  
+
+## ★ Kerberos
+
+간단하게 보면 이렇다.  
+
+![Kerberos](https://zemalee.github.io/images/Computer_Security/12_Kerberos.png)  
+
+한 단계씩 보자.
+
+![Kerberos_1,2](https://zemalee.github.io/images/Computer_Security/13_Kerberos_12.png)  
+
+
+![Kerberos_3,4](https://zemalee.github.io/images/Computer_Security/13_Kerberos_34.png)  
+
+
+![Kerberos_5,6](https://zemalee.github.io/images/Computer_Security/13_Kerberos_56.png)  
+
+에라이... 큰거 한 번 더 보면서 생각해봐요
+
+![Kerberos_OverView](https://zemalee.github.io/images/Computer_Security/14_Kerberos_OV.png)  
+
+그냥 순서만 잘 생각하면 안어려움...
+
+---  
+
+# CH19 ComputerSecurity MaliciousSW
+
+잉... 뭐하는지 모르겠다 이건
