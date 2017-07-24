@@ -1,0 +1,527 @@
+﻿---
+layout: entry
+title: "Software System Architecture HW4-2"
+author: 이제언
+date: 2017-07-21 16:42 +0900
+tags: 소시설, 과제
+comments: true
+---
+* table of contents
+{:toc}
+
+# 과제 개요
+  주어진 프로그램 코드에 대해 각각 Strategy Pattern, Observer Pattern을 적용한다.
+
+# 1. Strategy Pattern 적용하기
+
+
+## 기존 코드
+* Robot
+
+```
+public abstract class Robot {
+	private String name;
+
+	public Robot(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	abstract public void attack();
+
+	abstract public void move();
+}
+```
+
+* Atom
+
+```
+public class Atom extends Robot {
+	public Atom(String name) {
+		super(name);
+	}
+
+	public void attack() {
+		System.out.println("I have strong punch and can attack with it.");
+	}
+
+	public void move() {
+		System.out.println("I can fly.");
+	}
+}
+```
+
+* TaekwonV
+
+```
+public class TaekwonV extends Robot {
+	public TaekwonV(String name) {
+		super(name);
+	}
+
+	public void attack() {
+		System.out.println("I have Missile and can attack with it.");
+	}
+
+	public void move() {
+		System.out.println("I can only walk.");
+	}
+}
+```
+
+## Interface로 구현
+
+attack, move 함수를 interface로 생성하고, implements로 받은 클래스에 세부 구현내용이 있도록 클래스 생성. 
+
+* RobotActions Class
+
+```
+public interface RobotActions {
+	public void attack();
+	public void move();
+}
+```
+
+* AtomActions Class
+
+```
+public class AtomActions implements RobotActions {
+
+	@Override
+	public void attack() {
+		System.out.println("I have strong punch and can attack with it.");
+	}
+
+	@Override
+	public void move() {
+		System.out.println("I can fly.");
+	}
+}
+```
+
+* TaekwonVActions
+
+```
+public class TaekwonVActions implements RobotActions {
+
+	@Override
+	public void attack() {
+		System.out.println("I have Missile and can attack with it.");
+	}
+
+	@Override
+	public void move() {
+		System.out.println("I can only walk.");
+	}
+
+}
+```
+
+## Robot, Atom, TaekwonV 클래스에 적용
+
+Robot class에 RobotActions interface를 private으로 지정.
+
+각 개체에서 생성자 내부에서 RobotActions를 생성하여 attack, move 함수를 사용하도록 지정.
+
+* Robot Class
+
+```
+public abstract class Robot {
+	private String name;
+	private RobotActions robotActions;
+	public Robot(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setRobotActions(RobotActions robotActions) {
+		this.robotActions = robotActions;
+	}
+	
+	public void attack() {
+		robotActions.attack();
+	};
+
+	public void move() {
+		robotActions.move();
+	}
+}
+```
+
+* Atom Class
+
+```
+public class Atom extends Robot {
+	public Atom(String name) {
+		super(name);
+		RobotActions atomActions = new AtomActions();
+		setRobotActions(atomActions);
+	}
+
+	public void attack() {
+		super.attack();
+	}
+
+	public void move() {
+		super.move();
+	}
+}
+```
+
+* TaekwonV Class
+
+```
+public class TaekwonV extends Robot {
+	public TaekwonV(String name) {
+		super(name);
+		RobotActions taekwonVActions = new TaekwonVActions();
+		setRobotActions(taekwonVActions);
+	}
+
+	public void attack() {
+		super.attack();
+	}
+
+	public void move() {
+		super.move();
+	}
+}
+```
+
+## main함수에서의 테스트
+
+```
+public class testRobotMain {
+
+	public static void main(String[] args) {
+		Robot atom = new Atom("atom-1");
+
+		atom.attack();
+		atom.move();
+		
+		Robot taekwonV = new TaekwonV("taekwonV-1");
+		
+		taekwonV.attack();
+		taekwonV.move();
+	}
+
+}
+
+```
+
+예상대로(?) 각각에 대해 에러 없이 잘 동작하였다.
+
+아래는 출력된 결과이다.
+
+>I have strong punch and can attack with it.
+>
+>I can fly.
+>
+>I have Missile and can attack with it.
+>
+>I can only walk.
+
+## 정리(보고서 양식에 맞추어...)
+
+* 클래스다이어그램 작성
+Robot.java, TaekwonV.java, Atom.java 클래스에 대해 Strategy Pattern을 적용한 결과를 클래스 다이어그램으로 작성하고, 각 클래스를 설명하라
+
+(각 클래스를 Context, Strategy, Concrete Strategy 관점에서 설명.)
+
+---
+*Answer*
+
+![Class-diagram Picture](/images/SW4_strategy.PNG)
+
+Robot(Context)는 RobotActions(Strategy)을 변수로 내부 변수로 가진다
+
+attack(), move() 함수는 Context 내부의 Strategy inteface를 호출하여 동작한다.
+
+각 Concrete Strategy는 Interface로 제공되는 attack, move함수에 대해 세부 구현내용을 기술한다.
+
+
+* 얻을 수 있는 이점에 대해 설명
+
+*Answer*
+
+힝...
+
+# 2. Observer Pattern 적용하기
+
+
+## 기존 코드
+
+* DataSheetView
+
+```
+import java.util.List;
+
+public class DataSheetView {
+	private ScoreRecord scoreRecord;
+	private int viewCount;
+
+	public DataSheetView(ScoreRecord scoreRecord, int viewCount) {
+		this.scoreRecord = scoreRecord;
+		this.viewCount = viewCount;
+	}
+
+	public void update() { // 점수의 변경을 통보 받음
+		List<Integer> record = scoreRecord.getScoreRecord(); // 점수를 조회함
+		displayScores(record, viewCount); // 조회된 점수를 viewCount만큼 출력함
+	}
+
+	private void displayScores(List<Integer> record, int viewCount) {
+		System.out.print("List of " + viewCount + " entries: ");
+		for (int i = 0; i < viewCount && i < record.size(); i++) {
+			System.out.print(record.get(i) + " ");
+		}
+		System.out.println();
+	}
+}
+
+```
+
+* MinMaxView
+
+```
+import java.util.Collections;
+import java.util.List;
+
+public class MinMaxView { // 전체 점수가 아니라 최소/최대값만을 출력하는 클래스
+	private ScoreRecord scoreRecord;
+
+	public MinMaxView(ScoreRecord scoreRecord) {
+		this.scoreRecord = scoreRecord;
+	}
+
+	public void update() {
+		List<Integer> record = scoreRecord.getScoreRecord();
+		displayMinMax(record); // 최소/최대값만을 출력
+	}
+
+	private void displayMinMax(List<Integer> record) {
+		int min = Collections.min(record, null);
+		int max = Collections.max(record, null);
+		System.out.println("Min: " + min + " Max: " + max);
+	}
+}
+```
+
+* ScoreRecord
+
+```
+import java.util.ArrayList;
+import java.util.List;
+
+public class ScoreRecord {
+	private List<Integer> scores = new ArrayList<Integer>(); // 점수를 저장함
+	private DataSheetView dataSheetView; // 목록 형태로 점수를 출력하는 클래스
+
+	public void setDataSheetView(DataSheetView dataSheetView) {
+		this.dataSheetView = dataSheetView;
+	}
+
+	public void addScore(int score) { // 새로운 점수를 축함
+		scores.add(score); // scores 목록에 주어진 점수를 추가함
+		dataSheetView.update(); // scores가 변경됨을 통보함
+	}
+
+	public List<Integer> getScoreRecord() {
+		return scores;
+	}
+}
+```
+
+## 각 View에 적용할 Observer를 생성해보자.
+
+* Observer (interface)
+
+```
+public interface Observer {
+	public abstract void update();
+}
+```
+
+* Observer interface를 implements로 갖는 클래스 정의	
+	
+	두 클래스 모두 실제로 내부에 변경된 내용은 없고, implements Observer를 추가했다.
+	
+	* DataSheetView
+
+	```
+
+	import java.util.List;
+
+	public class DataSheetView implements Observer {
+		private ScoreRecord scoreRecord;
+		private int viewCount;
+	
+		public DataSheetView(ScoreRecord scoreRecord, int viewCount) {
+			this.scoreRecord = scoreRecord;
+			this.viewCount = viewCount;
+		}
+
+		public void update() { // 점수의 변경을 통보 받음
+			List<Integer> record = scoreRecord.getScoreRecord(); // 점수를 조회함
+			displayScores(record, viewCount); // 조회된 점수를 viewCount만큼 출력함
+		}
+
+		private void displayScores(List<Integer> record, int viewCount) {
+			System.out.print("List of " + viewCount + " entries: ");
+			for (int i = 0; i < viewCount && i < record.size(); i++) {
+				System.out.print(record.get(i) + " ");
+			}
+			System.out.println();
+		}
+	}
+
+	```
+
+	* MinMaxView
+
+	```
+	import java.util.Collections;
+	import java.util.List;
+	
+	public class MinMaxView implements Observer { // 전체 점수가 아니라 최소/최대값만을 출력하는 클래스
+		private ScoreRecord scoreRecord;
+	
+		public MinMaxView(ScoreRecord scoreRecord) {
+			this.scoreRecord = scoreRecord;
+		}
+	
+		public void update() {
+			List<Integer> record = scoreRecord.getScoreRecord();
+			displayMinMax(record); // 최소/최대값만을 출력
+		}
+	
+		private void displayMinMax(List<Integer> record) {
+			int min = Collections.min(record, null);
+			int max = Collections.max(record, null);
+			System.out.println("Min: " + min + " Max: " + max);
+		}
+	}
+
+	```
+
+## ScoreRecord의 SuperClass가 Observer를 다루도록 구현
+
+* Subject (abstract class)
+
+```
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Subject {
+	private List<Observer> observers = new ArrayList<Observer>();
+	
+	public void attachObserver(Observer observer) {
+		observers.add(observer);
+	}
+	
+	public void detachObserver(Observer observer) {
+		observers.remove(observer);
+	}
+	
+	public void notifyObservers() {
+		for( Observer observer : observers ) {
+			observer.update();
+		}
+	}
+}
+
+```
+
+* Subject를 extends하는 ScoreRecord 변화
+
+기존에 DataSheetView 또는 MinMaxView를 직접 private 변수로 가져야 했던 불편함을, List<Observer>로 갖게 되어 각 View에 대한 update()를 일일히 본인이 실행할 필요가 없도록 구성하였다.
+
+addScore 함수 내부에서 기존에는 dataSheetView.update(), minmaxView.update() 와 같이 각 View에 대해 직접 update 함수를 실행해야 했던 불편함이 있지만, observer의 notify()함수를 통해 모든 View를 자동으로 update하도록 수정하였다. 
+
+
+```
+import java.util.ArrayList;
+import java.util.List;
+
+public class ScoreRecord extends Subject {
+	private List<Integer> scores = new ArrayList<Integer>(); // 점수를 저장함
+
+	public void setDataSheetView(DataSheetView dataSheetView) {
+		attachObserver(dataSheetView);
+	}
+
+	public void addScore(int score) { // 새로운 점수를 축함
+		scores.add(score); // scores 목록에 주어진 점수를 추가함
+		notifyObservers();
+	}
+
+	public List<Integer> getScoreRecord() {
+		return scores;
+	}
+}
+
+```
+
+## main함수에서의 테스트
+
+ScoreRecord를 만들고, DataSheetView, MinMaxView를 Observer로 추가한 후, 여러 값을 넣으며 출력값을 확인했다.
+
+```
+public class testScoreRecordMain {
+	public static void main( String[] args ) {
+		ScoreRecord scoreRecord = new ScoreRecord();
+		
+		scoreRecord.attachObserver(new DataSheetView(scoreRecord, 10));
+		scoreRecord.attachObserver(new MinMaxView(scoreRecord));
+		
+		scoreRecord.addScore(10);
+		scoreRecord.addScore(20);
+		scoreRecord.addScore(30);
+		scoreRecord.addScore(40);
+	}
+}
+
+```
+
+출력 결과는 아래와 같다.
+
+> List of 10 entries: 10
+>  
+> Min: 10 Max: 10
+> 
+> List of 10 entries: 10 20
+>  
+> Min: 10 Max: 20
+> 
+> List of 10 entries: 10 20 30
+>  
+> Min: 10 Max: 30
+> 
+> List of 10 entries: 10 20 30 40
+>  
+> Min: 10 Max: 40
+
+
+## 정리(보고서 양식에 맞추어..)
+
+* 클래스 다이어그램 작성 및 설명
+
+*solution*
+
+![Class-diagram Picture(obs)](/images/SW4_observer.PNG)
+
+짜잔
+
+(각 클래스를 Subject, Concrete Subject, Observer, Concrete Observer 관점에서 설명)
+
+* Observer Pattern을 적용함으로써 얻을 수 있는 이점
+
+*solution*
+
+잉...
