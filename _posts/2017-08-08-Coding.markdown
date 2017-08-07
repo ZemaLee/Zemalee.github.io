@@ -17,7 +17,12 @@ using namespace std;
 
 const int TESTCASE = 50;
 
-int lines[3][6];
+double lines[3][6];
+
+double mySqrt() {
+  
+}
+
 int main() {
   // excute each TESTCASE
   for(int t=1; t<=TESTCASE; ++t) {
@@ -25,8 +30,16 @@ int main() {
     for(int i=0; i<3; i++) {
       for(int p=0; p<6; p++) {
          cin >> lines[i][p];
+         // input numbers are Integer.
+         // but we maybe used in double.
       }
     } // end of input
+    
+    double pointStart[3], pointEnd[3];
+    
+    /*
+    move Point : ( (t*Xs) + (1-t)*Xe), (t*Ys) + (1-t)*Ye), (t*Zs) + (1-t)*Ze) )
+    */
     
   }
 }
