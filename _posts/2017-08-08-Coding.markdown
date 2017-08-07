@@ -1,6 +1,6 @@
 ---
 layout: entry
-title: "Just my Coding(Algorithm)"
+title: "알고리즘 코딩"
 author: 이제언
 date: 2017-08-08 05:41 +0900
 tags: 프로그래밍
