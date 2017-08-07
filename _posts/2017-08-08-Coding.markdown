@@ -7,4 +7,28 @@ tags: 프로그래밍
 comments: true
 --- 
 
-Hello World
+# About "**Space Triangle**"
+
+
+
+```c++
+#include <iostream>
+using namespace std;
+
+const int TESTCASE = 50;
+
+int lines[3][6];
+int main() {
+  // excute each TESTCASE
+  for(int t=1; t<=TESTCASE; ++t) {
+		
+    for(int i=0; i<3; i++) {
+      for(int p=0; p<6; p++) {
+         cin >> lines[i][p];
+      }
+    } // end of input
+    
+  }
+}
+```
+
