@@ -11,37 +11,43 @@ comments: true
 
 
 
-```c++
+```c++  
 #include <iostream>
 using namespace std;
-
 const int TESTCASE = 50;
 
-double lines[3][6];
-
-double mySqrt() {
-  
+float mySqrt(float num) {
+	if (num >= 0) {
+		float x = num;
+		int i;
+		for (i = 0; i < 20; i++) {
+			x = (((x * x) + num) / (2 * x));
+		}
+		return x;
+	}
 }
+
+int lines[3][6];
+int lineMinPoint[3][6];
 
 int main() {
-  // excute each TESTCASE
-  for(int t=1; t<=TESTCASE; ++t) {
-		
-    for(int i=0; i<3; i++) {
-      for(int p=0; p<6; p++) {
-         cin >> lines[i][p];
-         // input numbers are Integer.
-         // but we maybe used in double.
-      }
-    } // end of input
-    
-    double pointStart[3], pointEnd[3];
-    
-    /*
-    move Point : ( (t*Xs) + (1-t)*Xe), (t*Ys) + (1-t)*Ye), (t*Zs) + (1-t)*Ze) )
-    */
-    
-  }
-}
+
+	int t, i, j;
+	for (t = 1; t <= TESTCASE; ++t) {
+		for (i = 0; i < 3; ++i) {
+			for (j = 0; j < 6; ++j) {
+				cin >> lines[i][j];
+			}
+		} // end of input
+
+		// 먼저, 두 선(0번째, 1번째)의  
+		// 가장 짧은 거리의 점을 찾는다.  
+
+		// 두번째로, 그 두 점을 이은 선분과  
+		// 2번째 선분 위의 가장 짧은 점을 찾는다.  
+
+		// 반복하며, 세 점을 입실론만큼 움직여보며 테스트한다?
+	}
+}  
 ```
 
