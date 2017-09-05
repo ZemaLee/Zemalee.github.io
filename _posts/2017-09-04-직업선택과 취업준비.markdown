@@ -9,7 +9,9 @@ comments: true
 * table of contents
 {:toc}
 
-**곽선희**교수님 (010-3716-2713 전화 X) sunnykwak0609@gmail.com  
+**곽선희**교수님  
+(010-3716-2713 전화 X)  
+sunnykwak0609@gmail.com  
 
 | 채점사항 | % |
 |---------|---|
