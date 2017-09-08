@@ -9,10 +9,9 @@ comments: true
 * table of contents
 {:toc}
 
-<<<<<<< HEAD
 
 # '17. 9. 4.(월)
-=======
+
 **곽선희**교수님  
 (010-3716-2713 전화 X)  
 sunnykwak0609@gmail.com  
@@ -33,5 +32,6 @@ sunnykwak0609@gmail.com
 10/30 조별과제 : 입사지원서 작성 및 제출
 
 12/11 기말대체 : 자소서작성 및 개별면담
->>>>>>> 304f53501763aaece3a01734119bad6da79f7bc1
+
+
 
