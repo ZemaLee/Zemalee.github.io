@@ -3,7 +3,7 @@ layout: entry
 title: "Diet 일지"
 author: 이제언
 date: 2017-09-07 22:30 +0900
-tags: 다이어트
+tags: 다이어트, 일기
 comments: true
 --- 
 * table of contents
