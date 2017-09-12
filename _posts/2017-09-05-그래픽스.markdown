@@ -25,5 +25,15 @@ comments: true
 
 PyOpenGL, OpenGL, JS 등등 사용할 예정
 
-# 하
+# 교수님의 의식의 흐름 기법
+
+WYSWYG : What You See, What You Get.
+
+* 모델링(Modeling)  
+   장면 내부 물체를 정의하는 작업  
+   선분의 끝점, 다각형의 정점을 정의
+
+* 렌더링(Rendering)  
+   정의될 물체를 그려내기  
+   와이어 프레임 렌더링, 솔리드 렌더링...
 
