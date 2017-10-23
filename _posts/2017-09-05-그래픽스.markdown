@@ -6,6 +6,8 @@ date: 2017-09-05 10:30 +0900
 tags: 그래픽스, 전공
 comments: true
 --- 
+* table of contents	
+{:toc}
 
 # OT
 
