@@ -1,0 +1,53 @@
+---
+layout: entry
+title: "면접s"
+author: 이제언
+date: 2017-10-27 19:00 +0900
+tags: 채용, 공채
+comments: true
+--- 
+* table of contents
+{:toc}
+
+# C++  
+																																																																																																												
+
+# Call-back 함수란?
+
+호출될 함수를 알려주어 다른 프로그램 또는 다른 모듈에서 함수를 호출하게 하는 방법.
+일반적으로 운영 체계(OS)가 호출할 애플리케이션의 함수를 지정해 특정한 사건 또는 메시지가 발생했을 때 호출되도록 지정할 수 있다. 이런 함수를 콜백 함수라고 한다.
+
+![콜백함수](https://zemalee.github.io/images/201702/callback.png)
+
+# Entity - Relation - Modeling (ERD / ERM)
+
+|       |  Entity  |  Relation  |  Attribute |
+|:-----:|:--------:|:----------:|:----------:|
+| 형식  |  네  모   | 선 또는 다이아 | 동그라미 |
+
+# 객체지향 프로그램의 개념
+
+* Objects  
+  특정 목적을 이루기 위해 구성되어지는 객체!  
+  데이터, 행위, IDentity의 집합.    
+  
+* Class  
+  객체를 담기 위한 통.  
+  속성 정의, 메소드 구현.
+
+* Encapsulation  
+  객체를 Interface와 Implement로 나눈다.  
+  Private을 보장하고 사용법만 알면 되는 방법?  
+  자동차 몬다고 생각하면 엔진이 몇바퀴돌고 알필요 ㄴㄴ
+
+* Inheritance  
+  Sub-class를 생성하여 Super-class를 이용하는 방법.  
+  코드 재활용. 간소화된 클래스 구조.  
+  클래스 기능 테스트에 대한 생산성, 정확성 증가  
+  클래스 수정/추가에 대한 유연성, 확장성.
+
+* Polymorphism  
+  상위클래스 타입 변수에 하위클래스가 참조할 수 있다.  
+  여러 타입의 객체를 하나의 타입으로 관리할 수 있다.  
+  확장성 업! 결합도 다운!
+
