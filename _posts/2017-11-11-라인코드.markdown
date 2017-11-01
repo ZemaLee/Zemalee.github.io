@@ -1,0 +1,539 @@
+---
+layout: entry
+title: "라인코드"
+author: 이제언
+date: 2017-11-01 19:00 +0900
+tags: 채용, 공채
+comments: true
+--- 
+* table of contents
+{:toc}
+
+# Prob 2 - 약수구하기  
+
+```c++  
+/* 평 수 N이 주어질 때, 얼마나 많은 정수의 곱으로 나타낼 수 있는가?  
+  (약수구하기 문제)  
+*/  
+#include <iostream>  
+#include <cmath>  
+using namespace std;  
+  
+int main() {  
+    long double Pyeong; cin >> Pyeong;  
+    int count = 0;  
+    int flag = 0;  
+  
+    int srut = sqrt(Pyeong)+1;  
+  
+    long long int origin = Pyeong;  
+    for (long long int i = 1; srut-i > 0; i++) {  
+        if (origin%i == 0) {  
+            count++;  
+            if (i * i == origin)  
+                flag = 1;  
+        }  
+    }  
+
+    int result;  
+    if (flag == 1)  
+        result = ((count - 1) + (count - 1)) + 1;  
+    else  
+        result = count + count;  
+  
+    cout << result << endl;  
+}  
+```  
+
+# Prob 3 - 하노이탑
+
+## 제출한 코드
+
+```c++    
+/* 하노이 탑(원래 위치가 나옴) 최소 이동 횟수 구하기 문제 */  
+#include <iostream>  
+#include <cstdio>  
+#include <cstring>  
+#include <vector>  
+#include <string>  
+#include <algorithm>  
+  
+#define PEG_MAX_SIZE 3  
+#define DISK_MAX_SIZE 20  
+ 
+using namespace std;  
+
+vector<int> pegs_given[3];  
+
+int BASEPOINT, BEFOREMOVE, DOT;  
+int myCount = 0;  
+
+void init() {  
+    int p0 = pegs_given[0][0]; if (p0 == 0) p0 = DISK_MAX_SIZE + 1;  
+    int p1 = pegs_given[0][1]; if (p1 == 0) p1 = DISK_MAX_SIZE + 1;  
+    int p2 = pegs_given[0][2]; if (p2 == 0) p2 = DISK_MAX_SIZE + 1;  
+
+    if (p0 < p1 && p0 < p2) {  
+        BASEPOINT = 0;  
+        if (p1 < p2) {  
+            DOT = 1; BEFOREMOVE = 2;  
+            if (p2 == DISK_MAX_SIZE + 1) swap(DOT,   BEFOREMOVE);
+        }  
+        else {  
+            DOT = 2; BEFOREMOVE = 1;  
+            if (p1 == DISK_MAX_SIZE + 1) swap(DOT, BEFOREMOVE);  
+        }  
+    }  
+    else if (p1 < p0 && p1 < p2) {  
+        BASEPOINT = 1;  
+        if (p0 < p2) {  
+            DOT = 0; BEFOREMOVE = 2;  
+            if (p2 == DISK_MAX_SIZE + 1) swap(DOT, BEFOREMOVE);  
+        }  
+        else {  
+            DOT = 2; BEFOREMOVE = 0;  
+            if (p0 == DISK_MAX_SIZE + 1) swap(DOT, BEFOREMOVE);  
+        }  
+    }  
+    else {  
+        BASEPOINT = 2;  
+        if (p0 < p1) {  
+            DOT = 0; BEFOREMOVE = 1;  
+            if (p1 == DISK_MAX_SIZE + 1) swap(DOT, BEFOREMOVE);  
+        }  
+        else {  
+            DOT = 1; BEFOREMOVE = 0;  
+            if (p0 == DISK_MAX_SIZE + 1) swap(DOT, BEFOREMOVE);  
+        }  
+    }  
+}  
+void hanoi_init(int N, int from, int by, int to) {  
+    if (N == 0) return;  
+      
+    if (N == 1) {  
+        pegs_given[by].push_back(pegs_given[from][0]);  
+        pegs_given[from].pop_back();  
+        myCount++;  
+    }  
+    else if (N == 2) {  
+        pegs_given[to].push_back(pegs_given[from][1]);  
+        pegs_given[from].pop_back();  
+        pegs_given[by].push_back(pegs_given[from][0]);  
+        pegs_given[from].pop_back();  
+        myCount += 2;  
+    }  
+    else {  
+        hanoi_init(N - 1, from, to, by);  
+        pegs_given[to].push_back(pegs_given[from][0]);  
+        pegs_given[from].pop_back();myCount++;  
+        hanoi_init(N - 1, by, from, to);  
+    }  
+}  
+void hanoi(int N, int from, int by, int to) {  
+    if (N == 0) return;  
+  
+    if (N == 1) {  
+        pegs_given[to].push_back(pegs_given[from][0]);  
+        pegs_given[from].pop_back();myCount++;  
+    }  
+    else {  
+        hanoi(N - 1, from, to, by);  
+        pegs_given[to].push_back(pegs_given[from][0]);  
+        pegs_given[from].pop_back();myCount++;  
+        hanoi(N - 1, by, from, to);  
+    }  
+}  
+  
+void findGET() {  
+    init();  
+    hanoi_init(pegs_given[DOT].size(), DOT, BASEPOINT, BEFOREMOVE);  
+    hanoi(pegs_given[BEFOREMOVE].size(), BEFOREMOVE, DOT, BASEPOINT);  
+}  
+  
+int main(int argc, const char *argv[]) {  
+  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) {  
+        string line;  
+        getline(cin, line);  
+        if (line.length() == 0) {  
+            continue;  
+        }  
+  
+        int j = 0;  
+        size_t last = 0;   
+        size_t next = 0;  
+        while ((next = line.find(' ', last)) != string::npos) {  
+            int len = next - last;  
+            if (len) {  
+                pegs_given[i].push_back(stoi(line.substr(last, len)))  ;
+            }  
+            last = next + 1;  
+        }  
+  
+        string lastNumber = line.substr(last);  
+        if (!lastNumber.empty()) {  
+            pegs_given[i].push_back(stoi(lastNumber));  
+        }  
+    }  
+  
+    findGET();  
+  
+  
+    cout << myCount << endl;  
+}   
+
+```
+
+## 새로짜본 코드
+
+```c++  
+/* main idea */  
+/*  
+바닥의 높이 순서로 A, B, C 기둥이라고 했을 때,  
+B의 기둥 중 바닥 하나 빼고 다 C로 옮겼다가,  
+B의 바닥 1개를 A로 옮긴 후, C에 정렬됐을 모든 것들을 A로 옮기면 끝이다.  
+  
+이 때, 정렬되지 않은 K개의 disk가 있을 때, 매 번 A 또는 C에 뭉치가 정렬되고,  
+B가 바닥만 남지 않을 때까지 이를 반복하게 된다.  
+  
+A, C를 결정하는 것은 (바닥 제외, C에 정렬되야 할 disk 수)와  
+쪼꼬미 disk로부터 계단식으로 이루고있는 뭉탱이 수 차이의 홀/짝 여부로 결정된다.  
+(이를 위해 %2 == 0 연산을 취했다)  
+  
+모든 옮기는 과정을 하나하나 되짚지 않고,  
+Hanoi 탑의 N개를 다른 기둥으로 옮길 때 필요한 최소 횟수가 2^(n) - 1 임을 이용하였다.  
+*/  
+#include <iostream>  
+#include <cstdio>  
+#include <cstring>  
+#include <vector>  
+#include <string>  
+#include <stack>  
+#include <algorithm>  
+  
+#define PEG_MAX_SIZE 3  
+#define DISK_MAX_SIZE 20  
+  
+using namespace std;  
+  
+/* A : has Biggest Disk index */  
+/* B : has Secondary Disk index */  
+/* C : lightest Disk of them */  
+int A, B, C;  
+  
+/* for find lightest disk */  
+int diskCount;// = 0; // gloval value auto set 0  
+  
+/* we don't care about Disk heavier than UnSortedDisk */  
+int UnSortedDisk;  
+int MustBeMovedC;  
+/* pegs */  
+vector<int> pegs_given[PEG_MAX_SIZE];  
+  
+/* no more calculate hanoi move count */  
+int HanoiMoveCount[DISK_MAX_SIZE + 1];  
+  
+void Get_Input_Template_Line_Gives_Me() {  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) {  
+        string line;  
+        getline(cin, line);  
+        if (line.length() == 0) {  
+            continue;  
+        }  
+  
+        int j = 0;  
+        size_t last = 0;  
+        size_t next = 0;  
+        while ((next = line.find(' ', last)) != string::npos) {  
+            int len = next - last;  
+            if (len) {  
+                int readDisk = stoi(line.substr(last, len));  
+                pegs_given[i].push_back(readDisk);  
+            }  
+            last = next + 1;  
+        }  
+  
+        string lastNumber = line.substr(last);  
+        if (!lastNumber.empty()) {  
+            int readDisk = stoi(lastNumber);  
+            pegs_given[i].push_back(readDisk);  
+        }  
+  
+        diskCount += pegs_given[i].size();  
+    }  
+}  
+
+bool CheckFirstDisk(const int &i, const int &expected) {  
+    bool result;  
+    if (pegs_given[i].empty()) result = false;  
+    else result = (pegs_given[i][0] == expected);  
+  
+    return result;  
+}  
+   
+int setUnsortedDisk() {  
+    int before = pegs_given[A][0]; // must be 1  
+    for (int i = 1; i < pegs_given[A].size(); i++) {  
+        if (before + 1 != pegs_given[A][i]) {  
+            break;  
+        }  
+        before++;  
+    }  
+    return before + 1;  
+}  
+
+void setABC() {  
+    /* get index where 1 is in */  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) {  
+        if (CheckFirstDisk(i, 1)) {  
+            A = i;  
+            UnSortedDisk = setUnsortedDisk();  
+            MustBeMovedC = diskCount - UnSortedDisk;  
+            break;  
+        }  
+    }  
+  
+    /* get index where second, third disk */  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) {  
+        if (CheckFirstDisk(i, UnSortedDisk)) {  
+            B = i;  
+            C = PEG_MAX_SIZE - A - B;  
+            break;  
+        }  
+    }  
+}  
+  
+int findMinDiskIndex() {  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) {  
+        if (pegs_given[i].empty()) continue;  
+        if (pegs_given[i].back() == diskCount) return i;  
+    }  
+}  
+  
+bool onlyLastStep() {  
+    return (pegs_given[B].back() == UnSortedDisk && pegs_given[B].size() == 1 && pegs_given[A].back() == UnSortedDisk - 1);  
+}  
+
+bool isMovedAll() {  
+    int count = 0;  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) { count += pegs_given[i].empty(); }  
+    return count == 2;  
+}  
+  
+void printStatus() {  
+    cout << "---- 이동 결과는? ----\n";  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) {  
+        cout << i << " 막대 : ";  
+        for (int j = 0; j < pegs_given[i].size(); j++) {  
+            cout << pegs_given[i][j] << " ";  
+        } cout << endl;  
+    }  
+    cout << "---- 이동 결과 끝 ----\n" << endl;  
+}  
+  
+void moveDisks(const int &from, const int &to, const int &count) {  
+    stack<int> temp;  
+    for (int i = 0; i < count; i++) {  
+        temp.push(pegs_given[from].back());  
+        pegs_given[from].pop_back();  
+    }  
+    while (!temp.empty()) {  
+        pegs_given[to].push_back(temp.top());  
+        temp.pop();  
+    }  
+}  
+  
+int getHanoiMoveCount(const int &moveDiskCount) {  
+    if (HanoiMoveCount[moveDiskCount]) return HanoiMoveCount[moveDiskCount];  
+  
+    int result = 0;  
+    for (int i = 1; i <= moveDiskCount; i++) {  
+        result <<= 1;  
+        result++;  
+        HanoiMoveCount[i] = result;  
+    }  
+    return result;  
+}  
+  
+int moveUnsortedDisks() {  
+    printStatus();  
+    // 종료조건 1. 1이 있는곳에 2번 바닥만 옮기면 되는 경우  
+    if (onlyLastStep()) return 1 + getHanoiMoveCount( MustBeMovedC );  
+  
+    // 종료조건 2. 이미 다 옮겨진 경우  
+    if (isMovedAll()) return 0;  
+  
+    // 종료조건 3. 1이 있는곳에 2번 모든것을 다 옮기면 되는 경우  
+    int min_i = findMinDiskIndex();  
+    int beforeDisk = pegs_given[min_i].back();  
+    int count = 1;  
+    for (int i = pegs_given[min_i].size() - 2; i >= 0; i--) {  
+        if (pegs_given[min_i][i] == beforeDisk - 1) {  
+            count++;  
+            beforeDisk = pegs_given[min_i][i];  
+        }  
+        else break;  
+    }  
+  
+    if (beforeDisk == UnSortedDisk) {  
+        return getHanoiMoveCount(count);  
+    }  
+  
+    /* 종료조건에 해당하지 않는 경우, 계산을 시작하지! */  
+  
+    // 뭉치를 얹을 녀석이 있는 곳 찾기  
+    int moveNextIndex;  
+    for (int i = 0; i < PEG_MAX_SIZE; i++) {  
+        if (pegs_given[i].empty()) continue;  
+        if (diskCount - count == pegs_given[i].back()) {  
+            moveNextIndex = i; break;  
+        }  
+    }  
+  
+    // 뭉치(min_i)를 얹을 녀석(moveNextIndex)로 옮겨주기  
+    bool haveToMoveC = ((MustBeMovedC - count) % 2) == 1;  
+    int moveCount = 0;  
+    if (haveToMoveC) {  
+        if (moveNextIndex != C) { // C로 가야되는데 C에 없을경우  
+            if (min_i == C) { // min이 C에 있으면  
+                int tempMin_i = PEG_MAX_SIZE - min_i - moveNextIndex;  
+                moveDisks(min_i, tempMin_i, count); // 1. 뭉탱이 치우고  
+                moveCount += getHanoiMoveCount(count);  
+                min_i = tempMin_i;  
+            }  
+            moveDisks(moveNextIndex, C, 1); // 2. 바닥 내려주고  
+            moveCount++;  
+  
+            moveDisks(min_i, C, count);  
+            moveCount += getHanoiMoveCount(count); // 3. 뭉탱이 그 위로  
+        }  
+        else { // C에있으면 걍 min만 옮겨주면 됨  
+            moveDisks(min_i, C, count);  
+            moveCount += getHanoiMoveCount(count);  
+        }  
+    }  
+    else {  
+        if (moveNextIndex != A) { // A로 가야하는데 A에 없을경우  
+            if (min_i == A) { // A에 새끼가 있으면 치움  
+                moveCount += getHanoiMoveCount(count); // 1. 치우고  
+                moveDisks(min_i, C, count);  
+                min_i = C;  
+            }  
+            moveCount++; // 2. 바닥에 넣을놈 옮기고  
+            moveDisks(moveNextIndex, A, 1);  
+  
+            moveCount += getHanoiMoveCount(count); // 3. 뭉탱이 옮김  
+            moveDisks(min_i, A, count);  
+        }  
+        else { // A에 이놈 새끼가 있으면  
+            moveCount += getHanoiMoveCount(count);  
+            moveDisks(min_i, A, count);  
+        }  
+    }  
+    cout << moveCount << " 번 옮기니까 이렇게 됨! " << endl;  
+    return moveCount + moveUnsortedDisks();  
+}  
+  
+int main(void) {  
+  
+    Get_Input_Template_Line_Gives_Me();  
+    setABC();  
+    cout << moveUnsortedDisks() << endl;  
+  
+    return 0;  
+}  
+```
+
+# Prob 3 - 자리배정  
+
+```c++  
+/* 각 사람이 원하는 자리를 말하면 다 앉을 수 있는 배치가 있는가? - 이분매칭 */  
+#include <cstdio>  
+#include <cstring>  
+#include <iostream>  
+#include <vector>  
+using namespace std;  
+  
+int matchA[1000], matchB[1000];  
+vector<int> adj[1000];  
+bool visited[1000];  
+  
+bool BipertiteMatch(int A) {  
+    int adjSize = adj[A].size();  
+    for (int i = 0; i < adjSize; i++) {  
+        int v = adj[A][i];  
+        if (visited[v]) continue;  
+        visited[v] = true;  
+        if (matchB[v] == -1 || BipertiteMatch(matchB[v])) {  
+            matchA[A] = v;  
+            matchB[v] = A;  
+            return 1;  
+        }  
+    }  
+    return 0;  
+}  
+  
+int main() {  
+    int testCase; cin >> testCase;  
+  
+    while (testCase--) {  
+        int n, m; cin >> n >> m;  
+        for (int i = 0; i < n; i++) adj[i].clear();  
+        for (int i = 0; i < m; i++) {  
+            int people, wantSit; cin >> people >> wantSit;  
+            adj[people].push_back(wantSit);  
+        }  
+  
+        memset(matchA, -1, sizeof(matchA));  
+        memset(matchB, -1, sizeof(matchB));    
+  
+        int count = 0;  
+        for (int i = 0; i < n; i++) {  
+            memset(visited, 0, sizeof(visited));  
+            count += BipertiteMatch(i);  
+        }  
+  
+        if (count == n) {  
+            cout << "O" << endl;  
+        }  
+        else {  
+            cout << "X" << endl;  
+        }  
+    }  
+  
+  
+}   
+```
+
+# Prob 5 - 책정리  
+
+```c++  
+/* 책 정리하기 문제 */  
+#include <iostream>  
+using namespace std;  
+int arr[50];  
+int main() {  
+    int N; cin >> N;  
+    int state = 0; // 0 : don't care 1 : up 2 : down  
+    int count = 1;  
+  
+    cin >> arr[0];  
+    for (int i = 1; i < N; i++) {  
+        cin >> arr[i];  
+        if (arr[i] > arr[i - 1]) {  
+            if (state != 1) {  
+                state = 1;  
+                count++;  
+            }  
+        }  
+        else if (arr[i] < arr[i - 1]) {  
+            if (state != 2) {  
+                state = 2;  
+                count++;  
+            }  
+        }  
+    }  
+    cout << count << endl;  
+}  
+```
+
