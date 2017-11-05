@@ -51,3 +51,26 @@ comments: true
   여러 타입의 객체를 하나의 타입으로 관리할 수 있다.  
   확장성 업! 결합도 다운!
 
+# OSI 7계층
+
+## 전반적 설명
+
+|     레벨    | 계층 | 기능 |
+|:-----------:|:----|:----|
+| Application(응용계층) | DHCP, DNS, FTP, HTTP 제공 | 사용자가 네트워크에 접근할 수 있도록 함. UI, 우편, DB관리 등 서비스를 제공. 텔넷, HTTP, SMTP, FTP 등이 예시 |
+| Presentation(표현계층) | JPEG, MPEG, SMB, AFP.. 이해할 수 있는 포맷으로 변환 | 입출력 데이터를 하나의 표현 형태로 변환. 제어코드나 문자 및 그래픽등의 확장자 를 생각하면 쉽다 |
+| Session(전송계층) | TCP, UDP, ARP, 게이트웨이 | P-to-P 제어 및 에러관리. 패킷전송의 유효성과 실패 패킷의 재전송 등 통신의 신뢰성을 보장. 머리에는 Segment가 포함됨. |
+| Network | IP, ICMP, IGMP. 라우터 | Packet을 전달할 책임을 갖는다. 각 패킷이 성공적 효과적으로 전달되도록 함. IP가 대표적 |
+| Data Link | MAC, PPP, 브리지, 스위치 | 오류 없이 Frame(비트들)을 전달하는 역할. MAC주소를 이용해 정확한 장치로 정보를 전달함. Network계층에서 정보를 받아와 주소와 제어정보를 추가함 |
+| Physical(물리계층) | 이더넷 등. 허브, 리피터 | 물리적 매체를 통해 Bit를 전송하기 위해 요구되는 기능을 조정. 케이블, 연결장치 등. 다른 두 노드를 물리적으로 연결시켜주는 신호방식을 다룸 |
+
+## 계층별 대표 프로토콜
+
+| 7. Applacation | HTTP, SMTP, SNMP, FTP, Telnet, SSH, Scp, NFS, RTSP |
+|:-----:|:-----|
+| 6. Presentation | JPEG, MPEG, XDR, ANS.1, SMB, AFP |
+| 5. Session | TLS, SSH, RPC |
+| 4. Transport | TCP, UDP, RTP, SCTP, PSX |
+| 3. Network | IP, ICMP, IGMP, CLNP, ARP, RARP, BGP, OSPF, RIP, IPX, DDP |
+| 2. DataLink | Ethernet, Toekn-Ring, PPP, HDLC, ISDN, ATM, 무선랜 |
+| 1. Physical | 전선, 전파, 광섬유, 케이블, 모뎀 |
