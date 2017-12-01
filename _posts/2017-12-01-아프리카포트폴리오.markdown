@@ -1,0 +1,1063 @@
+---
+layout: entry
+title: "아프리카포트폴리오"
+author: 이제언
+date: 2017-12-01 17:44 +0900
+tags: 채용, 공채, 포트폴리오
+comments: true
+--- 
+* table of contents
+{:toc}
+
+# OPIC 성적증명서
+
+![OPIC 성적](https://zemalee.github.io/images/scan/OPICIL.PNG)
+
+# 포트폴리오
+
+부산대학교 기계공학부 연구실에서 아르바이트 기간동안 제작한 프로그램 입니다.
+
+## 프로그램 목적
+
+항공기의 날개 또는 동체가 바람(유체)의 영향을 얼마나 받는가를 판단하기 위한 2D Cartesian Mesh를 생성하는 프로그램입니다.
+
+
+## Mesh 예시와 설명
+
+직사각형 모양의 판 위에, 항공기 유체를 올려놓은 후, 각 Cell에 미치는 영향을 계산한다고 가정했을 때, 모든 칸을 다 쪼갠 후, 연산한다고 하면 굉장히 비효율적인 부분까지도 계산을 하게 될 것입니다.
+
+오랜 시간이 걸리겠지만, 아주 간단한 Mesh를 제작한다면 그림 1과 같을 것입니다.
+
+그림 1. 최악의 Mesh  
+![Worst Mesh](https://zemalee.github.io/images/scan/MESHMESH.PNG)
+
+하지만, 실제로 바람의 영향을 확인하기 위해 실제로 필요한 부분만 쪼개는 형식으로 확인할 수 있습니다. 이렇게 할 경우 그림 2와 같을 것입니다.
+
+그림 2. 그림에 걸맞는 Mesh  
+![Great Mesh](https://zemalee.github.io/images/scan/MESH.PNG)
+
+
+그림 1이 아닌, 그림 2와 같이 Mesh를 설계하기 위해, 저는 class를 이용해, 완벽한 Quad-Tree를 작성하였습니다. "쪼개지기 전의 판"은 부모 Node, "쪼개진 작은 판"은 자식 Node로 구현하였습니다. 이해가 잘 안 되시는 분을 위해 Quad-Tree를 간단히 묘사해보았습니다.
+
+그림 3. Quad-Tree  
+![Quad Tree](https://zemalee.github.io/images/scan/QUADTREE.PNG)
+
+이러한 방식으로 판을 생성한 후, 유체의 모형을 무수한 점의 집합이라고 가정하였을 때, 각 점이 찍힌 곳에 있는 판을 "옆으로 얼마나", "판은 얼마나 많이 쪼개지는가" 라는 정보를 토대로 Mesh의 Quad-Tree 생성을 하는 프로그램입니다.
+
+## 전체 Code
+
+아래 코드는 인수자에게 설명을 위해 주석을 달았던 코드입니다.  
+Markdown 언어로 작성되는 블로그이기 때문에, 각 line에 double-space를 통해 엔터처리를 하였습니다.  
+수기로 double-enter 처리를 하였기때문에 실제 코드 Copy시 동작하지 않는 부분이 있을 수 있습니다.   
+이는 필요시, 첨부파일을 추가적으로 제출하겠습니다.
+
+```c++  
+/*  
+--- 기초 ---  
+Array로 하면 편하겠지만, 그럴 경우 Memory 초과가 난다는 박사님의 말에 따라  
+Class로 구현함.  
+  
+정사각형을 Cell, 사각형을 이루는 변을 Face, 각 꼭지점을 Node라 정의함.  
+  
+--- 전체 흐름 설명 ---  
+각 네모를 Cell이라 부르며  
+네모를 이루는 상/하/좌/우의 벽을 Face라 부른다.  
+네모의 각 꼭지점을 Node라 부른다.  
+  
+편의를 위해, 전체 네모가 Cell들을 참조할 수 있다.( Rectangle->initCell[i][j] )  
+Cell에서 Face 밑 Node를 접근할 수 있다.  
+( Cell-> LFace,  DFace,  RFace,  UFace );  
+( Cell->LUNode, LDNode, RDNode, RUNode );  
+  
+Face에서 인접해있는 Cell과 Node를 접근할 수 있다.  
+( Face-> sNode, eNode [startNode, endNode의 줄임말] )  
+  
+--- 출력 순서와 관련된 부분 ---  
+각 부분에 대해, 파일로 출력할 때, 먼저 출력되는 부분에 대한 설정이 필요하다.  
+특히 Face를 출력할 때 sNode, eNode, sCell, eCell 순서로 출력하는 부분이 있는데,  
+기역자(?)로 항상 그리면서 출력하는 내용은 박사님께 직접 전해듣기를 바란다.  
+  
+판을 그릴 때, (0, 0)에 가까운 부분을 start로 하고, (width, height)에 가까울수록 end로 설정한다.  
+출력할 때, 끝 부분이 NULL인 경우에만 순서를 거꾸로 출력하도록 설정하였다.  
+예를 들어, Face(변)에 대해 생각해보면  
+(0, 0) ~ (100, 0)을 잇는 Face가 있다고 생각할 때,  
+그 Face의 sNode는 (0, 0)이고, eNode는 (100, 0)이다.  
+  
+본인은, 고려하기 쉽게 좌표평면상의 점으로 생각한 후 작성하였다.  
+  
+  
+  
+전체 판을 만들기 위해  
+1. 가로, 세로 크기에 대한 입력을 받는다.  
+2. 가로/세로 GCD를 구해서, 그 GCD에 맞도록 판을 쪼갠다.  
+3. 각 Cell에 대한 정보를 입력한다.  
+*/  
+#include <iostream>  
+#include <vector>  
+#include <cstdio>  
+#include <algorithm>  
+#include <cstdio>  
+#include <queue>  
+#include <string>  
+  
+using namespace std;  
+class Cell;  
+class Face;  
+class Node;  
+class Rectangle;  
+vector<Node*> nodeVector;  
+vector<Cell*> cellVector;  
+vector<Face*> faceVector;  
+Rectangle *initRectangle;  
+FILE *fp = fopen("test.msh", "w");  
+class Node {  
+public:  
+    double x, y;  
+    int id;  
+    static int nodeCount; // node 개수를 count  
+public:  
+    Node() {  
+        x = -99999, y = -99999;  
+        id = ++nodeCount;  
+    }  
+    Node(double x, double y) {  
+        this->x = x; this->y = y;  
+        id = ++nodeCount;  
+    }  
+    ~Node() {  
+        nodeCount--;  
+    }  
+    void setPoint(double x, double y) {  
+        this->x = x;  
+        this->y = y;  
+    }  
+    double getX() {  
+        return x;  
+    }  
+    double getY() {  
+        return y;  
+    }  
+    int getID() {  
+        return id;  
+    }  
+    int getCount() {  
+        return nodeCount;  
+    }  
+};  
+class Face {  
+public:  
+    Node *sNode, *eNode, *centerNode;  
+    Cell *sCell, *eCell;  
+    Face *Child1, *Child2, *curParent;  
+    int id, attribute;  
+    int depth;  
+    int printID, myPrintID;  
+    bool childOrNot;  
+    /* attribute  
+    0 : outflow  (맨 오른쪽)  
+    1 : inlet    (맨 왼쪽)  
+    2 : top      (맨 위)  
+    3 : bottom   (맨 아래)  
+    4 : interrior(중간 Face들) */  
+    static int faceCount;  
+    static int maxDepth;  
+public:  
+    Face() {  
+        sNode = eNode = centerNode = NULL;  
+        sCell = eCell = NULL;  
+        Child1 = Child2 = curParent = NULL;  
+        id = ++faceCount;  
+        attribute = 4; // default = interrior  
+        depth = 0;  
+        printID = 0;  
+        childOrNot = false;  
+    }  
+    Face(Node *sNode, Node *eNode) {  
+        centerNode = NULL;  
+        this->sNode = sNode; this->eNode = eNode;  
+        sCell = eCell = NULL;  
+        Child1 = Child2 = curParent = NULL;  
+        id = ++faceCount;  
+        attribute = 4; // default = interrior  
+        depth = 0;  
+        printID = 0;  
+        childOrNot = false;  
+    }  
+    ~Face() {  
+        faceCount--;  
+    }  
+    void setAttribute(int attribute) {  
+        this->attribute = attribute;  
+    }  
+    void setStartCell(Cell *cell) {  
+        this->sCell = cell;  
+    }  
+    void setEndCell(Cell *cell) {  
+        this->eCell = cell;  
+    }  
+    void setStartNode(Node *node) {  
+        this->sNode = node;  
+    }  
+    void setEndNode(Node *node) {  
+        this->eNode = node;  
+    }  
+    void setCenterNode(Node *node) {  
+        centerNode = node;  
+    }  
+    void setChilds(Face *c1, Face *c2) {  
+        Child1 = c1;  
+        Child2 = c2;  
+  
+        int childDepth = depth + 1;  
+        c1->depth = childDepth;	c1->setParent(this);  
+        c2->depth = childDepth;	c2->setParent(this);  
+  
+        if (childDepth > maxDepth) {  
+            maxDepth = childDepth;  
+        }  
+    }  
+    void setID(int newID) {  
+        id = newID;  
+    }  
+    void setDepth(int depth) {  
+        this->depth = depth;  
+    }  
+    void setPrintID(int newID) {  
+        this->printID = newID;  
+    }  
+    void setMyPrintID(int newID) {  
+        myPrintID = newID;  
+    }  
+    void setParent(Face *parent) {  
+        curParent = parent;  
+    }  
+    int getMyPrintID() {  
+        return myPrintID;  
+    }  
+    int getMaxDepth() {  
+        return maxDepth;  
+    }  
+    int getPrintID() {  
+        return this->printID;  
+    }  
+    int getID() {  
+        return id;  
+    }  
+    int getAttribute() {  
+        return attribute;  
+    }  
+    int getCount() {  
+        return faceCount;  
+    }  
+    Node* getStartNode() {  
+        return sNode;  
+    }  
+    Node* getEndNode() {  
+        return eNode;  
+    }  
+    Node* getCenterNode() {  
+        return centerNode;  
+    }  
+    Cell* getStartCell() {  
+        return sCell;  
+    }  
+    Cell* getEndCell() {  
+        return eCell;  
+    }  
+    Face* getChild1() {  
+        return Child1;  
+    }  
+    Face* getChild2() {  
+        return Child2;  
+    }  
+    int getDepth() {  
+        return depth;  
+    }  
+    bool isParent() {  
+        return ((Child1 != NULL) && (Child2 != NULL));  
+    }  
+    bool isChild() {  
+        return curParent != NULL;  
+    }  
+};  
+class Cell {  
+public:  
+    Face *LFace, *DFace, *RFace, *UFace;  
+    Node *LUNode, *LDNode, *RDNode, *RUNode;  
+    Cell *LUCell, *LDCell, *RDCell, *RUCell;  
+    double cellSize;  
+    int id, depth;  
+    static int cellCount;  
+    void setChildNodes(Node *L, Node *D, Node *R, Node *U, Node *C) {  
+        LUCell->setLUNode(LUNode);	LUCell->setLDNode(L);  
+        LUCell->setRDNode(C);			LUCell->setRUNode(U);  
+  
+        LDCell->setLUNode(L);			LDCell->setLDNode(LDNode);  
+        LDCell->setRDNode(D);			LDCell->setRUNode(C);  
+  
+        RDCell->setLUNode(C);			RDCell->setLDNode(D);  
+        RDCell->setRDNode(RDNode);	RDCell->setRUNode(R);  
+  
+        RUCell->setLUNode(U);			RUCell->setLDNode(C);  
+        RUCell->setRDNode(R);			RUCell->setRUNode(RUNode);  
+    }  
+    void setNewFaces(Face *from, Face *child1, Face *child2, Node *Start, Node *Center, Node *End) {  
+        if (!from->isParent()) {  
+            child1 = new Face(Start, Center);  
+            child2 = new Face(Center, End);  
+            faceVector.push_back(child1);  
+            faceVector.push_back(child2);  
+            child1->setAttribute(LFace->attribute);  
+            child2->setAttribute(LFace->attribute);  
+            from->setChilds(child1, child2);  
+            from->setCenterNode(Center);  
+        }  
+        else {  
+            child1 = from->Child1;  
+            child2 = from->Child2;  
+        }  
+        child1->curParent = from;  
+        child2->curParent = from;  
+    }  
+public:  
+    Cell() {  
+        LUCell = LDCell = RDCell = RUCell = NULL;  
+        LUNode = LDNode = RDNode = RUNode = NULL;  
+        LFace = DFace = RFace = UFace = NULL;  
+        id = ++cellCount;  
+        depth = 0;  
+    }  
+    int getNodeCount() {  
+        return LUNode->getCount();  
+    }  
+    int getCellCount() {  
+        return cellCount;  
+    }  
+    int getFaceCount() {  
+        return LFace->getCount();  
+    }  
+    int getID() {  
+        return id;  
+    }  
+    Node* getLUNode() {  
+        return LUNode;  
+    }  
+    Node* getLDNode() {  
+        return LDNode;  
+    }  
+    Node* getRDNode() {  
+        return RDNode;  
+    }  
+    Node* getRUNode() {  
+        return RUNode;  
+    }  
+    bool isParent() {    
+        return (LUCell != NULL);  
+    }  
+    double getSize() {  
+        return this->cellSize;  
+    }  
+    int getDepth() {  
+        return depth;  
+    }  
+    void setDepth(int newDepth) {  
+        depth = newDepth;  
+    }  
+    void setID(int newID) {  
+        this->id = newID;  
+    }  
+    void setLUNode(Node *node) {  
+        LUNode = node;  
+    }  
+    void setLDNode(Node *node) {  
+        LDNode = node;  
+    }  
+    void setRDNode(Node *node) {  
+        RDNode = node;  
+    }  
+    void setRUNode(Node *node) {  
+        RUNode = node;  
+    }  
+    void setSize(double size) {  
+        cellSize = size;  
+    }  
+    void dotPoint(double x, double y, int layer, int depth) {  
+        const int OUTFLOW = 0, INLET = 1, TOP = 2, BOTTOM = 3, INTERRIOR = 4;  
+  
+        if (LUCell == NULL) {	// 아직 이 Cell이 쪼개지지 않았으면, 쪼개라!   
+                                //( 쪼개졌으면 LUCell, LDCell, RDCell, RUCell이 NULL이 아닐거니까 그중 하나만 체크한거임 )  
+                                // 내부 Cell(Default)를 먼저 생성해둔다.  
+            LUCell = new Cell();	LUCell->setDepth(depth + 1);  
+            LDCell = new Cell();	LDCell->setDepth(depth + 1);  
+            RDCell = new Cell();	RDCell->setDepth(depth + 1);  
+            RUCell = new Cell();	RUCell->setDepth(depth + 1);  
+            cellVector.push_back(LUCell);	cellVector.push_back(LDCell);  
+            cellVector.push_back(RDCell);	cellVector.push_back(RUCell);  
+  
+            // 새로 만들어지는 Node를 먼저 생성한다.  
+            Node *LeftCenter, *DownCenter, *RightCenter, *UpCenter, *cellCenter;  
+            if (!LFace->isParent()) {  
+                LeftCenter = new Node(((LUNode->x + LDNode->x) / 2.0), ((LUNode->y + LDNode->y) / 2.0));  
+                nodeVector.push_back(LeftCenter);  
+            }  
+            else {  
+                LeftCenter = LFace->centerNode;  
+            }  
+            if (!DFace->isParent()) {  
+                DownCenter = new Node((this->LDNode->x + this->RDNode->x) / 2.0, (this->LDNode->y + this->RDNode->y) / 2.0);  
+                nodeVector.push_back(DownCenter);  
+            }  
+            else {  
+                DownCenter = DFace->centerNode;  
+            }  
+            if (!RFace->isParent()) {  
+                RightCenter = new Node((this->RDNode->x + this->RUNode->x) / 2.0, (this->RDNode->y + this->RUNode->y) / 2.0);  
+                nodeVector.push_back(RightCenter);  
+            }  
+            else {  
+                RightCenter = RFace->centerNode;   
+            }  
+            if (!UFace->isParent()) {  
+                UpCenter = new Node((this->RUNode->x + this->LUNode->x) / 2.0, (this->RUNode->y + this->LUNode->y) / 2.0);  
+                nodeVector.push_back(UpCenter);  
+            }  
+            else {  
+                UpCenter = UFace->centerNode;  
+            }  
+            cellCenter = new Node((this->LDNode->x + this->RUNode->x) / 2.0, (this->LDNode->y + this->RUNode->y) / 2.0);  
+            nodeVector.push_back(cellCenter);  
+  
+            // 내부 Cell의 Node를 세팅한다.  
+            setChildNodes(LeftCenter, DownCenter, RightCenter, UpCenter, cellCenter);  
+  
+            // 내부 Cell Size 값 전달.  
+            double ChildSize = cellSize / 2.0;  
+            LUCell->setSize(ChildSize);		LDCell->setSize(ChildSize);  
+            RDCell->setSize(ChildSize);		RUCell->setSize(ChildSize);  
+  
+            // 내부 Face 12개를 만들겁니다.  
+            Face *LU = 0, *LD = 0, *DL = 0, *DR = 0, *RD = 0, *RU = 0;  
+            Face *UR = 0, *UL = 0, *IL = 0, *ID = 0, *IR = 0, *IU = 0;  
+  
+            // Cell 만들 때 새로 만들어지는 Face중 외부 8개 먼저 셋팅  
+            // LD LU  
+            if (!LFace->isParent()) {  
+                LD = new Face(LDNode, LeftCenter);	faceVector.push_back(LD);  
+                LU = new Face(LeftCenter, LUNode);	faceVector.push_back(LU);  
+                LD->setAttribute(LFace->attribute);  
+                LU->setAttribute(LFace->attribute);  
+                LFace->setChilds(LD, LU);  
+                LFace->setCenterNode(LeftCenter);  
+            }  
+            else {  
+                LD = LFace->Child1;  
+                LU = LFace->Child2;  
+            }  
+            // DL DR  
+            if (!DFace->isParent()) {  
+                DL = new Face(LDNode, DownCenter);	faceVector.push_back(DL);  
+                DR = new Face(DownCenter, RDNode);	faceVector.push_back(DR);  
+                DL->setAttribute(DFace->attribute);  
+                DR->setAttribute(DFace->attribute);  
+                DFace->setChilds(DL, DR);  
+                DFace->setCenterNode(DownCenter);  
+            }  
+            else {  
+                DL = DFace->Child1;  
+                DR = DFace->Child2;  
+            }  
+            // RD RU  
+            if (!RFace->isParent()) {  
+                RD = new Face(RDNode, RightCenter);	faceVector.push_back(RD);  
+                RU = new Face(RightCenter, RUNode);	faceVector.push_back(RU);  
+                RD->setAttribute(RFace->attribute);  
+                RU->setAttribute(RFace->attribute);  
+                RFace->setChilds(RD, RU);  
+                RFace->setCenterNode(RightCenter);  
+            }  
+            else {  
+                RD = RFace->Child1;  
+                RU = RFace->Child2;  
+            }  
+            // UL UR  
+            if (!UFace->isParent()) {  
+                UL = new Face(LUNode, UpCenter);	faceVector.push_back(UL);  
+                UR = new Face(UpCenter, RUNode);	faceVector.push_back(UR);  
+                UL->setAttribute(UFace->attribute);  
+                UR->setAttribute(UFace->attribute);  
+                UFace->setChilds(UL, UR);  
+                UFace->setCenterNode(UpCenter);  
+            }  
+            else {  
+                UL = UFace->Child1;  
+                UR = UFace->Child2;  
+            }  
+  
+            IL = new Face(LeftCenter, cellCenter);	IL->setAttribute(INTERRIOR);	IL->setDepth(UL->depth);	faceVector.push_back(IL);  
+            ID = new Face(DownCenter, cellCenter);	ID->setAttribute(INTERRIOR);	ID->setDepth(UL->depth);	faceVector.push_back(ID);  
+            IR = new Face(cellCenter, RightCenter);	IR->setAttribute(INTERRIOR);	IR->setDepth(UL->depth);	faceVector.push_back(IR);  
+            IU = new Face(cellCenter, UpCenter);		IU->setAttribute(INTERRIOR);	IU->setDepth(UL->depth);	faceVector.push_back(IU);  
+  
+            // 각 내부 cell이 face를 가리키도록  
+            LUCell->LFace = LU;	LUCell->DFace = IL;	LUCell->RFace = IU;	LUCell->UFace = UL;  
+            LDCell->LFace = LD; LDCell->DFace = DL; LDCell->RFace = ID; LDCell->UFace = IL;  
+            RDCell->LFace = ID; RDCell->DFace = DR; RDCell->RFace = RD; RDCell->UFace = IR;  
+            RUCell->LFace = IU; RUCell->DFace = IR; RUCell->RFace = RU; RUCell->UFace = UR;  
+  
+            // 각 Face의 startCell / endCell 셋팅  
+  
+            // LU, LD  
+  
+            LU->setEndCell(LUCell);	LD->setEndCell(LDCell);  
+            if (LFace->attribute != INLET) {  
+                if (LFace->sCell->LUCell == NULL) {  
+                    LU->setStartCell(LFace->sCell);  
+                    LD->setStartCell(LFace->sCell);  
+                }  
+                else {  
+                    LU->setStartCell(LFace->sCell->RUCell);  
+                    LD->setStartCell(LFace->sCell->RDCell);  
+                }  
+            }  
+            // DL, DR  
+            DL->setStartCell(LDCell);	DR->setStartCell(RDCell);  
+            if (DFace->attribute != BOTTOM) {  
+                if (DFace->eCell->LUCell == NULL) {  
+                    DL->setEndCell(DFace->eCell);  
+                    DR->setEndCell(DFace->eCell);  
+                }   
+                else {  
+                    DL->setEndCell(DFace->eCell->LUCell);  
+                    DR->setEndCell(DFace->eCell->RUCell);  
+                }  
+            }  
+            // RD, RU  
+            RD->setStartCell(RDCell);	RU->setStartCell(RUCell);  
+            if (RFace->attribute != OUTFLOW) {  
+                if (RFace->eCell->LUCell == NULL) {  
+                    RD->setEndCell(RFace->eCell);  
+                    RU->setEndCell(RFace->eCell);  
+                }  
+                else {  
+                    RD->setEndCell(RFace->eCell->LDCell);  
+                    RU->setEndCell(RFace->eCell->LUCell);  
+                }  
+            }  
+            // UR, UL  
+            UR->setEndCell(RUCell); UL->setEndCell(LUCell);  
+            if (UFace->attribute != TOP) {  
+                if (UFace->sCell->LUCell == NULL) {  
+                    UR->setStartCell(UFace->sCell);  
+                    UL->setStartCell(UFace->sCell);  
+                }  
+                else {  
+                    UR->setStartCell(UFace->sCell->RDCell);  
+                    UL->setStartCell(UFace->sCell->LDCell);  
+                }  
+            }  
+            // INNER Faces  
+            IL->setStartCell(LUCell); IL->setEndCell(LDCell);  
+            ID->setStartCell(LDCell); ID->setEndCell(RDCell);  
+            IR->setStartCell(RUCell); IR->setEndCell(RDCell);  
+            IU->setStartCell(LUCell); IU->setEndCell(RUCell);  
+        }  
+  
+        // layer spread  
+        if (layer > 0) {  
+            // [0] [1] [2] [3] [4] [5] [6] [7]  
+            // LU,  L, LD,  D, RD,  R, RU,  U   
+            Cell *SpreadCell[8] = { NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL };  
+            bool isLeft = (LFace->attribute == INLET);  
+            bool isBottom = (DFace->attribute == BOTTOM);  
+            bool isRight = (RFace->attribute == OUTFLOW);  
+            bool isTop = (UFace->attribute == TOP);  
+  
+            if (!isLeft) {  
+                SpreadCell[1] = LFace->sCell;  
+                if (!isTop)	SpreadCell[0] = SpreadCell[1]->UFace->sCell;  
+                if (!isBottom)	SpreadCell[2] = SpreadCell[1]->DFace->eCell;  
+            }  
+            if (!isBottom) {  
+                SpreadCell[3] = DFace->eCell;  
+                if (!isRight)	SpreadCell[4] = SpreadCell[3]->RFace->eCell;  
+            }  
+            if (!isRight) {  
+                SpreadCell[5] = RFace->eCell;  
+                if (!isTop)	SpreadCell[6] = SpreadCell[5]->UFace->sCell;  
+            }  
+            if (!isTop) SpreadCell[7] = UFace->sCell;  
+            // spread by layer  
+            for (int i = 0; i < 8; i++) {  
+                if (SpreadCell[i] != NULL) {  
+                    SpreadCell[i]->dotPoint(x, y, layer - 1, 0);  
+                }  
+            }  
+        }  
+  
+        // depth 내려가면서 더 쪼개는 부분  
+        if (depth > 0) {  
+            Node *CellCenterNode = LUCell->RDNode;  
+            double centerX = CellCenterNode->x;  
+            double centerY = CellCenterNode->y;  
+            if (x > centerX) {   
+                if (y > centerY) {  
+                    RUCell->dotPoint(x, y, layer, depth - 1);  
+                }  
+                else {  
+                    RDCell->dotPoint(x, y, layer, depth - 1);  
+                }  
+            }  
+            else {  
+                if (y > centerY) {  
+                    LUCell->dotPoint(x, y, layer, depth - 1);  
+                }  
+                else {  
+                    LDCell->dotPoint(x, y, layer, depth - 1);  
+                }  
+            }  
+        }  
+    }  
+    void printCell() {  
+        // 그냥 개발자가 확인하려고 만들어둔 부분  
+        cout << this->id << " cell information --\n";  
+        cout << "  node  \n";  
+        cout << "LU = " << this->LUNode->id;  
+        cout << " LD = " << this->LDNode->id;  
+        cout << " RD = " << this->RDNode->id;  
+        cout << " RU = " << this->RUNode->id << endl;  
+  
+        cout << "  face  \n";  
+        cout << "L = " << this->LFace->id;  
+        cout << " D = " << this->DFace->id;  
+        cout << " R = " << this->RFace->id;  
+        cout << " U = " << this->UFace->id << endl;  
+        cout << endl;  
+  
+        // deldeldel  
+        if (LFace->Child1 != NULL) {  
+            if (LFace->Child1->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << LFace->id << " == " << LFace->Child1->id << " == (" << LFace->Child1->Child1->id << " " << LFace->Child1->Child2->id << ")\n";  
+            }  
+            if (LFace->Child2->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << LFace->id << " == " << LFace->Child2->id << " == (" << LFace->Child2->Child1->id << " " << LFace->Child2->Child2->id << ")\n";  
+            }  
+        }  
+        if (DFace->Child1 != NULL) {  
+            if (DFace->Child1->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << DFace->id << " == " << DFace->Child1->id << " == (" << DFace->Child1->Child1->id << " " << DFace->Child1->Child2->id << ")\n";  
+            }  
+            if (DFace->Child2->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << DFace->id << " == " << DFace->Child2->id << " == (" << DFace->Child2->Child1->id << " " << DFace->Child2->Child2->id << ")\n";  
+            }  
+        }  
+        if (RFace->Child1 != NULL) {  
+            if (RFace->Child1->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << RFace->id << " == " << RFace->Child1->id << " == (" << RFace->Child1->Child1->id << " " << RFace->Child1->Child2->id << ")\n";  
+            }  
+            if (RFace->Child2->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << RFace->id << " == " << RFace->Child2->id << " == (" << RFace->Child2->Child1->id << " " << RFace->Child2->Child2->id << ")\n";  
+            }  
+        }  
+        if (UFace->Child1 != NULL) {  
+            if (UFace->Child1->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << UFace->id << " == " << UFace->Child1->id << " == (" << UFace->Child1->Child1->id << " " << UFace->Child1->Child2->id << ")\n";  
+            }  
+            if (UFace->Child2->Child1 != NULL) {  
+                cout << "!!!!!!!!!!!!!!!!!!!!!!!! ";  
+                cout << UFace->id << " == " << UFace->Child2->id << " == (" << UFace->Child2->Child1->id << " " << UFace->Child2->Child2->id << ")\n";  
+            }  
+        }  
+        system("pause");  
+    }  
+    void confirmAll() {  
+        // 그냥 개발자가 확인하려고 만들어 둔 부분  
+        if (LUCell != NULL) {  
+            if (LUCell->LUCell != NULL) {  
+                cout << "Start Left : " << LUCell->LFace->id << "    ";  
+                cout << LUCell->LFace->Child2->id << " " << LUCell->LFace->Child1->id << " __ " <<  
+                    LUCell->DFace->Child1->id << " " << LUCell->DFace->Child2->id << " __ " <<  
+                    LUCell->RFace->Child1->id << " " << LUCell->RFace->Child2->id << " __ " <<  
+                    LUCell->UFace->Child2->id << " " << LUCell->UFace->Child1->id << " __    " <<   
+                    LUCell->LUCell->DFace->id << " " << LUCell->LDCell->RFace->id << " " << LUCell->RDCell->UFace->id << " " << LUCell->RUCell->LFace->id << "\n\n";   
+            }  
+            if (LDCell->LUCell != NULL) {  
+                cout << "Start Left : " << LDCell->LFace->id << "    ";  
+                cout << LDCell->LFace->Child2->id << " " << LDCell->LFace->Child1->id << " __ " <<  
+                    LDCell->DFace->Child1->id << " " << LDCell->DFace->Child2->id << " __ " <<  
+                    LDCell->RFace->Child1->id << " " << LDCell->RFace->Child2->id << " __ " <<  
+                    LDCell->UFace->Child2->id << " " << LDCell->UFace->Child1->id << " __    " <<  
+                    LDCell->LUCell->DFace->id << " " << LDCell->LDCell->RFace->id << " " << LDCell->RDCell->UFace->id << " " << LDCell->RUCell->LFace->id << "\n\n";  
+            }  
+            if (RDCell->RDCell != NULL) {  
+                cout << "Start Left : " << RDCell->LFace->id << "    ";  
+                cout << RDCell->LFace->Child2->id << " " << RDCell->LFace->Child1->id << " __ " <<  
+                    RDCell->DFace->Child1->id << " " << RDCell->DFace->Child2->id << " __ " <<  
+                    RDCell->RFace->Child1->id << " " << RDCell->RFace->Child2->id << " __ " <<  
+                    RDCell->UFace->Child2->id << " " << RDCell->UFace->Child1->id << " __    " <<  
+                    RDCell->LUCell->DFace->id << " " << RDCell->LDCell->RFace->id << " " << RDCell->RDCell->UFace->id << " " << RDCell->RUCell->LFace->id << "\n\n";  
+            }  
+            if (RUCell->RUCell != NULL) {  
+                cout << "Start Left : " << RUCell->LFace->id << "    ";  
+                cout << RUCell->LFace->Child2->id << " " << RUCell->LFace->Child1->id << " __ " <<  
+                    RUCell->DFace->Child1->id << " " << RUCell->DFace->Child2->id << " __ " <<  
+                    RUCell->RFace->Child1->id << " " << RUCell->RFace->Child2->id << " __ " <<  
+                    RUCell->UFace->Child2->id << " " << RUCell->UFace->Child1->id << " __    " <<  
+                    RUCell->LUCell->DFace->id << " " << RUCell->LDCell->RFace->id << " " << RUCell->RDCell->UFace->id << " " << RUCell->RUCell->LFace->id << "\n\n";  
+            }  
+  
+        }  
+        else {  
+            cout << "NO CHILD\n";  
+        }  
+    }  
+};  
+class Rectangle {  
+public:  
+    int LDx, LDy, RUx, RUy;  
+    Cell **initCell;  
+    int initCellSize;  
+    int widthCount, heightCount;  
+    int getGCD(int x, int y) {  
+        while (x != y) {  
+            if (x > y)  
+                x -= y;  
+            else  
+                y -= x;  
+        }  
+        return x;  
+    }  
+public:  
+    Rectangle(int LDX, int LDY, int RUX, int RUY) {  
+        LDx = LDX;	LDy = LDY;  
+        RUx = RUX;	RUy = RUY;  
+  
+        int width = RUX - LDX;  
+        int height = RUY - LDY;  
+        initCellSize = getGCD(width, height);  
+  
+        widthCount = width / initCellSize;  
+        heightCount = height / initCellSize;  
+  
+        Node **initNode = new Node*[widthCount + 1];  
+        for (int w = 0; w <= widthCount; w++) {  
+            int plusX = LDX + (w * initCellSize);  
+            initNode[w] = new Node[heightCount + 1];  
+            for (int h = 0; h <= heightCount; h++) {  
+                int plusY = LDY + (h * initCellSize);  
+                initNode[w][h].setPoint(plusX, plusY);  
+                nodeVector.push_back(&initNode[w][h]);  
+            }  
+        }  
+  
+        const int OUTFLOW = 0, INLET = 1, TOP = 2, BOTTOM = 3, INTERRIOR = 4;  
+        initCell = new Cell*[widthCount];  
+        for (int i = 0; i < widthCount; i++) {  
+            initCell[i] = new Cell[heightCount];  
+            for (int j = 0; j < heightCount; j++) {  
+                initCell[i][j].setSize(initCellSize);  
+                cellVector.push_back(&initCell[i][j]);  
+  
+                initCell[i][j].setLUNode(&initNode[i][j + 1]);  
+                initCell[i][j].setLDNode(&initNode[i][j]);  
+                initCell[i][j].setRDNode(&initNode[i + 1][j]);  
+                initCell[i][j].setRUNode(&initNode[i + 1][j + 1]);   
+   
+                // Left Face   
+                if (i == 0) { // Left : inlet   
+                    initCell[i][j].LFace = new Face(initCell[i][j].LDNode, initCell[i][j].LUNode);    
+                    initCell[i][j].LFace->setAttribute(INLET);  
+                    faceVector.push_back(initCell[i][j].LFace);  
+                }  
+                else {  
+                    initCell[i][j].LFace = initCell[i - 1][j].RFace;  
+                }  
+  
+                // Bottom Face  
+                if (j == 0) {  
+                    initCell[i][j].DFace = new Face(initCell[i][j].LDNode, initCell[i][j].RDNode);  
+                    initCell[i][j].DFace->setAttribute(BOTTOM);  
+                    faceVector.push_back(initCell[i][j].DFace);  
+                }  
+                else {  
+                    initCell[i][j].DFace = initCell[i][j - 1].UFace;  
+                }  
+  
+                // Right Face  
+                initCell[i][j].RFace = new Face(initCell[i][j].RDNode, initCell[i][j].RUNode);  
+                if (i == widthCount - 1) {  
+                    initCell[i][j].RFace->setAttribute(OUTFLOW);  
+                }  
+                faceVector.push_back(initCell[i][j].RFace);  
+  
+                // Top Face  
+                initCell[i][j].UFace = new Face(initCell[i][j].LUNode, initCell[i][j].RUNode);  
+                if (j == heightCount - 1) {  
+                    initCell[i][j].UFace->setAttribute(TOP);  
+                }  
+                faceVector.push_back(initCell[i][j].UFace);  
+  
+                if (initCell[i][j].LFace->attribute != INLET)  
+                    initCell[i][j].LFace->setStartCell(&initCell[i - 1][j]);  
+                initCell[i][j].LFace->setEndCell(&initCell[i][j]);  
+  
+                initCell[i][j].DFace->setStartCell(&initCell[i][j]);  
+                if (initCell[i][j].DFace->attribute != BOTTOM)  
+                    initCell[i][j].DFace->setEndCell(&initCell[i][j - 1]);  
+  
+                initCell[i][j].RFace->setStartCell(&initCell[i][j]);  
+                if (initCell[i][j].RFace->attribute != OUTFLOW)  
+                    initCell[i][j].RFace->setEndCell(&initCell[i + 1][j]);  
+   
+                if (initCell[i][j].UFace->attribute != TOP)  
+                    initCell[i][j].UFace->setStartCell(&initCell[i][j + 1]);  
+                initCell[i][j].UFace->setEndCell(&initCell[i][j]);  
+            }  
+        }  
+    }  
+    int getNodeCount() {  
+        return initCell[0][0].getLDNode()->getCount();  
+    }  
+    int getCellCount() {  
+        return initCell[0][0].getCellCount();  
+    }  
+    int getFaceCount() {  
+        return initCell[0][0].getFaceCount();  
+    }  
+    void printAll() {  
+        for (int w = 0; w < widthCount; w++) {  
+            for (int h = 0; h < heightCount; h++) {  
+                cout << "cell[" << w << "][" << h << "]\n";  
+                initCell[w][h].printCell();  
+            }  
+        }  
+    }  
+    void confirmAll() {  
+        for (int w = 0; w < widthCount; w++) {  
+            for (int h = 0; h < heightCount; h++) {  
+                cout << "cell[" << w << "][" << h << "]\n";  
+                initCell[w][h].confirmAll();  
+            }  
+        }  
+    }  
+    void dotPoint(double x, double y, int layer = 0, int depth = 0) {  
+        int findX = 1, findY = 1;  
+        while (true) {  
+            if (((findX * initCellSize) + LDx) > x) {  
+                break;  
+            }  
+            findX++;  
+        }  
+        while (true) {  
+            if (((findY * initCellSize) + LDy) > y) {  
+                break;  
+            }  
+            findY++;  
+        }  
+        initCell[findX - 1][findY - 1].dotPoint(x, y, layer, depth);  
+    }  
+};  
+int Node::nodeCount = 0;  
+int Face::faceCount = 0;  
+int Face::maxDepth = 0;  
+int Cell::cellCount = 0;  
+void DescribeMesh() {  
+    fprintf(fp, "(0 \"Grid:\")\n\n");  
+  
+    fprintf(fp, "(0 \"Dimensions:\")\n");  
+    fprintf(fp, "(2 2)\n\n");  
+  
+    fprintf(fp, "(12 (0 1 %x 0))\n", initRectangle->getCellCount()); // Cell Count   
+    fprintf(fp, "(13 (0 1 %x 0))\n", initRectangle->getFaceCount()); // Face Count  
+    fprintf(fp, "(10 (0 1 %x 0 2))\n\n", initRectangle->getNodeCount()); // Node Count  
+  
+    int myID = 1;  
+    double printSize = cellVector[0]->getSize();  
+    int cellParentCount = 0;  
+    for (int i = 0; i < initRectangle->getCellCount(); i++) {  
+        if (cellVector[i]->isParent()) {  
+            cellParentCount++;  
+        }  
+    }   
+  
+    fprintf(fp, "(12 (%x 1 %x 1 3))\n", myID++, initRectangle->getCellCount() - cellParentCount); // Cells (if have child, it should be changed)   
+    if (cellParentCount != 0) {  
+        fprintf(fp, "(12 (%x %x %x 20 3))\n", myID++, 1 + initRectangle->getCellCount() - cellParentCount, initRectangle->getCellCount());  
+    } fprintf(fp, "\n");  
+  
+    int faceMaxDepth = faceVector[0]->getMaxDepth();  
+    int **FACount = new int*[faceMaxDepth + 1];  
+    for (int i = 0; i < faceMaxDepth + 1; i++) {  
+        const int ColumnCount = 10;  
+        FACount[i] = new int[ColumnCount];  
+        for (int j = 0; j < ColumnCount; j++) FACount[i][j] = 0;  
+    }  
+  
+    // for get Count attributes  
+    const int OUTFLOW = 0, INLET = 1, TOP = 2, BOTTOM = 3, INTERRIOR = 4;  
+    int findDepth = faceVector[0]->getDepth();  
+    for (vector<Face*>::iterator it = faceVector.begin(); it != faceVector.end(); it++) {  
+        if ((*it)->depth != findDepth) {  
+            findDepth = (*it)->depth;  
+        }  
+        int att = (*it)->attribute;  
+        int plusAlpha = 0;  
+        if ((*it)->isParent()) plusAlpha = 5;  
+        if (att == INTERRIOR) {  
+            FACount[findDepth][0 + plusAlpha]++;  
+        }  
+        else if (att == BOTTOM) {  
+            FACount[findDepth][1 + plusAlpha]++;  
+        }  
+        else if (att == TOP) {  
+            FACount[findDepth][2 + plusAlpha]++;  
+        }  
+        else if (att == INLET) {  
+            FACount[findDepth][3 + plusAlpha]++;  
+        }  
+        else {  
+            FACount[findDepth][4 + plusAlpha]++;  
+        }  
+    }  
+  
+    // start print faces  
+    queue< Face* > haveChild;  
+    int faceNumber = 1, lowCount = 0, di = faceVector[0]->depth;  
+    for (unsigned int k = 0; k < faceVector.size(); k++) {  
+  
+        if (di != faceVector[k]->depth) {  
+            di = faceVector[k]->depth;  
+            lowCount = 0;  
+  
+        }  
+        if (FACount[di][lowCount] == 0) {  
+            k--; lowCount++; continue;  
+        }   
+        int ParentChildNumber[2] = { faceNumber,FACount[di][lowCount] + faceNumber - 1 };  
+        fprintf(fp, "(13 (%x %x %x ", myID++, faceNumber, FACount[di][lowCount] + faceNumber - 1);  
+        if (faceVector[k]->isParent()) {  
+            fprintf(fp, "1f 2)(");  
+            faceVector[k]->myPrintID = (myID - 1);  
+        }  
+        else if (lowCount == 0) fprintf(fp, "2 2)(");  
+        else if (lowCount <= 2) fprintf(fp, "7 2)(");  
+        else if (lowCount == 3) fprintf(fp, "a 2)(");  
+        else if (lowCount == 4) fprintf(fp, "24 2)(");  
+  
+        faceNumber = FACount[di][lowCount] + faceNumber;  
+        for (int i = 0; i < FACount[di][lowCount]; i++) {  
+            if (faceVector[k]->isChild()) {  
+                faceVector[k]->myPrintID = (myID - 1);  
+            }  
+            if (faceVector[k]->isParent()) {  
+                faceVector[k]->myPrintID = (myID - 1);  
+                haveChild.push(faceVector[k]);  
+            }   
+            Cell *s = faceVector[k]->sCell;  
+            Cell *e = faceVector[k]->eCell;   
+  
+            int sn = faceVector[k]->sNode->id;  
+            int en = faceVector[k]->eNode->id;  
+            int sfi = 0;  
+            int efi = 0;  
+  
+            if (s != NULL) sfi = s->id;  
+            if (e != NULL) efi = e->id;  
+  
+            if (s == NULL) {  
+                fprintf(fp, "\n%x %x %x %x", en, sn, efi, sfi);  
+            }  
+            else {  
+                fprintf(fp, "\n%x %x %x %x", sn, en, sfi, efi);  
+            }  
+            k++;  
+        }  
+        fprintf(fp, "))\n\n");  
+        lowCount++;  
+        k--;  
+        if (!haveChild.empty()) {  
+            fprintf(fp, "(59 (%x %x %x %x)(", ParentChildNumber[0], ParentChildNumber[1], haveChild.front()->myPrintID, haveChild.front()->Child1->myPrintID);  
+            myID++;  
+            while (!haveChild.empty()) {  
+                fprintf(fp, "\n 2 %x %x", haveChild.front()->Child1->id, haveChild.front()->Child2->id);  
+                haveChild.pop();  
+            }  
+            fprintf(fp, "))\n\n");  
+        }  
+    } // end of faces  
+  
+      // print nodes  
+    int nodeCount = nodeVector.size();  
+    fprintf(fp, "(10 (%x 1 %x 1 2)\n(\n", myID++, nodeCount);  
+    for (int i = 0; i < nodeCount - 1; i++) {  
+        fprintf(fp, "%lf\t%lf\n", nodeVector[i]->x, nodeVector[i]->y);  
+    }  
+    fprintf(fp, "%lf\t%lf))\n", nodeVector[nodeCount - 1]->x, nodeVector[nodeCount - 1]->y);  
+    // end of nodes  
+}  
+bool faceCompare(Face *f1, Face *f2) {  
+    int f1Depth = f1->depth;  
+    int f2Depth = f2->depth;  
+    if (f1Depth > f2Depth) {  
+        return true;  
+    }  
+    else if (f1Depth == f2Depth) {  
+        if ((f1->isParent() && f2->isParent())) {  
+            if (f1->attribute > f2->attribute)  
+                return true;  
+            else if (f1->attribute == f2->attribute)  
+                return f1->Child1->myPrintID > f2->Child1->myPrintID;  
+            else  
+                return false;  
+        }  
+        else if ((!f1->isParent() && !f2->isParent())) {  
+            return f1->attribute > f2->attribute;  
+        }  
+        else {  
+            return !f1->isParent();  
+        }  
+  
+    }  
+    else {  
+        return false;  
+    }  
+}  
+bool cellCompare(Cell *c1, Cell *c2) {  
+    if ((c1->isParent() && c2->isParent()) || (!c1->isParent() && !c2->isParent())) {  
+        return false;  
+    }  
+    else {  
+        return !c1->isParent();  
+    }  
+}  
+int main() {  
+    int LeftDownX = 0, LeftDownY = 0;  
+    int RightUpX = 1600, RightUpY = 1500;  
+  
+    initRectangle = new Rectangle(LeftDownX, LeftDownY, RightUpX, RightUpY);  
+  
+    initRectangle->dotPoint(777, 888, 1, 3);  
+    sort(faceVector.begin(), faceVector.end(), faceCompare);  
+    sort(cellVector.begin(), cellVector.end(), cellCompare);  
+  
+    //initRectangle->printAll();  
+    for (unsigned int i = 0; i < faceVector.size(); i++) {  
+        faceVector[i]->setID(i + 1);  
+    }  
+    for (unsigned int i = 0; i < cellVector.size(); i++) {  
+        cellVector[i]->setID(i + 1);  
+    }  
+  
+    DescribeMesh();  
+  
+    initRectangle->confirmAll();  
+  
+    return 0;  
+}    
+```
