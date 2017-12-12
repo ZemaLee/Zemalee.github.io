@@ -244,7 +244,7 @@ comments: true
  
 # 직업윤리
 
-<brain storming>  
+* brain storming    
 1) 윤리는 무엇인가?  
 2) 윤리는 필요한가?  
 _2-1) 왜 그러한가?  
