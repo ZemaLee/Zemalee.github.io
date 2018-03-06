@@ -2,7 +2,7 @@
 layout: entry
 title: "2018상반기_채용정리"
 author: 이제언
-date: 2017-09-12 13:30 +0900
+date: 2018-03-06 17:40 +0900
 tags: 채용, 공채
 comments: true
 ---
