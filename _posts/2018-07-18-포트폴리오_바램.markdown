@@ -6,6 +6,8 @@ date: 2018-07-18 17:44 +0900
 tags: 채용, 공채, 포트폴리오
 comments: true
 --- 
+* table of contents
+{:toc}
 
 # 2D Cartesian Mesh
 
@@ -19,33 +21,25 @@ comments: true
 
 항공기의 날개 또는 동체가 바람(유체)의 영향을 얼마나 받는가를 판단하기 위한 Mesh를 생성하는 프로그램입니다.
 
-
-
 ## Mesh 예시와 설명
 
 직사각형 모양의 판 위에, 항공기 유체를 올려놓은 후, 각 Cell에 미치는 영향을 계산한다고 가정했을 때, 모든 칸을 다 쪼갠 후, 연산한다고 하면 굉장히 비효율적인 부분까지도 계산을 하게 될 것입니다.
 
 오랜 시간이 걸리겠지만, 아주 간단한 Mesh를 제작한다면 그림 1과 같을 것입니다.
 
-  
+
 
 그림 1. 최악의 Mesh  
 ![Worst Mesh](https://zemalee.github.io/images/scan/MESHMESH.PNG)
 
 하지만, 실제로 바람의 영향을 확인하기 위해 실제로 필요한 부분만 쪼개는 형식으로 확인할 수 있습니다. 이렇게 할 경우 그림 2와 같을 것입니다.
 
-  
+
 그림 2. 그림에 걸맞는 Mesh  
 ![Great Mesh](https://zemalee.github.io/images/scan/MESH.PNG)
 
-  
 
 그림 1이 아닌, 그림 2와 같이 Mesh를 설계하기 위해, 저는 class를 이용해, 완벽한 Quad-Tree를 작성하였습니다. "쪼개지기 전의 판"은 부모 Node, "쪼개진 작은 판"은 자식 Node로 구현하였습니다. 이해가 잘 안 되시는 분을 위해 Quad-Tree를 간단히 묘사해보았습니다.
-
-  
-  
-  
-  
 
 그림 3. Quad-Tree  
 ![Quad Tree](https://zemalee.github.io/images/scan/QUADTREE.PNG)
