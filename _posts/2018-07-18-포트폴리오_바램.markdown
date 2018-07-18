@@ -9,6 +9,20 @@ comments: true
 * table of contents
 {:toc}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 2D Cartesian Mesh
 
 부산대학교 기계공학부 연구실에서 동체역학 연구에 필요한 프로그램을 제작한 경험입니다. C++ 언어와 기본적인 자료구조만을 사용해야 한다는 제약조건이 있었습니다.
@@ -27,10 +41,13 @@ comments: true
 
 오랜 시간이 걸리겠지만, 아주 간단한 Mesh를 제작한다면 그림 1과 같을 것입니다.
 
+
+
 그림 1. 최악의 Mesh  
 ![Worst Mesh](https://zemalee.github.io/images/scan/MESHMESH.PNG)
 
 하지만, 실제로 바람의 영향을 확인하기 위해 실제로 필요한 부분만 쪼개는 형식으로 확인할 수 있습니다. 이렇게 할 경우 그림 2와 같을 것입니다.
+
 
 그림 2. 그림에 걸맞는 Mesh  
 ![Great Mesh](https://zemalee.github.io/images/scan/MESH.PNG)
