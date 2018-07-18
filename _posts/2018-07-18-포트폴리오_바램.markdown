@@ -1,8 +1,8 @@
 ---
 layout: entry
-title: "포트폴리오"
+title: "포트폴리오_바램"
 author: 이제언
-date: 2017-12-01 17:44 +0900
+date: 2018-07-18 17:44 +0900
 tags: 채용, 공채, 포트폴리오
 comments: true
 --- 
