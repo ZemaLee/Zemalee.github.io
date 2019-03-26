@@ -1,8 +1,8 @@
 ---
 layout: entry
-title: "정보처리기사 실기"  
+title: "정보처리기사실기"
 author: 이제언
-date: 2018-07-18 17:44 +0900
+date: 2019-03-26 12:00 +0900
 tags: 채용, 자격증, 포트폴리오
 comments: true
 --- 
@@ -10,4 +10,3 @@ comments: true
 {:toc}
 
 # 2D Cartesian Mesh
-
