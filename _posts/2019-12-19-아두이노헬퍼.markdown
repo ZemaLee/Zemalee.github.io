@@ -15,19 +15,17 @@ comments: true
 
 ```c++
 
-// Please Check Under *******Pin's Number.
+// 아래 네 줄 핀번호 (2, 3, 11, 12) 본인 보드에 맞게 수정하세요.
 const int button1Pin = 2;
 const int button2Pin = 3;
 const int led1Pin = 11;
 const int led2Pin = 12;
 
-// Global Value for Save
+// 버튼 정보 저장하려고 변수 선언.
 int button1State = 0;
 int button2State = 0;
 
-// setup code.
-// LED : OUTPUT
-// BUTTON : INPUT
+// 맨 위 핀 번호만 설정하셨으면 setup() 따로 안건드셔도 됩니다.
 void setup() {
 	pinMode(led1Pin, OUTPUT);
 	pinMode(led2Pin, OUTPUT);
@@ -35,26 +33,103 @@ void setup() {
 	pinMode(button2Pin, INPUT);
 }
 
-// REAL LOOP
 void loop() {
+
+    // 버튼 정보 읽어오구요
 	button1State = digitalRead(button1Pin);
 	button2State = digitalRead(button2Pin);
 
 	if (button1State == HIGH) {
-		// button 1 pressed
+		// 버튼 1 눌려진 상태에서 동작할 내용을 {} 안에 작성
 		digitalWrite(led1Pin, HIGH);
 	}
 	else {
-		// button 1 released
+		// 버튼 1 떼어진 상태에서 동작할 내용을 {} 안에 작성
 		digitalWrite(led1Pin, LOW);
 	}
 	if (button2State == HIGH) {
-		// button 2 pressed
+		// 버튼 2 눌려진 상태에서 동작할 내용을 {} 안에 작성
 		digitalWrite(led2Pin, HIGH);
 	}
 	else {
-		// button 2 released
+		// 버튼 2 떼어진 상태에서 동작할 내용을 {} 안에 작성
 		digitalWrite(led2Pin, LOW);
 	}
 }
+```
+
+
+## 각 버튼을 "떼는 순간" LED가 Switching 되게 하기.
+
+```c++
+
+// 아래 네 줄 핀번호 (2, 3, 11, 12) 본인 보드에 맞게 수정하세요. 
+const int button1Pin = 2;
+const int button2Pin = 3;
+const int led1Pin = 11;
+const int led2Pin = 12;
+
+// 버튼 정보 저장하려고 변수 선언. 
+int button1State = 0;
+int button2State = 0;
+int beforeButton1State = 0;
+int beforeButton2State = 0;
+
+// LED ON OFF 를 위함.
+int led1State = 0;
+int led2State = 0;
+
+// 맨 위 핀 번호만 설정하셨으면 setup() 따로 안건드셔도 됩니다. 
+void setup() {
+	pinMode(led1Pin, OUTPUT);
+	pinMode(led2Pin, OUTPUT);
+	pinMode(button1Pin, INPUT);
+	pinMode(button2Pin, INPUT);
+}
+
+void loop() {
+
+	// 버튼 정보 읽어오구요
+	button1State = digitalRead(button1Pin);
+	button2State = digitalRead(button2Pin);
+
+	/* 1111111111111111111 */
+	if (button1State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton1State == LOW) {
+			led1State = led1State == 0; // 0이면 1로, 1이면 0으로 스위칭.
+		}
+	}
+
+	if (led1State == 1) {
+		digitalWrite(led1Pin, HIGH);
+	}
+	else {
+		digitalWrite(led1Pin, LOW);
+	}
+	/* 1111111111111111111 끝 */
+
+	/* 2222222222222222222 (위 1이랑 똑같은 동작. 핀번호만 다름 */
+	if (button2State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton2State == LOW) {
+			led2State = led2State == 0; // 0이면 1로, 1이면 0으로 스위칭.
+		}
+	}
+
+	if (led2State == 1) {
+		digitalWrite(led2Pin, HIGH);
+	}
+	else {
+		digitalWrite(led2Pin, LOW);
+	}
+	/* 2222222222222222222 끝 */
+
+	// 현재 버튼정보 저장. (다음 loop()에서 써먹을 수 있음)
+	beforeButton1State = button1State;
+	beforeButton2State = button2State;
+}
+
 ```
