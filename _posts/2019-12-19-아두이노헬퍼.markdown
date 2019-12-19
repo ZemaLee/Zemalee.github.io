@@ -133,3 +133,96 @@ void loop() {
 }
 
 ```
+
+# 2 버튼 4 LED
+
+## +, - 버튼을 이용해 숫자(0~15)를 2진수로 표현한다.
+
+```c++
+
+// 아래 네 핀번호 (2, 3, 10, 11, 12, 13) 본인 보드에 맞게 수정하세요.
+const int button1Pin = 2;
+const int button2Pin = 3;
+const int led1Pin = 10;
+const int led2Pin = 11;
+const int led3Pin = 12;
+const int led4Pin = 13;
+
+// 버튼 정보 저장하려고 변수 선언.
+int button1State = 0;
+int button2State = 0;
+int beforeButton1State = 0;
+int beforeButton2State = 0;
+
+// 표현할 숫자 정보
+int showNumber = 0;
+
+// 맨 위 핀 번호만 설정하셨으면 setup() 따로 안건드셔도 됩니다.
+void setup() {
+	pinMode(led1Pin, OUTPUT);
+	pinMode(led2Pin, OUTPUT);
+	pinMode(button1Pin, INPUT);
+	pinMode(button2Pin, INPUT);
+}
+
+void loop() {
+
+	// 버튼 정보 읽어오구요
+	button1State = digitalRead(button1Pin);
+	button2State = digitalRead(button2Pin);
+
+	if (button1State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton1State == LOW) {
+			if( showNumber < 15 ) {
+				// 버튼 1번 누르면 숫자 + 1
+				showNumber++;
+			}
+		}
+	}
+
+	if (button2State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton2State == LOW) {
+			if (showNumber > 0) {
+				// 버튼 1번 누르면 숫자 - 1
+				showNumber--;
+			}
+		}
+	}
+
+	// 숫자(showNumber) LED 2진수로 표현
+	// 0 : 0000
+	// 1 : 0001
+	// 2 : 0010
+	// 3 : 0011
+	// 4 : 0100
+	// ...
+	// 13 : 1101
+	// 14 : 1110
+	// 15 : 1111
+
+	// 초보용 코드 (생략, 필요시 == 1, 2, 3, ..., 15)
+	//if (showNumber == 0) {
+	//	digitalWrite(led1Pin, LOW);
+	//	digitalWrite(led2Pin, LOW);
+	//	digitalWrite(led3Pin, LOW);
+	//	digitalWrite(led4Pin, LOW);
+	//}
+
+	// 고급자 코드
+	if (showNumber % 2 == 0) { digitalWrite(led4Pin, LOW); }
+	else { digitalWrite(led4Pin, HIGH); }
+	if ((showNumber / 2) % 2 == 0) { digitalWrite(led3Pin, LOW); }
+	else { digitalWrite(led3Pin, HIGH); }
+	if ((showNumber / 4) % 2 == 0) { digitalWrite(led2Pin, LOW); }
+	else { digitalWrite(led2Pin, HIGH); }
+	if ((showNumber / 8) % 2 == 0) { digitalWrite(led1Pin, LOW); }
+	else { digitalWrite(led1Pin, HIGH); }
+
+	beforeButton1State = button1State;
+	beforeButton2State = button2State;
+}
+```
