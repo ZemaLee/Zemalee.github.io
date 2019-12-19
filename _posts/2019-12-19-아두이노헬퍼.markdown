@@ -59,7 +59,7 @@ void loop() {
 ```
 
 
-## 각 버튼을 "떼는 순간" LED가 Switching 되게 하기.
+## 각 버튼을 "누르는 순간" LED가 Switching 되게 하기.
 
 ```c++
 
