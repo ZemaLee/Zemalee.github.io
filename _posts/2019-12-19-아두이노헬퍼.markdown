@@ -1,0 +1,228 @@
+---
+layout: entry
+title: "아두이노헬퍼"
+author: 이제언
+date: 2019-12-19 17:00 +0900
+tags: 하드웨어
+comments: true
+--- 
+* table of contents
+{:toc}
+
+# 버튼 2 : LED 2
+
+## 각 버튼이 각 LED를 켜기만 하기.
+
+```c++
+
+// 아래 네 줄 핀번호 (2, 3, 11, 12) 본인 보드에 맞게 수정하세요.
+const int button1Pin = 2;
+const int button2Pin = 3;
+const int led1Pin = 11;
+const int led2Pin = 12;
+
+// 버튼 정보 저장하려고 변수 선언.
+int button1State = 0;
+int button2State = 0;
+
+// 맨 위 핀 번호만 설정하셨으면 setup() 따로 안건드셔도 됩니다.
+void setup() {
+	pinMode(led1Pin, OUTPUT);
+	pinMode(led2Pin, OUTPUT);
+	pinMode(button1Pin, INPUT);
+	pinMode(button2Pin, INPUT);
+}
+
+void loop() {
+
+    // 버튼 정보 읽어오구요
+	button1State = digitalRead(button1Pin);
+	button2State = digitalRead(button2Pin);
+
+	if (button1State == HIGH) {
+		// 버튼 1 눌려진 상태에서 동작할 내용을 {} 안에 작성
+		digitalWrite(led1Pin, HIGH);
+	}
+	else {
+		// 버튼 1 떼어진 상태에서 동작할 내용을 {} 안에 작성
+		digitalWrite(led1Pin, LOW);
+	}
+	if (button2State == HIGH) {
+		// 버튼 2 눌려진 상태에서 동작할 내용을 {} 안에 작성
+		digitalWrite(led2Pin, HIGH);
+	}
+	else {
+		// 버튼 2 떼어진 상태에서 동작할 내용을 {} 안에 작성
+		digitalWrite(led2Pin, LOW);
+	}
+}
+```
+
+
+## 각 버튼을 "누르는 순간" LED가 Switching 되게 하기.
+
+```c++
+
+// 아래 네 줄 핀번호 (2, 3, 11, 12) 본인 보드에 맞게 수정하세요. 
+const int button1Pin = 2;
+const int button2Pin = 3;
+const int led1Pin = 11;
+const int led2Pin = 12;
+
+// 버튼 정보 저장하려고 변수 선언. 
+int button1State = 0;
+int button2State = 0;
+int beforeButton1State = 0;
+int beforeButton2State = 0;
+
+// LED ON OFF 를 위함.
+int led1State = 0;
+int led2State = 0;
+
+// 맨 위 핀 번호만 설정하셨으면 setup() 따로 안건드셔도 됩니다. 
+void setup() {
+	pinMode(led1Pin, OUTPUT);
+	pinMode(led2Pin, OUTPUT);
+	pinMode(button1Pin, INPUT);
+	pinMode(button2Pin, INPUT);
+}
+
+void loop() {
+
+	// 버튼 정보 읽어오구요
+	button1State = digitalRead(button1Pin);
+	button2State = digitalRead(button2Pin);
+
+	/* 1111111111111111111 */
+	if (button1State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton1State == LOW) {
+			led1State = led1State == 0; // 0이면 1로, 1이면 0으로 스위칭.
+		}
+	}
+
+	if (led1State == 1) {
+		digitalWrite(led1Pin, HIGH);
+	}
+	else {
+		digitalWrite(led1Pin, LOW);
+	}
+	/* 1111111111111111111 끝 */
+
+	/* 2222222222222222222 (위 1이랑 똑같은 동작. 핀번호만 다름 */
+	if (button2State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton2State == LOW) {
+			led2State = led2State == 0; // 0이면 1로, 1이면 0으로 스위칭.
+		}
+	}
+
+	if (led2State == 1) {
+		digitalWrite(led2Pin, HIGH);
+	}
+	else {
+		digitalWrite(led2Pin, LOW);
+	}
+	/* 2222222222222222222 끝 */
+
+	// 현재 버튼정보 저장. (다음 loop()에서 써먹을 수 있음)
+	beforeButton1State = button1State;
+	beforeButton2State = button2State;
+}
+
+```
+
+# 2 버튼 4 LED
+
+## +, - 버튼을 이용해 숫자(0~15)를 2진수로 표현한다.
+
+```c++
+
+// 아래 네 핀번호 (2, 3, 10, 11, 12, 13) 본인 보드에 맞게 수정하세요.
+const int button1Pin = 2;
+const int button2Pin = 3;
+const int led1Pin = 10;
+const int led2Pin = 11;
+const int led3Pin = 12;
+const int led4Pin = 13;
+
+// 버튼 정보 저장하려고 변수 선언.
+int button1State = 0;
+int button2State = 0;
+int beforeButton1State = 0;
+int beforeButton2State = 0;
+
+// 표현할 숫자 정보
+int showNumber = 0;
+
+// 맨 위 핀 번호만 설정하셨으면 setup() 따로 안건드셔도 됩니다.
+void setup() {
+	pinMode(led1Pin, OUTPUT);
+	pinMode(led2Pin, OUTPUT);
+	pinMode(button1Pin, INPUT);
+	pinMode(button2Pin, INPUT);
+}
+
+void loop() {
+
+	// 버튼 정보 읽어오구요
+	button1State = digitalRead(button1Pin);
+	button2State = digitalRead(button2Pin);
+
+	if (button1State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton1State == LOW) {
+			if( showNumber < 15 ) {
+				// 버튼 1번 누르면 숫자 + 1
+				showNumber++;
+			}
+		}
+	}
+
+	if (button2State == HIGH) {
+		// 직전에는 LOW였는데 이번에 읽으니까 HIGH다
+		// 눌러진 순간 딱 한번만 수행하겠다는 말입니다.
+		if (beforeButton2State == LOW) {
+			if (showNumber > 0) {
+				// 버튼 1번 누르면 숫자 - 1
+				showNumber--;
+			}
+		}
+	}
+
+	// 숫자(showNumber) LED 2진수로 표현
+	// 0 : 0000
+	// 1 : 0001
+	// 2 : 0010
+	// 3 : 0011
+	// 4 : 0100
+	// ...
+	// 13 : 1101
+	// 14 : 1110
+	// 15 : 1111
+
+	// 초보용 코드 (생략, 필요시 == 1, 2, 3, ..., 15)
+	//if (showNumber == 0) {
+	//	digitalWrite(led1Pin, LOW);
+	//	digitalWrite(led2Pin, LOW);
+	//	digitalWrite(led3Pin, LOW);
+	//	digitalWrite(led4Pin, LOW);
+	//}
+
+	// 고급자 코드
+	if (showNumber % 2 == 0) { digitalWrite(led4Pin, LOW); }
+	else { digitalWrite(led4Pin, HIGH); }
+	if ((showNumber / 2) % 2 == 0) { digitalWrite(led3Pin, LOW); }
+	else { digitalWrite(led3Pin, HIGH); }
+	if ((showNumber / 4) % 2 == 0) { digitalWrite(led2Pin, LOW); }
+	else { digitalWrite(led2Pin, HIGH); }
+	if ((showNumber / 8) % 2 == 0) { digitalWrite(led1Pin, LOW); }
+	else { digitalWrite(led1Pin, HIGH); }
+
+	beforeButton1State = button1State;
+	beforeButton2State = button2State;
+}
+```
